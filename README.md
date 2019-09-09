@@ -37,8 +37,8 @@ The 'R' folder contains the following scripts:
 * '02_diabetes_medication.R' - extracts data on diabetes medication and defines drug types
 * '03_diabetes_type.R' - extracts diabetes diagnoses and defines diabetes type, additionally depends on script 02
 * '04_BMI.R' - extracts height and weight data, calculates numerical and categorical BMI
-* '05_HbA1C.R'* - extracts HbA1C measurements and defines HbA1C control
-* 06_smoking_status.R' - extracts data on smoking status and defines smoking status
+* '05_HbA1C.R' - extracts HbA1C measurements and defines HbA1C control
+* '06_smoking_status.R' - extracts data on smoking status and defines smoking status
 
 ## Useful references
 * Khalid JM, Raluy-Callado M, Curtis BH, Boye KS, Maguire A, Reaney M. Rates and risk of hospitalisation among patients with type 2 diabetes: Retrospective cohort study using the UK General Practice Research Database linked to English Hospital Episode Statistics. Int J Clin Pract. 2014;68(1):40–8.  
@@ -48,7 +48,7 @@ The 'R' folder contains the following scripts:
 
 ## Authors
 * **Fiona Grimm** - [@fiona_grimm](https://twitter.com/fiona_grimm) - [fiona-grimm](https://github.com/fiona-grimm)
-* **Meetali Kakad** - 
+* **Meetali Kakad**  
 
 ## License
 This project is licensed under the [MIT License](LICENSE.md).
