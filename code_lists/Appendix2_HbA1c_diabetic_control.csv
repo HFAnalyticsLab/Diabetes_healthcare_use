@@ -1,0 +1,32 @@
+medcode,readcode,readterm
+24458,C109711,Type II diabetes mellitus - poor control
+47315,C10F711,Type II diabetes mellitus - poor control
+46850,C108811,Type I diabetes mellitus - poor control
+105337,C10E811,Type I diabetes mellitus - poor control
+45913,C109712,Type 2 diabetes mellitus - poor control
+25627,C10F700,Type 2 diabetes mellitus - poor control
+45914,C108812,Type 1 diabetes mellitus - poor control
+35288,C10E800,Type 1 diabetes mellitus - poor control
+8403,C109700,Non-insulin dependent diabetes mellitus - poor control
+6791,C108800,Insulin dependent diabetes mellitus - poor control
+72702,C10E812,Insulin dependent diabetes mellitus - poor control
+101208,66Ae000,HbA1c target level - IFCC standardised
+37035,66Ae.00,HbA1c target
+14053,42W4.00,HbA1c level (DCCT aligned)
+19807,42c3.00,HbA1 level (DCCT aligned)
+40463,42c1.00,HbA1 7 - 10% - borderline control
+46079,42c2.00,HbA1 > 10% - bad control
+42360,42c0.00,HbA1 < 7% - good control
+14050,42c..00,HbA1 - diabetic control
+29218,42W2.00,Hb. A1C 7-10% - borderline
+13604,42W3.00,Hb. A1C > 10% - bad control
+13597,42W1.00,Hb. A1C < 7% - good control
+14049,42WZ.00,Hb. A1C - diabetic control NOS
+9958,42W..00,Hb. A1C - diabetic control
+96968,42W5.00,Haemoglobin A1c level - IFCC standardised
+14051,44TB.00,Haemoglobin A1c level
+108963,44TB100,Haemoglobin A1c (monitoring ranges)
+108943,44TB000,Haemoglobin A1c (diagnostic reference range)
+22023,66AJz00,Diabetic - poor control NOS
+2378,66AJ.00,Diabetic - poor control
+13071,66AI.00,Diabetic - good control

@@ -1,0 +1,687 @@
+product_code,description,drug_type
+479,acarbose tablets 50mg,Acarbose
+5174,acarbose tablets 100mg,Acarbose
+5621,GLUCOBAY tablets 50mg (BAYER),Acarbose
+9105,GLUCOBAY tablets 100mg (BAYER),Acarbose
+35022,Sitagliptin 100mg tablets,DPP-4i
+35462,Januvia 100mg tablets (Merck Sharp & Dohme Ltd),DPP-4i
+37875,Vildagliptin 50mg tablets,DPP-4i
+39149,Galvus 50mg tablets (Novartis Pharmaceuticals UK Ltd),DPP-4i
+41204,Saxagliptin 5mg tablets,DPP-4i
+41431,Onglyza 5mg tablets (AstraZeneca UK Ltd),DPP-4i
+45775,Saxagliptin 2.5mg tablets,DPP-4i
+45821,Onglyza 2.5mg tablets (AstraZeneca UK Ltd),DPP-4i
+46665,Linagliptin 5mg tablets,DPP-4i
+46716,Trajenta 5mg tablets (Boehringer Ingelheim Ltd),DPP-4i
+48401,Sitagliptin 50mg tablets,DPP-4i
+48533,Sitagliptin 25mg tablets,DPP-4i
+50087,Januvia 50mg tablets (Merck Sharp & Dohme Ltd),DPP-4i
+50124,Januvia 25mg tablets (Merck Sharp & Dohme Ltd),DPP-4i
+59809,Alogliptin 6.25mg tablets,DPP-4i
+60681,Vipidia 12.5mg tablets (Takeda UK Ltd),DPP-4i
+60682,Vipidia 25mg tablets (Takeda UK Ltd),DPP-4i
+62326,Vipidia 6.25mg tablets (Takeda UK Ltd),DPP-4i
+469,Rosiglitazone 4mg tablets,Glitazone
+548,Pioglitazone 15mg tablets,Glitazone
+5227,Rosiglitazone 8mg tablets,Glitazone
+9662,Avandia 4mg tablets (GlaxoSmithKline UK Ltd),Glitazone
+9699,Pioglitazone 30mg tablets,Glitazone
+10051,Pioglitazone 45mg tablets,Glitazone
+15232,Avandia 8mg tablets (GlaxoSmithKline UK Ltd),Glitazone
+19472,Actos 45mg tablets (Takeda UK Ltd),Glitazone
+20287,Actos 15mg tablets (Takeda UK Ltd),Glitazone
+20889,Actos 30mg tablets (Takeda UK Ltd),Glitazone
+37617,Rosiglitazone 2mg tablet,Glitazone
+48120,Avandia 2mg Tablet (GlaxoSmithKline UK Ltd),Glitazone
+48139,Pioglitazone 30mg tablets (A A H Pharmaceuticals Ltd),Glitazone
+56208,Pioglitazone 15mg tablets (A A H Pharmaceuticals Ltd),Glitazone
+57659,Pioglitazone 30mg tablets (Actavis UK Ltd),Glitazone
+62426,Pioglitazone 30mg tablets (Accord Healthcare Ltd),Glitazone
+63046,Pioglitazone 45mg tablets (A A H Pharmaceuticals Ltd),Glitazone
+63107,Pioglitazone 45mg tablets (Waymade Healthcare Plc),Glitazone
+63421,Pioglitazone 30mg tablets (Teva UK Ltd),Glitazone
+64900,Glidipion 30mg tablets (Actavis UK Ltd),Glitazone
+35144,Byetta 5micrograms/0.02ml solution for injection 1.2ml pre-filled disposable devices (AstraZeneca UK,GLP-1
+35149,Exenatide 10micrograms/0.04ml solution for injection 2.4ml pre-filled disposable devices,GLP-1
+35150,Byetta 10micrograms/0.04ml solution for injection 2.4ml pre-filled disposable devices (AstraZeneca U,GLP-1
+35251,Exenatide 5micrograms/0.02ml solution for injection 1.2ml pre-filled disposable devices,GLP-1
+40642,Victoza 6mg/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),GLP-1
+40693,Liraglutide 6mg/ml solution for injection 3ml pre-filled disposable devices,GLP-1
+46458,Exenatide 2mg powder and solvent for suspension for injection vials,GLP-1
+46469,Bydureon 2mg powder and solvent for suspension for injection vials (AstraZeneca UK Ltd),GLP-1
+55728,Lyxumia 10micrograms/0.2ml solution for injection 3ml pre-filled pen (Sanofi),GLP-1
+55729,Lyxumia 20micrograms/0.2ml solution for injection 3ml pre-filled pen (Sanofi),GLP-1
+55767,Lyxumia 10micrograms/0.2ml solution for injection 3ml pre-filled pen and Lyxumia 20micrograms/0.2ml ,GLP-1
+62661,Bydureon 2mg powder and solvent for suspension for injection pre-filled pen (AstraZeneca UK Ltd),GLP-1
+64622,Bydureon 2mg powder and solvent for suspension for injection vials (Lexon (UK) Ltd),GLP-1
+321,INSULIN HUMAN ACTRAPID (NEUTRAL) 40 I/U INJ,Insulin
+322,Humalog 100units/ml solution for injection 1.5ml cartridges (Eli Lilly and Company Ltd),Insulin
+1587,Monotard 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+1588,Actrapid 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+1592,Actrapid penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+1593,Insulatard penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+1594,Actrapid NovoLet 100units/ml solution for injection (Novo Nordisk Ltd),Insulin
+1595,Insulatard NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+1643,INSULIN NOVO MONOTARD MC 100 I/U INJ,Insulin
+1645,INSULIN NOVO ACTRAPID MC 100 I/U INJ,Insulin
+1649,Human actraphane 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+1805,Mixtard 30/70 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+1806,Penmix 30/70 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+1839,INSULIN HUMULIN I (ISOPHANE) 100 I/U INJ,Insulin
+1840,Humulin s 100unit/ml Injection (Eli Lilly and Company Ltd),Insulin
+1842,Pork velosulin 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+1843,Pork Insulatard 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+1844,Ultratard 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+1886,Insulatard 100iu/ml GE injection (Novo Nordisk Ltd),Insulin
+2220,Penmix 20/80 Pen (Novo Nordisk Ltd),Insulin
+2221,Mixtard 30 NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+2373,INSULIN HUMAN VELOSULIN 100 I/U INJ,Insulin
+2454,Mixtard 30 penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+2455,Mixtard 20 NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+2456,Mixtard 10 NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+2459,Pork Mixtard 30 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+2808,INSULIN LENTARD INJ,Insulin
+2812,Mixtard 40 NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+2929,Mixtard 30 100iu/ml GE injection (Novo Nordisk Ltd),Insulin
+3396,Penmix 10/90 Penfill (Novo Nordisk Ltd),Insulin
+3439,Penmix 10/90 Pen (Novo Nordisk Ltd),Insulin
+3550,Mixtard 40 penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+3551,Mixtard 20 penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+4093,Humulin M2 100units/ml suspension for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+4129,Insulin soluble porcine 100units/ml solution for injection 1.5ml cartridges,Insulin
+4163,Rapitard MC 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+4198,Humulin m3 100unit/ml M3 injection (Eli Lilly and Company Ltd),Insulin
+4199,Humulin m1 100unit/ml M1 injection (Eli Lilly and Company Ltd),Insulin
+4247,Insulin isophane porcine 100units/ml suspension for injection 1.5ml cartridges,Insulin
+4248,INSULIN NOVO ULTRATARD MC 100 I/U INJ,Insulin
+4706,Velosulin 100units/ml solution for injection 10ml vials (Novo Nordisk Ltd),Insulin
+4715,Humalog mix 25 25/75 100units/ml Injection (Eli Lilly and Company Ltd),Insulin
+4760,Humulin i 100unit/ml Injection (Eli Lilly and Company Ltd),Insulin
+4784,Lentard mc 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+4790,Mixtard 50 penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+5021,NovoRapid Penfill 100units/ml solution for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+5214,Insulin lispro 100units/ml solution for injection 1.5ml cartridges,Insulin
+5250,Insulin biphasic lispro human prb 25:75; 100 units/ml Injection,Insulin
+5255,Mixtard 10 penfill 100 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+5501,Insuman basal 100iu/ml Injection (Aventis Pharma),Insulin
+5845,Mixtard 30 InnoLet 100units/ml suspension for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+5891,Insulatard FlexPen 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+5892,NovoRapid FlexPen 100units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+5933,Mixtard 50 NovoLet 100units/ml suspension for injection (Novo Nordisk Ltd),Insulin
+5953,Insulin glargine 100iu/ml Injection,Insulin
+6057,Lantus 100iu/ml Injection (Aventis Pharma),Insulin
+6061,Novomix 30 30/70 100units/ml Injection (Novo Nordisk Ltd),Insulin
+6209,NovoRapid 100units/ml solution for injection 10ml vials (Novo Nordisk Ltd),Insulin
+6447,Insulin aspart human pyr 100 iu/ml Injection,Insulin
+6958,Levemir FlexPen 100units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+6965,Levemir Penfill 100units/ml solution for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+7228,NovoMix 30 FlexPen 100units/ml suspension for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+7231,Mixtard 30 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+7237,Lantus 100units/ml solution for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+7266,Lantus 100units/ml solution for injection 3ml cartridges (Sanofi),Insulin
+7267,NovoMix 30 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+7300,Mixtard 30 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+7318,Humalog 100units/ml solution for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+7319,Mixtard 20 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+7349,Actrapid 100units/ml solution for injection 10ml vials (Novo Nordisk Ltd),Insulin
+7350,Insulin isophane porcine 100units/ml suspension for injection 10ml vials,Insulin
+7393,Insulin glargine 100units/ml solution for injection 3ml cartridges,Insulin
+7400,Insulin glargine 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+7402,Lantus 100units/ml solution for injection 10ml vials (Sanofi),Insulin
+7537,Humulin Zn 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+7757,INSULIN NEULENTE (ZINC SUSP)(PURIFIED) 100 I/U INJ,Insulin
+7763,INSULIN NEUPHANE (ISOPHANE)(PURIFIED) 100 I/U INJ,Insulin
+7764,INSULIN NEUSULIN (NEUTRAL)(PURIFIED) 100 I/U INJ,Insulin
+7765,INSULIN NEUTRAL (HUMAN) 100 I/U INJ,Insulin
+7771,Human protaphane penfill 100 100unit/ml Penfill (Novo Nordisk Ltd),Insulin
+7772,Human protaphane 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+7783,INSULIN ISOPHANE (HUMAN) 100 I/U INJ,Insulin
+7793,HumaJect M3 Pen 100units/ml suspension for injection (Eli Lilly and Company Ltd),Insulin
+7861,INSULIN HUMULIN S (NEUTRAL) CARTRIDGE 100 I/U,Insulin
+7959,INSULIN MIXTARD 30/70 40 I/U INJ,Insulin
+8118,Humaject i 100iu/ml Pen (Eli Lilly and Company Ltd),Insulin
+8203,Penmix 50/50 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+8322,Insulin zinc suspension mixed human pyr 100unit/ml Injection,Insulin
+8354,INSULIN ISOPHANE 70%/NEUTRAL 30% 100 I/U INJ,Insulin
+8376,INSULIN ISOPHANE 100 I/U,Insulin
+8483,MONOJECT INSULIN NEEDLES,Insulin
+8646,INSULIN ZINC CRYSTALLINE susp 100 I/U INJ,Insulin
+8838,INSULIN SEMITARD 40 I/U INJ,Insulin
+8839,INSULIN SEMITARD 100 I/U INJ,Insulin
+8841,Humulin M5 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+8895,Initard 50/50 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+9079,INSULIN SOLUBLE 100 I/U INJ,Insulin
+9341,Insulin biphasic isophane human prb 30:70; 100 units/ml Injection,Insulin
+9376,Insulin zinc suspension crystalline human pyr 100unit/ml long acting Injection,Insulin
+9503,Hypurin Bovine Protamine Zinc 100units/ml suspension for injection 10ml vials (Wockhardt UK Ltd),Insulin
+9521,Pork Actrapid 100units/ml solution for injection 10ml vials (Novo Nordisk Ltd),Insulin
+9565,HumaJect S Pen 100units/ml solution for injection (Eli Lilly and Company Ltd),Insulin
+9618,Hypurin Porcine 30/70 Mix 100units/ml suspension for injection 1.5ml cartridges (C P Pharmaceuticals,Insulin
+9737,Insulatard innolet 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+10001,Humalog Mix50 Pen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Ltd,Insulin
+10067,Insulin biphasic aspart human pyr 30:70; 100 units/ml Injection,Insulin
+10175,Insulin isophane human 100units/ml suspension for injection 1.5ml cartridges,Insulin
+10184,Insulin detemir 100 iu/ml Solution for injection,Insulin
+10207,Insulin isophane human 100units/ml suspension for injection 3ml cartridges,Insulin
+10208,Insulatard InnoLet 100units/ml suspension for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+10225,Lantus 100units/ml solution for injection 3ml OptiClik cartridges (Sanofi),Insulin
+10229,Humulin I Pen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+10243,Humalog Mix25 100units/ml suspension for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+10244,Mixtard 40 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+10245,Mixtard 10 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+10259,Insulin glargine 100units/ml solution for injection 10ml vials,Insulin
+10264,Humalog Pen 100units/ml solution for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+10277,Humulin M3 100units/ml suspension for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+10484,Penmix 20/80 Penfill (Novo Nordisk Ltd),Insulin
+10545,INSULIN HUMULIN M4 CARTRIDGE 100 I/U,Insulin
+10546,INSULIN HUMULIN M4 100 I/U INJ,Insulin
+10547,Humulin Lente 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+10566,INSULIN HUMULIN M CARTRIDGE 100 I/U,Insulin
+10572,Insulin soluble bovine 100unit/ml Injection,Insulin
+10691,INSULIN ISOPHANE (NPH) 100 I/U INJ,Insulin
+10887,Penmix 40/60 100iu/ml Penfill (Novo Nordisk Ltd),Insulin
+10910,Humaject m2 100iu/ml M2 pen (Eli Lilly and Company Ltd),Insulin
+10915,Humaject m1 100iu/ml M1 pen (Eli Lilly and Company Ltd),Insulin
+11055,Insulin biphasic isophane human pyr 20:80; 100 units/ml Injection,Insulin
+11056,Insulin biphasic isophane human pyr 30:70; 100 units/ml Injection,Insulin
+11080,Insulin isophane human prb 100iu/ml Injection,Insulin
+11107,Humulin m4 100unit/ml M4 injection (Eli Lilly and Company Ltd),Insulin
+11337,NovoRapid Novolet 100units/ml solution for injection (Novo Nordisk Ltd),Insulin
+12035,Insulin zinc mixed bovine 100units/ml suspension for injection 10ml vials,Insulin
+12060,INSULIN QUICKSOL (SOLUBLE NEUTRAL) 100 I/U INJ,Insulin
+12244,INSULIN ZINC BOVINE susp 100 I/U INJ,Insulin
+12297,Hypurin bovine neutral 100unit/ml Injection (C P Pharmaceuticals Ltd),Insulin
+12299,Semitard mc 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+12300,SYRINGE INSULIN (BS1619/1) 2ML,Insulin
+12638,Insulin soluble human pyr 100unit/ml Injection,Insulin
+12654,Insulin soluble human prb 100unit/ml Injection,Insulin
+12818,Human Mixtard 50 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+13277,Mixtard 50 Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+13416,Insulin biphasic 100 units/ml Injection,Insulin
+13516,Hypurin bovine isophane 100unit/ml Injection (C P Pharmaceuticals Ltd),Insulin
+13550,INSULIN BP 100 I/U,Insulin
+13622,Hypurin porcine neutral 100unit/ml Injection (C P Pharmaceuticals Ltd),Insulin
+13729,Insulin isophane human emp 100unit/ml Injection,Insulin
+13819,Hypurin Porcine Isophane 100units/ml suspension for injection 1.5ml cartridges (C P Pharmaceuticals ,Insulin
+13837,Insulin biphasic isophane human prb 10:90; 100 units/ml Injection,Insulin
+14270,Humalog Mix25 Pen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Ltd,Insulin
+14290,Insulatard Penfill 100units/ml suspension for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+14299,Insulin glulisine 100units/ml solution for injection 3ml cartridges,Insulin
+14301,Insulin detemir 100units/ml solution for injection 3ml cartridges,Insulin
+14313,Insulin lispro 100units/ml solution for injection 3ml cartridges,Insulin
+14330,Insulin detemir 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+14339,Hypurin Bovine Neutral 100units/ml solution for injection 10ml vials (Wockhardt UK Ltd),Insulin
+14340,Hypurin Bovine Isophane 100units/ml suspension for injection 10ml vials (Wockhardt UK Ltd),Insulin
+14345,Apidra 100units/ml solution for injection 3ml cartridges (Sanofi),Insulin
+14357,Humulin I 100units/ml suspension for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+14362,Insulin lispro 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+14504,INSULIN HYPURIN PROTAMINE ZINC 100 I/U INJ,Insulin
+14505,Insulin protamine zinc bovine 100units/ml suspension for injection 10ml vials,Insulin
+14506,INSULIN BOVINE PROTAMINE ZINC 100 I/U INJ,Insulin
+14619,Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 1.5ml cartridges,Insulin
+14644,Insulin biphasic isophane human prb 20:80; 100 units/ml Injection,Insulin
+14649,Insulin biphasic isophane human pyr 10:90; 100 units/ml Injection,Insulin
+14918,Humulin I 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+14925,Insulin isophane human vial 100unit/ml Sterile suspension injection,Insulin
+14928,Insulatard 100units/ml suspension for injection 10ml vials (Novo Nordisk Ltd),Insulin
+14930,Hypurin Porcine Neutral 100units/ml solution for injection 3ml cartridges (Wockhardt UK Ltd),Insulin
+14933,Hypurin Porcine Isophane 100units/ml suspension for injection 3ml cartridges (Wockhardt UK Ltd),Insulin
+14938,Insulin soluble bovine cartridge 100unit/ml Solution for injection,Insulin
+14944,Humulin S 100units/ml solution for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+15040,INSULIN MONOPHANE (ISOPHANE) 100 I/U INJ,Insulin
+15199,Insuman comb 25 100iu/ml Injection (Aventis Pharma),Insulin
+15484,Insulin isophane bovine 100units/ml suspension for injection 1.5ml cartridges,Insulin
+15624,INSULIN ISOPHANE (HIGHLY PURIFIED) 100 I/U INJ,Insulin
+15710,Insulin soluble human emp 100unit/ml Injection,Insulin
+15961,Insulin isophane human crb 100iu/ml Injection,Insulin
+16129,Insulin soluble human 100units/ml solution for injection 3ml cartridges,Insulin
+16142,Insulin aspart 100units/ml solution for injection 3ml cartridges,Insulin
+16152,Insulin isophane biphasic human 30/70 100units/ml suspension for injection 3ml cartridges,Insulin
+16160,Humulin M3 Pen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+16209,INSULIN HYPURIN SOLUBLE 100 I/U INJ,Insulin
+16682,Tempulin 100unit/ml Injection (Knoll Ltd),Insulin
+16700,Insulin zinc mixed bovine vial 100unit/ml Sterile suspension injection,Insulin
+17336,Novopen 100unit/ml Injection device (Novo Nordisk Ltd),Insulin
+17712,Hypurin Bovine Lente 100units/ml suspension for injection 10ml vials (Wockhardt UK Ltd),Insulin
+17731,Penmix 50/50 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+17809,Humaject m4 100iu/ml M4 pen (Eli Lilly and Company Ltd),Insulin
+18224,Humalog 100units/ml solution for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+18301,INSULIN SOLUBLE INJ I/U^2,Insulin
+18461,Insulin zinc mixed human 100units/ml suspension for injection 10ml vials,Insulin
+18590,Insulin isophane bovine 100units/ml suspension for injection 10ml vials,Insulin
+18592,Insulin soluble bovine 100units/ml solution for injection 10ml vials,Insulin
+18593,Humalog Mix50 100units/ml suspension for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+18645,INSULIN NEUTRAL (PURIFIED) 100 I/U INJ,Insulin
+18931,Insulin zinc crystalline human 100units/ml suspension for injection 10ml vials,Insulin
+19029,SYRINGE PRE-SET INSULIN FOR BLIND 2ML,Insulin
+19491,Apidra 100units/ml solution for injection 10ml vials (Sanofi),Insulin
+19513,Humulin M3 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+19707,INSULIN HUMULIN S (NEUTRAL SOLUBLE),Insulin
+19829,INSULIN NOVO MONOTARD MC,Insulin
+19877,Insulin aspart 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+19878,Insulin isophane biphasic human 30/70 100units/ml suspension for injection 3ml pre-filled disposable,Insulin
+20195,INSULIN BOVINE PROTAMINE ZINC 40 I/U INJ,Insulin
+20196,INSULIN SOLUBLE 40 I/U INJ,Insulin
+20422,Insuman comb 15 100iu/ml Injection (Aventis Pharma),Insulin
+20671,INSULIN HUM/ACTRAPHANE,Insulin
+20672,INSULIN HUM/ACTRAPID,Insulin
+20995,Hypurin Porcine 30/70 Mix 100units/ml suspension for injection 3ml cartridges (Wockhardt UK Ltd),Insulin
+21110,Insulin biphasic isophane human prb 50:50; 100 units/ml Injection,Insulin
+21232,Insulin isophane biphasic human 30/70 100units/ml suspension for injection 10ml vials,Insulin
+21235,Humulin S 100units/ml solution for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+21347,Penmix 40/60 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+21374,Insulin biphasic isophane human prb 40:60; 100 units/ml Injection,Insulin
+21395,Insulin biphasic isophane human pyr 40:60; 100 units/ml Injection,Insulin
+21422,Insulin isophane biphasic human 40/60 100units/ml suspension for injection 3ml cartridges,Insulin
+21459,SYRINGE INSULIN U100 S/U+8MM NEEDLE,Insulin
+21554,Insuman comb 50 100iu/ml Injection (Aventis Pharma),Insulin
+21583,Apidra 100units/ml solution for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+21590,Insulin glulisine 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+21945,INSULIN PORK INSULATARD,Insulin
+22058,Pur-in mix 15/85 Injection (C P Pharmaceuticals Ltd),Insulin
+22094,INSULIN HUMULIN M2 VIAL,Insulin
+22155,Humaject m5 100iu/ml M5 pen (Eli Lilly and Company Ltd),Insulin
+22161,INSULIN HUMULIN M1 VIAL,Insulin
+22496,INSULIN ZINC LENTE PURIFIED SUSPENSION,Insulin
+22697,Insulin isophane biphasic human 50/50 100units/ml suspension for injection 1.5ml cartridges,Insulin
+22806,INSULIN PORK ACTRAPID,Insulin
+22823,INSULIN ISOPHANE (PURIFIED) 100 I/U INJ,Insulin
+22945,Insuman rapid 100iu/ml Injection (Aventis Pharma),Insulin
+22983,Insuman Rapid 100units/ml solution for injection 3ml cartridges (Sanofi),Insulin
+23003,INSULIN ISOPHANE (NPH) 40 I/U,Insulin
+23099,Insulin aspart biphasic 30/70 100units/ml suspension for injection 3ml pre-filled disposable devices,Insulin
+23231,Hypurin Bovine Neutral 100units/ml solution for injection 3ml cartridges (Wockhardt UK Ltd),Insulin
+23992,Insuman Basal 100units/ml suspension for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+23993,Insuman Rapid 100units/ml solution for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+24002,Insuman Comb 25 100units/ml suspension for injection 5ml vials (Sanofi),Insulin
+24485,INSULIN ZINC ANIMAL SUSPENSION,Insulin
+24593,Neutral insulin bovine 100unit/ml Injection,Insulin
+24722,INSULIN ISOPHANE 50%/NEUTRAL 50% 100 I/U INJ,Insulin
+24795,Insulin aspart biphasic 30/70 100units/ml suspension for injection 3ml cartridges,Insulin
+24800,Hypurin Porcine 30/70 Mix 100units/ml suspension for injection 10ml vials (Wockhardt UK Ltd),Insulin
+24845,INSULIN PUR-IN ISOPHANE 100 I/U INJ,Insulin
+24846,Pur-in neutral 100unit/ml Injection (C P Pharmaceuticals Ltd),Insulin
+24866,INSULIN INSULATARD (LEO RETARD) 40 I/U INJ,Insulin
+24993,Insuman Comb 25 100units/ml suspension for injection 3ml cartridges (Sanofi),Insulin
+25006,INSULIN HUMAN ACTRAPID (NEUTRAL),Insulin
+25133,Insuman Comb 25 100units/ml suspension for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+25479,Insulin soluble porcine 100units/ml solution for injection 3ml cartridges,Insulin
+25735,Insulin isophane biphasic human 20/80 100units/ml suspension for injection 3ml cartridges,Insulin
+25736,Insulin isophane biphasic human 10/90 100units/ml suspension for injection 3ml cartridges,Insulin
+25812,Insulin isophane human 100units/ml suspension for injection 3ml pre-filled disposable devices,Insulin
+26060,Insulin lispro 100units/ml solution for injection 10ml vials,Insulin
+26098,Hypurin Porcine Neutral 100units/ml solution for injection 10ml vials (Wockhardt UK Ltd),Insulin
+26403,Pur-in mix 25/75 Injection (C P Pharmaceuticals Ltd),Insulin
+26498,Insulin zinc suspension mixed bovine and porcine 100unit/ml Injection,Insulin
+26621,Insulin soluble human crb 100iu/ml Injection,Insulin
+26784,INSULIN ZINC SEMILENTE SUSP BP 100 I/U INJ,Insulin
+26795,SYRINGE INSULIN DISPOSABLE,Insulin
+27151,SYRINGE INSULIN U100 S/U+8MM NEEDLE,Insulin
+27177,Insulin biphasic lispro human prb 50:50; 100 units/ml Injection,Insulin
+27280,Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 10ml vials,Insulin
+27396,Insulin soluble porcine 100units/ml solution for injection 10ml vials,Insulin
+27402,Insulin soluble human 100units/ml solution for injection 10ml vials,Insulin
+27461,Insuman Basal 100units/ml suspension for injection 3ml cartridges (Sanofi),Insulin
+27614,Penmix 30/70 100iu/ml Injection (Novo Nordisk Ltd),Insulin
+27911,INSULIN HUMAN ACTRAPID PENFILL,Insulin
+28096,Insulin isophane biphasic human 50/50 100units/ml suspension for injection 3ml cartridges,Insulin
+28101,Insulin glulisine 100units/ml solution for injection 10ml vials,Insulin
+28183,Hypurin Porcine Isophane 100units/ml suspension for injection 10ml vials (Wockhardt UK Ltd),Insulin
+28185,Insulin lispro biphasic 25/75 100units/ml suspension for injection 3ml cartridges,Insulin
+28442,Insulin glulisine 100unit/ml Solution for injection,Insulin
+28588,Hypurin Bovine Isophane 100units/ml suspension for injection 3ml cartridges (Wockhardt UK Ltd),Insulin
+28723,INSULIN ZINC BOVINE SUSPENSION,Insulin
+28978,INSULIN PUR-IN MIX 15/85 100 I/U INJ,Insulin
+29567,Insulin aspart 100units/ml solution for injection 10ml vials,Insulin
+29837,Insulin biphasic isophane human prb 25:75; 100 units/ml Injection,Insulin
+29953,Apidra 100units/ml solution for injection 3ml OptiClik cartridges (Sanofi),Insulin
+30209,Actrapid mc 100unit/ml Injection (Arun Products Ltd),Insulin
+30236,Isophane insulin 100iu/ml Injection,Insulin
+30686,Insulin isophane porcine 100units/ml suspension for injection 3ml cartridges,Insulin
+30819,Insuman Comb 15 100units/ml suspension for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+30861,INSULIN ZINC HUMAN SUSPENSION,Insulin
+31205,Insuman Comb 50 100units/ml suspension for injection 3ml pre-filled OptiSet pen (Sanofi),Insulin
+31258,Insulin lispro biphasic 25/75 100units/ml suspension for injection 3ml pre-filled disposable devices,Insulin
+31267,INSULIN PUR-IN MIX 50/50 100 I/U INJ,Insulin
+31465,Exubera 1mg inhalation powder blisters (Pfizer Ltd),Insulin
+31467,Exubera 3mg inhalation powder blisters (Pfizer Ltd),Insulin
+32053,INSULIN HUMALOG MIX 25,Insulin
+33167,Insulin biphasic isophane human crb 25:75; 100 units/ml Injection,Insulin
+33232,Insulin isophane biphasic human 50/50 100units/ml suspension for injection 5ml vials,Insulin
+33966,Insulatard 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+34031,Monotard mc 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+34097,Human initard 50/50 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+35253,Insuman Comb 50 100units/ml suspension for injection 3ml cartridges (Sanofi),Insulin
+35260,Levemir InnoLet 100units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+35468,Insuman Basal 100units/ml suspension for injection 5ml vials (Sanofi),Insulin
+35701,Insulin lispro biphasic 50/50 100units/ml suspension for injection 3ml pre-filled disposable devices,Insulin
+36031,Insulin isophane biphasic porcine 30/70 100units/ml suspension for injection 3ml cartridges,Insulin
+36066,Insulin isophane bovine 100units/ml suspension for injection 3ml cartridges,Insulin
+36146,Insulin lispro biphasic 50/50 100units/ml suspension for injection 3ml cartridges,Insulin
+36194,Insulin isophane biphasic human 25/75 100units/ml suspension for injection 3ml cartridges,Insulin
+36355,Insulin human 1mg inhalation powder blisters,Insulin
+36356,Insulin human 3mg inhalation powder blisters,Insulin
+36430,Insulin soluble human 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+36513,Velosulin cartridge 100unit/ml Injection (Novo Nordisk Ltd),Insulin
+36853,Lantus 100units/ml solution for injection 3ml pre-filled SoloStar pen (Sanofi),Insulin
+36920,Apidra 100units/ml solution for injection 3ml pre-filled SoloStar pen (Sanofi),Insulin
+38422,Isophane 100iu/ml Injection (Celltech Pharma Europe Ltd),Insulin
+38986,Humalog KwikPen 100units/ml solution for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+39006,Humalog Mix25 KwikPen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company,Insulin
+39086,Humalog Mix50 KwikPen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company,Insulin
+41120,Insulin isophane biphasic human 50/50 100units/ml suspension for injection 3ml pre-filled disposable,Insulin
+41834,Insulin zinc suspension lente 100iu/ml Injection (Celltech Pharma Europe Ltd),Insulin
+41959,Penject 100unit/ml Injection device (Hypoguard Ltd),Insulin
+42395,Humalog Mix25 100units/ml suspension for injection 10ml vials (Eli Lilly and Company Ltd),Insulin
+42954,Insulin isophane biphasic human 25/75 100units/ml suspension for injection 5ml vials,Insulin
+43950,Humulin I KwikPen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Ltd,Insulin
+43953,Insulin lispro biphasic 25/75 100units/ml suspension for injection 10ml vials,Insulin
+43991,Humulin M3 KwikPen 100units/ml suspension for injection 3ml pre-filled pen (Eli Lilly and Company Lt,Insulin
+44251,Insulin zinc suspension mixed porcine 100unit/ml Injection,Insulin
+44378,Insulin isophane biphasic human 25/75 100units/ml suspension for injection 3ml pre-filled disposable,Insulin
+44480,Insuman Comb 25 100units/ml suspension for injection 3ml pre-filled SoloStar pen (Sanofi),Insulin
+45158,Insuman Comb 15 100units/ml suspension for injection 3ml cartridges (Sanofi),Insulin
+46001,Insuman Basal 100units/ml suspension for injection 3ml pre-filled SoloStar pen (Sanofi),Insulin
+46666,NovoRapid FlexTouch 100units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+47360,Neutral insulin 100unit/ml Injection (Celltech Pharma Europe Ltd),Insulin
+47856,Neuphane 100unit/ml Injection (Wellcome Medical Division),Insulin
+49108,NovoRapid Penfill 100units/ml solution for injection 3ml cartridges (Necessity Supplies Ltd),Insulin
+49831,Lantus 100units/ml solution for injection 3ml pre-filled SoloStar pen (Necessity Supplies Ltd),Insulin
+50633,Lantus 100units/ml solution for injection 3ml cartridges (Necessity Supplies Ltd),Insulin
+50691,Human Mixtard 20 Penfill 100units/ml suspension for injection 1.5ml cartridges (Novo Nordisk Ltd),Insulin
+51743,NovoRapid Penfill 100units/ml solution for injection 3ml cartridges (Sigma Pharmaceuticals Plc),Insulin
+52522,Humalog Mix50 KwikPen 100units/ml suspension for injection 3ml pre-filled pen (DE Pharmaceuticals),Insulin
+52722,Human Mixtard 30 Penfill 100units/ml suspension for injection 1.5ml cartridges (Novo Nordisk Ltd),Insulin
+52748,Insulatard Penfill 100units/ml suspension for injection 3ml cartridges (Waymade Healthcare Plc),Insulin
+53118,NovoRapid FlexPen 100units/ml solution for injection 3ml pre-filled pen (Mawdsley-Brooks & Company L,Insulin
+53251,NovoRapid Penfill 100units/ml solution for injection 3ml cartridges (DE Pharmaceuticals),Insulin
+53710,Insulin human 500units/ml solution for injection 20ml vials,Insulin
+54462,Insulin biphasic isophane human emp 25:75; 100 units/ml Injection,Insulin
+55234,Tresiba FlexTouch 200units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+55462,Tresiba FlexTouch 100units/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin
+55517,Insulin isophane human 100units/ml suspension for injection 10ml vials,Insulin
+55603,Humalog KwikPen 100units/ml solution for injection 3ml pre-filled pen (DE Pharmaceuticals),Insulin
+55618,Levemir FlexPen 100units/ml solution for injection 3ml pre-filled pen (Waymade Healthcare Plc),Insulin
+55687,Insulin degludec 100units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+55907,Insulin degludec 100units/ml solution for injection 3ml cartridges,Insulin
+55910,Tresiba Penfill 100units/ml solution for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+56115,Human Actrapid Penfill 100units/ml solution for injection 1.5ml cartridges (Novo Nordisk Ltd),Insulin
+56489,NovoMix 30 Penfill 100units/ml suspension for injection 3ml cartridges (Waymade Healthcare Plc),Insulin
+56495,Lantus 100units/ml solution for injection 3ml pre-filled OptiSet pen (Waymade Healthcare Plc),Insulin
+56502,Actrapid Penfill 100units/ml solution for injection 3ml cartridges (Novo Nordisk Ltd),Insulin
+56691,Insulin degludec 200units/ml solution for injection 3ml pre-filled disposable devices,Insulin
+56857,Insulin isophane biphasic human 15/85 100units/ml suspension for injection 3ml cartridges,Insulin
+57529,Humalog 100units/ml solution for injection 10ml vials (Dowelhurst Ltd),Insulin
+57564,Humalog KwikPen 100units/ml solution for injection 3ml pre-filled pen (Waymade Healthcare Plc),Insulin
+57620,Humulin M3 100units/ml suspension for injection 10ml vials (Mawdsley-Brooks & Company Ltd),Insulin
+57622,Humalog Mix50 KwikPen 100units/ml suspension for injection 3ml pre-filled pen (Waymade Healthcare Pl,Insulin
+59500,Insulin isophane human 100units/ml suspension for injection 5ml vials,Insulin
+59533,NovoRapid FlexPen 100units/ml solution for injection 3ml pre-filled pen (Sigma Pharmaceuticals Plc),Insulin
+60933,Humulin M3 100units/ml suspension for injection 10ml vials (Sigma Pharmaceuticals Plc),Insulin
+60938,Mixtard 30 100units/ml suspension for injection 10ml vials (Waymade Healthcare Plc),Insulin
+61845,NovoRapid PumpCart 100units/ml solution for injection 1.6ml cartridges (Novo Nordisk Ltd),Insulin
+62276,Humulin R 500units/ml solution for injection 20ml vials (Imported (United States)),Insulin
+63464,Humalog KwikPen 200units/ml solution for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+63562,Insulin degludec 100units/ml / Liraglutide 3.6mg/ml solution for injection 3ml pre-filled disposable,Insulin
+63679,Hypurin soluble 100iu/ml Injection (C P Pharmaceuticals Ltd),Insulin
+64354,Toujeo 300units/ml solution for injection 1.5ml pre-filled SoloStar pen (Sanofi),Insulin
+64460,Insulin glargine 300units/ml solution for injection 1.5ml pre-filled disposable devices,Insulin
+64723,Abasaglar KwikPen 100units/ml solution for injection 3ml pre-filled pen (Eli Lilly and Company Ltd),Insulin
+64987,Abasaglar 100units/ml solution for injection 3ml cartridges (Eli Lilly and Company Ltd),Insulin
+62899,Xultophy 100units/ml / 3.6mg/ml solution for injection 3ml pre-filled pen (Novo Nordisk Ltd),Insulin/glp-1
+5678,Nateglinide 120mg tablets,Meglitinide
+5989,Nateglinide 180mg tablets,Meglitinide
+9707,Repaglinide 1mg tablets,Meglitinide
+9748,Repaglinide 2mg tablets,Meglitinide
+9865,Repaglinide 500microgram tablets,Meglitinide
+11316,NovoNorm 500microgram tablets (Novo Nordisk Ltd),Meglitinide
+11321,NovoNorm 1mg tablets (Novo Nordisk Ltd),Meglitinide
+11366,NovoNorm 2mg tablets (Novo Nordisk Ltd),Meglitinide
+11483,Nateglinide 60mg tablets,Meglitinide
+15955,Starlix 120mg tablets (Novartis Pharmaceuticals UK Ltd),Meglitinide
+23945,Starlix 60mg tablets (Novartis Pharmaceuticals UK Ltd),Meglitinide
+27125,Starlix 180mg tablets (Novartis Pharmaceuticals UK Ltd),Meglitinide
+35561,Prandin 2mg tablets (Novo Nordisk Ltd),Meglitinide
+36774,Prandin 1mg tablets (Novo Nordisk Ltd),Meglitinide
+36948,Prandin 0.5mg tablets (Novo Nordisk Ltd),Meglitinide
+52203,Enyglid 0.5mg tablets (Consilient Health Ltd),Meglitinide
+61925,NovoNorm 500microgram tablets (Waymade Healthcare Plc),Meglitinide
+23,Metformin 500mg tablets,Metformin
+93,Metformin 850mg tablets,Metformin
+735,Metformin 100mg/ml Oral solution,Metformin
+2928,METFORMIN HCl 850 MG TAB,Metformin
+3252,METFORMIN HCl 500 MG TAB,Metformin
+7048,Metformin 500mg modified-release tablets,Metformin
+7166,Glucophage 500mg tablets (Merck Serono Ltd),Metformin
+7610,Glucophage 850mg tablets (Merck Serono Ltd),Metformin
+7815,METFORMIN 800 MG TAB,Metformin
+11990,Metformin 500mg/5ml oral solution sugar free,Metformin
+16044,Glucophage SR 500mg tablets (Merck Serono Ltd),Metformin
+16213,METFORMIN 250 MG TAB,Metformin
+20810,METFORMIN,Metformin
+25678,Glucamet 500mg Tablet (Opus Pharmaceuticals Ltd),Metformin
+26258,Glucamet 850mg Tablet (Opus Pharmaceuticals Ltd),Metformin
+27501,Orabet 500mg Tablet (Lagap),Metformin
+31146,Metsol 500mg/5ml oral solution (Kappin Ltd),Metformin
+33087,Metformin 500mg tablets (Actavis UK Ltd),Metformin
+33674,Metformin 850mg tablets (A A H Pharmaceuticals Ltd),Metformin
+34004,Metformin 500mg tablets (IVAX Pharmaceuticals UK Ltd),Metformin
+34020,Metformin 850mg tablets (IVAX Pharmaceuticals UK Ltd),Metformin
+34135,Metformin 500mg Tablet (M & A Pharmachem Ltd),Metformin
+34323,Metformin 500mg tablets (A A H Pharmaceuticals Ltd),Metformin
+34504,Metformin 500mg tablets (Wockhardt UK Ltd),Metformin
+34598,Metformin 500mg tablets (Mylan Ltd),Metformin
+34697,Metformin 850mg tablets (Wockhardt UK Ltd),Metformin
+34742,Metformin 850mg tablets (Teva UK Ltd),Metformin
+34836,Metformin 850mg tablets (Actavis UK Ltd),Metformin
+34917,Metformin 500mg tablets (Teva UK Ltd),Metformin
+38355,Metformin 750mg modified-release tablets,Metformin
+38400,Glucophage SR 750mg tablets (Merck Serono Ltd),Metformin
+39560,Bolamyn SR 500mg tablets (Teva UK Ltd),Metformin
+39598,Metformin 1g modified-release tablets,Metformin
+39729,Glucophage SR 1000mg tablets (Merck Serono Ltd),Metformin
+39988,Metformin 500mg oral powder sachets sugar free,Metformin
+40007,Glucophage 1000mg oral powder sachets (Merck Serono Ltd),Metformin
+40110,Glucophage 500mg oral powder sachets (Merck Serono Ltd),Metformin
+40233,Metformin 1g oral powder sachets sugar free,Metformin
+42161,Orabet 500mg Tablet (Sandoz Ltd),Metformin
+43270,Metformin 500mg/5ml oral solution sugar free (Rosemont Pharmaceuticals Ltd),Metformin
+44250,Metformin 500mg/5ml Oral solution (Hillcross Pharmaceuticals Ltd),Metformin
+45581,Metabet SR 500mg tablets (Morningside Healthcare Ltd),Metformin
+46989,Metabet SR 1000mg tablets (Morningside Healthcare Ltd),Metformin
+47939,Glucient SR 500mg tablets (Consilient Health Ltd),Metformin
+48149,Metformin 500mg tablets (Almus Pharmaceuticals Ltd),Metformin
+49502,Glucophage SR 500mg tablets (Mawdsley-Brooks & Company Ltd),Metformin
+49738,Metformin 1g modified-release tablets (A A H Pharmaceuticals Ltd),Metformin
+50570,Glucophage SR 500mg tablets (Lexon (UK) Ltd),Metformin
+50821,Metformin 850mg tablets (Pfizer Ltd),Metformin
+50970,Metformin 500mg tablets (Bristol Laboratories Ltd),Metformin
+51080,Metabet SR 1000mg tablets (Actavis UK Ltd),Metformin
+51135,Metformin 500mg modified-release tablets (A A H Pharmaceuticals Ltd),Metformin
+51527,Metformin 500mg tablets (Boston Healthcare Ltd),Metformin
+52221,Diagemet XL 500mg tablets (Genus Pharmaceuticals Ltd),Metformin
+52442,Metformin 500mg tablets (Pfizer Ltd),Metformin
+52634,Glucophage SR 500mg tablets (DE Pharmaceuticals),Metformin
+53478,Metformin 500mg modified-release tablets (Kent Pharmaceuticals Ltd),Metformin
+53774,Metabet SR 500mg tablets (Actavis UK Ltd),Metformin
+53867,Metformin 500mg tablets (Zentiva),Metformin
+54442,Metformin (roi) 1000mg Tablet,Metformin
+54898,Metformin 850mg tablets (Almus Pharmaceuticals Ltd),Metformin
+55270,Duformin 500mg Tablet (Dumex Ltd),Metformin
+55711,Metformin 500mg tablets (Alliance Healthcare (Distribution) Ltd),Metformin
+55739,Metformin 500mg tablets (Tillomed Laboratories Ltd),Metformin
+57147,Bolamyn SR 1000mg tablets (Teva UK Ltd),Metformin
+57457,Metformin 500mg tablets (Aurobindo Pharma Ltd),Metformin
+58051,Metformin 500mg/5ml oral solution,Metformin
+58607,Metformin 500mg/5ml oral solution sugar free (Zentiva),Metformin
+59620,Glucophage SR 500mg tablets (Waymade Healthcare Plc),Metformin
+60074,Metformin 1g modified-release tablets (Waymade Healthcare Plc),Metformin
+60286,Metformin 500mg/5ml oral suspension,Metformin
+60968,Metformin 500mg modified-release tablets (Actavis UK Ltd),Metformin
+61043,Sukkarto SR 1000mg tablets (Morningside Healthcare Ltd),Metformin
+61559,Sukkarto SR 500mg tablets (Morningside Healthcare Ltd),Metformin
+62144,Metformin 500mg modified-release tablets (DE Pharmaceuticals),Metformin
+62265,Metformin 500mg modified-release tablets (Mawdsley-Brooks & Company Ltd),Metformin
+62605,Metformin 850mg tablets (Kent Pharmaceuticals Ltd),Metformin
+62824,Metformin 1g modified-release tablets (Actavis UK Ltd),Metformin
+63045,Metformin 850mg tablets (Relonchem Ltd),Metformin
+63307,Metformin 1g/5ml oral solution,Metformin
+64939,Glucient SR 1000mg tablets (Consilient Health Ltd),Metformin
+37874,Vildagliptin 50mg / Metformin 850mg tablets,Metformin/DPP-4i
+37902,Vildagliptin 50mg / Metformin 1g tablets,Metformin/DPP-4i
+38551,Eucreas 50mg/1000mg tablets (Novartis Pharmaceuticals UK Ltd),Metformin/DPP-4i
+39203,Eucreas 50mg/850mg tablets (Novartis Pharmaceuticals UK Ltd),Metformin/DPP-4i
+43619,Metformin 1g / Sitagliptin 50mg tablets,Metformin/DPP-4i
+43684,Janumet 50mg/1000mg tablets (Merck Sharp & Dohme Ltd),Metformin/DPP-4i
+50682,Jentadueto 2.5mg/1000mg tablets (Boehringer Ingelheim Ltd),Metformin/DPP-4i
+52445,Linagliptin 2.5mg / Metformin 1g tablets,Metformin/DPP-4i
+52449,Linagliptin 2.5mg / Metformin 850mg tablets,Metformin/DPP-4i
+54150,Jentadueto 2.5mg/850mg tablets (Boehringer Ingelheim Ltd),Metformin/DPP-4i
+54891,Saxagliptin 2.5mg / Metformin 1g tablets,Metformin/DPP-4i
+54973,Saxagliptin 2.5mg / Metformin 850mg tablets,Metformin/DPP-4i
+56965,Komboglyze 2.5mg/1000mg tablets (AstraZeneca UK Ltd),Metformin/DPP-4i
+58865,Komboglyze 2.5mg/850mg tablets (AstraZeneca UK Ltd),Metformin/DPP-4i
+59385,Vipdomet 12.5mg/1000mg tablets (Takeda UK Ltd),Metformin/DPP-4i
+60497,Alogliptin 12.5mg / Metformin 1g tablets,Metformin/DPP-4i
+6855,Avandamet 2mg/500mg tablets (GlaxoSmithKline UK Ltd),Metformin/Glitazone
+7325,Avandamet 4mg/1000mg tablets (GlaxoSmithKline UK Ltd),Metformin/Glitazone
+7375,Rosiglitazone 4mg / Metformin 1g tablets,Metformin/Glitazone
+11601,Rosiglitazone 2mg / Metformin 500mg tablets,Metformin/Glitazone
+11604,Rosiglitazone 1mg / Metformin 500mg tablets,Metformin/Glitazone
+11609,Metformin with rosiglitazone 500mg + 1mg Tablet,Metformin/Glitazone
+11610,Metformin with rosiglitazone 500mg + 2mg Tablet,Metformin/Glitazone
+11717,Rosiglitazone 2mg / Metformin 1g tablets,Metformin/Glitazone
+11737,Metformin with rosiglitazone 1000mg + 4mg Tablet,Metformin/Glitazone
+11760,Metformin with rosiglitazone 1000mg + 2mg Tablet,Metformin/Glitazone
+14164,Avandamet 2mg/1000mg tablets (GlaxoSmithKline UK Ltd),Metformin/Glitazone
+17580,Avandamet 1mg/500mg tablets (GlaxoSmithKline UK Ltd),Metformin/Glitazone
+18220,Pioglitazone 15mg / Metformin 850mg tablets,Metformin/Glitazone
+30316,Metformin with pioglitazone 850mg + 15mg Tablet,Metformin/Glitazone
+31077,Competact 15mg/850mg tablets (Takeda UK Ltd),Metformin/Glitazone
+60012,Dapagliflozin 5mg / Metformin 1g tablets,Metformin/SGLT2-i
+60643,Xigduo 5mg/1000mg tablets (AstraZeneca UK Ltd),Metformin/SGLT2-i
+63031,Dapagliflozin 5mg / Metformin 850mg tablets,Metformin/SGLT2-i
+63929,Canagliflozin 50mg / Metformin 1g tablets,Metformin/SGLT2-i
+64743,Canagliflozin 50mg / Metformin 850mg tablets,Metformin/SGLT2-i
+65057,Empagliflozin 5mg / Metformin 1g tablets,Metformin/SGLT2-i
+65059,Xigduo 5mg/850mg tablets (AstraZeneca UK Ltd),Metformin/SGLT2-i
+65066,Empagliflozin 12.5mg / Metformin 1g tablets,Metformin/SGLT2-i
+65083,Synjardy 5mg/1000mg tablets (Boehringer Ingelheim Ltd),Metformin/SGLT2-i
+54182,Dapagliflozin 10mg tablets,SGLT2-i
+54203,Forxiga 10mg tablets (AstraZeneca UK Ltd),SGLT2-i
+54265,Dapagliflozin 5mg tablets,SGLT2-i
+54480,Forxiga 5mg tablets (AstraZeneca UK Ltd),SGLT2-i
+60066,Invokana 100mg tablets (Janssen-Cilag Ltd),SGLT2-i
+60211,Canagliflozin 100mg tablets,SGLT2-i
+60379,Invokana 300mg tablets (Janssen-Cilag Ltd),SGLT2-i
+60430,Invokana 100mg tablets (Janssen-Cilag Ltd),SGLT2-i
+62760,Jardiance 10mg tablets (Boehringer Ingelheim Ltd),SGLT2-i
+63516,Forxiga 10mg tablets (Waymade Healthcare Plc),SGLT2-i
+64217,Jardiance 25mg tablets (Boehringer Ingelheim Ltd),SGLT2-i
+32,Gliclazide 80mg tablets,Sulfonylurea
+547,Glipizide 2.5mg tablets,Sulfonylurea
+1253,chlorpropamide tablets 100mg,Sulfonylurea
+1254,Glibenclamide 5mg tablets,Sulfonylurea
+1847,chlorpropamide tablets 250mg,Sulfonylurea
+1964,Diamicron 80mg tablets (Servier Laboratories Ltd),Sulfonylurea
+1965,Tolbutamide 500mg tablets,Sulfonylurea
+2219,Glibenclamide 2.5mg tablets,Sulfonylurea
+4862,Diabetamide 2.5mg tablets (Ashbourne Pharmaceuticals Ltd),Sulfonylurea
+5276,Glimepiride 1mg tablets,Sulfonylurea
+5316,Glimepiride 4mg tablets,Sulfonylurea
+5353,Glimepiride 2mg tablets,Sulfonylurea
+5627,Gliclazide 30mg modified-release tablets,Sulfonylurea
+5636,Glipizide 5mg tablets,Sulfonylurea
+6337,Glimepiride 3mg tablets,Sulfonylurea
+7284,Amaryl 2mg tablets (Zentiva),Sulfonylurea
+7332,Amaryl 1mg tablets (Zentiva),Sulfonylurea
+7409,Amaryl 3mg tablets (Zentiva),Sulfonylurea
+7744,Daonil 5mg tablets (Sanofi),Sulfonylurea
+7912,Semi-Daonil 2.5mg tablets (Sanofi),Sulfonylurea
+8034,DIABINESE tablets 100mg (PFIZER),Sulfonylurea
+8168,DIABINESE tablets 250mg (PFIZER),Sulfonylurea
+8390,gliquidone tablets 30mg,Sulfonylurea
+8976,Euglucon 2.5mg tablets (Aventis Pharma),Sulfonylurea
+9108,TOLBUTAMIDE 250 MG TAB,Sulfonylurea
+10427,tolazamide tablets 250mg,Sulfonylurea
+11284,Amaryl 4mg tablets (Zentiva),Sulfonylurea
+11695,Diamicron 30mg MR tablets (Servier Laboratories Ltd),Sulfonylurea
+11946,Tolbutamide 50mg/ml Injection,Sulfonylurea
+12245,GLUTRIL tablets 25mg (ROCHE),Sulfonylurea
+12259,glibornuride tablets 25mg,Sulfonylurea
+12455,Rastinon 500mg Tablet (Hoechst Marion Roussel),Sulfonylurea
+12513,Glibenese 5mg tablets (Pfizer Ltd),Sulfonylurea
+13331,Euglucon 5mg tablets (Sanofi),Sulfonylurea
+15374,Gliclazide 40mg/5ml oral suspension,Sulfonylurea
+16211,TOLBUTAMIDE 100 MG TAB,Sulfonylurea
+16602,Calabren 2.5mg Tablet (Berk Pharmaceuticals Ltd),Sulfonylurea
+17343,Gliclazide 80mg tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+17698,Minodiab 5mg tablets (Pfizer Ltd),Sulfonylurea
+17706,Minodiab 2.5mg tablets (Pfizer Ltd),Sulfonylurea
+19336,tolazamide tablets 100mg,Sulfonylurea
+19658,GLURENORM tablets 30mg (SANOFI S),Sulfonylurea
+21424,Glibenclamide 5mg/5ml oral suspension,Sulfonylurea
+21489,TOLANASE tablets 250mg (PHARMACIA),Sulfonylurea
+21564,Gliclazide 80mg tablets (Wockhardt UK Ltd),Sulfonylurea
+21832,Diabetamide 5mg tablets (Ashbourne Pharmaceuticals Ltd),Sulfonylurea
+21892,Diaglyk 80mg tablets (Ashbourne Pharmaceuticals Ltd),Sulfonylurea
+22145,TOLANASE tablets 100mg (PHARMACIA),Sulfonylurea
+22636,TOLBUTAMIDE 1 GM TAB,Sulfonylurea
+22858,acetohexamide tablets 500mg,Sulfonylurea
+24848,glymidine sodium tablets 500mg,Sulfonylurea
+25636,Libanil 2.5mg Tablet (Approved Prescription Services Ltd),Sulfonylurea
+26118,DIMELOR tablets 500mg (LILLY),Sulfonylurea
+26218,Calabren 5mg Tablet (Berk Pharmaceuticals Ltd),Sulfonylurea
+27969,GLYMESE tablets 250mg (DDSA),Sulfonylurea
+28708,Malix 2.5mg Tablet (Lagap),Sulfonylurea
+29326,Glipizide 5mg tablets (Mylan Ltd),Sulfonylurea
+29939,Gliclazide 80mg tablets (Mylan Ltd),Sulfonylurea
+30460,Malix 5mg Tablet (Lagap),Sulfonylurea
+31212,Gliclazide 80mg tablets (Actavis UK Ltd),Sulfonylurea
+31474,Libanil 5mg Tablet (Approved Prescription Services Ltd),Sulfonylurea
+33562,Duclazide 80mg Tablet (Dumex Ltd),Sulfonylurea
+33673,Tolbutamide 500mg tablets (Actavis UK Ltd),Sulfonylurea
+34399,Gliclazide 80mg tablets (IVAX Pharmaceuticals UK Ltd),Sulfonylurea
+34507,Glibenclamide 2.5mg tablets (Wockhardt UK Ltd),Sulfonylurea
+34563,Glibenclamide 5mg tablets (Wockhardt UK Ltd),Sulfonylurea
+34676,Glibenclamide 2.5mg tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+34706,Glibenclamide 2.5mg tablets (IVAX Pharmaceuticals UK Ltd),Sulfonylurea
+34802,Glipizide 5mg tablets (IVAX Pharmaceuticals UK Ltd),Sulfonylurea
+34932,Gliclazide 80mg tablets (Genus Pharmaceuticals Ltd),Sulfonylurea
+34957,Tolbutamide 500mg tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+36856,Gliclazide 80mg tablets (Sandoz Ltd),Sulfonylurea
+40365,Glimepiride 1mg tablets (Actavis UK Ltd),Sulfonylurea
+40425,Nazdol MR 30mg tablets (Teva UK Ltd),Sulfonylurea
+41558,Glibenclamide 5mg tablets (Teva UK Ltd),Sulfonylurea
+41559,Glibenclamide 5mg tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+41593,Glibenclamide 2.5mg tablets (Teva UK Ltd),Sulfonylurea
+41898,GLIBENCLAMIDE,Sulfonylurea
+42790,Gliclazide 80mg Tablet (Merck Generics (UK) Ltd),Sulfonylurea
+43065,Gliclazide 40mg tablets,Sulfonylurea
+43465,Zicron 40mg tablets (Bristol Laboratories Ltd),Sulfonylurea
+44304,Glyconon 500mg Tablet (DDSA Pharmaceuticals Ltd),Sulfonylurea
+44473,Edicil MR 30mg tablets (Ratiopharm UK Ltd),Sulfonylurea
+44738,Niddaryl 1mg tablets (Dee Pharmaceuticals Ltd),Sulfonylurea
+45215,Gliclazide 80mg Tablet (Neo Laboratories Ltd),Sulfonylurea
+45831,Dacadis MR 30mg tablets (Mylan Ltd),Sulfonylurea
+46927,Tolbutamide 500mg tablets (Teva UK Ltd),Sulfonylurea
+47074,Gliclazide 80mg/5ml oral suspension,Sulfonylurea
+47894,Nazdol MR 30mg tablets (Consilient Health Ltd),Sulfonylurea
+48056,Gliclazide 80mg tablets (Sovereign Medical Ltd),Sulfonylurea
+51955,Gliclazide 80mg tablets (Accord Healthcare Ltd),Sulfonylurea
+53288,Gliclazide 30mg modified-release tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+54764,Gliclazide 80mg tablets (Arrow Generics Ltd),Sulfonylurea
+55862,Gliclazide Oral solution,Sulfonylurea
+56008,Gliclazide 80mg tablets (Almus Pharmaceuticals Ltd),Sulfonylurea
+56437,Gliclazide 60mg modified-release tablets,Sulfonylurea
+57601,Daonil 5mg tablets (Dowelhurst Ltd),Sulfonylurea
+57830,Gliclazide 30mg modified-release tablets (Alliance Healthcare (Distribution) Ltd),Sulfonylurea
+58882,Gliclazide 120mg/5ml oral suspension,Sulfonylurea
+60495,Gliclazide 80mg tablets (Teva UK Ltd),Sulfonylurea
+61311,Glimepiride 4mg tablets (Sigma Pharmaceuticals Plc),Sulfonylurea
+61957,Gliclazide 40mg tablets (A A H Pharmaceuticals Ltd),Sulfonylurea
+62014,Glimepiride 2mg tablets (Accord Healthcare Ltd),Sulfonylurea
+62034,Laaglyda MR 60mg tablets (Consilient Health Ltd),Sulfonylurea
+63048,Gliclazide 80mg tablets (Alliance Healthcare (Distribution) Ltd),Sulfonylurea
+63131,Ziclaseg 30mg modified-release tablets (Lupin (Europe) Ltd),Sulfonylurea
+56376,Rosiglitazone 4mg with glimepiride 4mg tablet,Sulfonylurea/Glitazone

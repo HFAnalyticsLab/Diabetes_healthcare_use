@@ -1,0 +1,65 @@
+medcode,readcode,readterm,smoking_status
+54,137..00,Tobacco consumption,current smoker
+12942,137..11,Smoker - amount smoked,current smoker
+33,1371,Never smoked tobacco,non-smoker
+11788,1371.11,Non-smoker,non-smoker
+12958,1372,Trivial smoker - < 1 cig/day,current smoker
+12941,1372.11,Occasional smoker,current smoker
+12944,1373,Light smoker - 1-9 cigs/day,current smoker
+1878,1374,Moderate smoker - 10-19 cigs/d,current smoker
+3568,1375,Heavy smoker - 20-39 cigs/day,current smoker
+1822,1376,Very heavy smoker - 40+cigs/d,current smoker
+12961,1377,Ex-trivial smoker (<1/day),ex smoker
+12957,1378,Ex-light smoker (1-9/day),ex smoker
+12955,1379,Ex-moderate smoker (10-19/day),ex smoker
+12956,137A.00,Ex-heavy smoker (20-39/day),ex smoker
+12967,137a.00,Pipe tobacco consumption,current smoker
+31114,137b.00,Ready to stop smoking,current smoker
+12959,137B.00,Ex-very heavy smoker (40+/day),ex smoker
+12964,137C.00,Keeps trying to stop smoking,current smoker
+30423,137c.00,Thinking about stopping smoking,current smoker
+30762,137d.00,Not interested in stopping smoking,current smoker
+41979,137e.00,Smoking restarted,current smoker
+12946,137F.00,Ex-smoker - amount unknown,ex smoker
+46321,137f.00,Reason for restarting smoking,current smoker
+12240,137G.00,Trying to give up smoking,current smoker
+12947,137H.00,Pipe smoker,current smoker
+62686,137h.00,Minutes from waking to first tobacco consumption,current smoker
+12943,137J.00,Cigar smoker,current smoker
+97210,137j.00,Ex-cigarette smoker,ex smoker
+776,137K.00,Stopped smoking,ex smoker
+99838,137K000,Recently stopped smoking,ex smoker
+100495,137l.00,Ex roll-up cigarette smoker,ex smoker
+60,137L.00,Current non-smoker,non-smoker
+101338,137m.00,Failed attempt to stop smoking,current smoker
+12945,137M.00,Rolls own cigarettes,current smoker
+26470,137N.00,Ex pipe smoker,ex smoker
+19488,137O.00,Ex cigar smoker,ex smoker
+93,137P.00,Cigarette smoker,current smoker
+1823,137P.11,Smoker,current smoker
+12952,137Q.00,Smoking started,current smoker
+12951,137Q.11,Smoking restarted,current smoker
+10558,137R.00,Current smoker,current smoker
+90,137S.00,Ex smoker,ex smoker
+12878,137T.00,Date ceased smoking,ex smoker
+12966,137V.00,Smoking reduced,current smoker
+12965,137X.00,Cigarette consumption,current smoker
+12963,137Y.00,Cigar consumption,current smoker
+12960,137Z.00,Tobacco consumption NOS,current smoker
+7622,8CAL.00,Smoking cessation advice,current smoker
+18573,8H7i.00,Referral to smoking cessation advisor,current smoker
+98154,8HkQ.00,Referral to NHS stop smoking service,current smoker
+10742,8HTK.00,Referral to stop-smoking clinic,current smoker
+100099,8IAj.00,Smoking cessation advice declined,current smoker
+106359,8T08.00,Referral to smoking cessation service,current smoker
+98447,9km..00,Ex-smoker annual review - enhanced services administration,ex smoker
+100963,9km..11,Ex-smoker annual review,ex smoker
+98177,9kn..00,Non-smoker annual review - enhanced services administration,non-smoker
+101878,9kn..11,Non-smoker annual review,non-smoker
+98347,9ko..00,Current smoker annual review - enhanced services admin,current smoker
+104310,9ko..11,Current smoker annual review,current smoker
+102361,9NS0200,Referral for smoking cessation service offered,current smoker
+32687,E251.00,Tobacco dependence,current smoker
+95610,E251000,"Tobacco dependence, unspecified",current smoker
+70746,E251100,"Tobacco dependence, continuous",current smoker
+68658,E251z00,Tobacco dependence NOS,current smoker
