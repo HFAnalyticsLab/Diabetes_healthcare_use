@@ -25,10 +25,10 @@ As the data used for this analysis is not publically available, the code cannot 
 These scripts were written in R version (to be added) and RStudio Version 1.1.383. 
 The following R packages (available on CRAN) are needed: 
 
-* **tidyverse** - [https://www.tidyverse.org/](https://www.tidyverse.org/)
-* **tidylog** - [https://cran.r-project.org/web/packages/tidylog/index.html](https://cran.r-project.org/web/packages/tidylog/index.html)
-* **janitor** - [https://cran.r-project.org/web/packages/janitor/index.html](https://cran.r-project.org/web/packages/janitor/index.html)
-* **lubridate** - [https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
+* [**tidyverse**](https://www.tidyverse.org/)
+* [**tidylog**](https://cran.r-project.org/web/packages/tidylog/index.html)
+* [**janitor**](https://cran.r-project.org/web/packages/janitor/index.html)
+* [**lubridate**](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
 
 ### Getting started
 The 'R' folder contains the following scripts:
@@ -51,5 +51,5 @@ The 'R' folder contains the following scripts:
 * **Meetali Kakad**  
 
 ## License
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](https://github.com/HFAnalyticsLab/Diabetes_outpatients/blob/master/LICENSE).
 
