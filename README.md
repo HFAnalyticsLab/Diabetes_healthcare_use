@@ -29,8 +29,10 @@ The following R packages (available on CRAN) are needed:
 * [**tidylog**](https://cran.r-project.org/web/packages/tidylog/index.html)
 * [**janitor**](https://cran.r-project.org/web/packages/janitor/index.html)
 * [**lubridate**](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
+* [**tableone**](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html)
 
 ### Getting started
+
 The 'R' folder contains the following scripts:
 * '00_import_data.R' - imports and combines data, needs to be run first
 * '01_define_study_population.R' - defines study cohort based on inclusion and exclusion criteria, all other scripts depend on the outputs of it
@@ -39,16 +41,33 @@ The 'R' folder contains the following scripts:
 * '04_BMI.R' - extracts height and weight data, calculates numerical and categorical BMI
 * '05_HbA1C.R' - extracts HbA1C measurements and defines HbA1C control
 * '06_smoking_status.R' - extracts data on smoking status and defines smoking status
+* '07_multimorbidity.R' - calculated Cambridge multimorbidity score, based on the output of the SAS scripts
+* '08_recentlydiagnosed.R' - creates binary flag if first diagnosis was within last x years before study start
+* '09_descriptives_clinical.R' - creates table with baseline descriptives (table 1)
+
+The 'SAS' folder contains scripts that generates flags for each of the conditions in the [Cambridge multimorbidity
+score v1.0[(https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) (to be converted to R in the future):
+* '01-libnames.sas'- set libnames, file paths and variables 
+* '02_import.sas' - import raw C{RD data and save as sas files
+* '03_CPRDCAM_prep.sas' - import reference data (to be added to repo)
+* '04_CPRDCAM_processing.sas' - identify each of the 36 conditions 
+* '05_CPRDCAM_save.sas' - save output as csv file
+
 
 ## Useful references
 * Khalid JM, Raluy-Callado M, Curtis BH, Boye KS, Maguire A, Reaney M. Rates and risk of hospitalisation among patients with type 2 diabetes: Retrospective cohort study using the UK General Practice Research Database linked to English Hospital Episode Statistics. Int J Clin Pract. 2014;68(1):40–8.  
 * Kontopantelis E, Springate DA, Reeves D, Ashcroft DM, Rutter M, Buchan I, et al. Glucose, blood pressure and cholesterol levels and their relationships to clinical outcomes in type 2 diabetes: a retrospective cohort study. Diabetologia. 2015;58(3):505–18. 
-* Wright AK, Kontopantelis E, Emsley R, Buchan IE, Mamas MA, Sattar N, et al. Cardiovascular Risk and Risk Factor Management in Type 2 Diabetes: A Population-Based Cohort Study Assessing Sex Disparities. Circulation. 2019;44(0):CIRCULATIONAHA.118.039100. 
+* Wright AK, Kontopantelis E, Emsley R, Buchan IE, Mamas MA, Sattar N, et al. Cardiovascular Risk and Risk Factor Management in Type 2 Diabetes: A Population-Based Cohort Study Assessing Sex Disparities. Circulation. 2019;44(0):CIRCULATIONAHA.118.039100.
+* Cassell A, Edwards D, Harshfield A, et al. The epidemiology of multimorbidity in primary care: a retrospective cohort study. Br J Gen Pract. 2018;68(669):e245-e251. doi:10.3399/bjgp18X695465
+
+
 
 
 ## Authors
 * **Fiona Grimm** - [@fiona_grimm](https://twitter.com/fiona_grimm) - [fiona-grimm](https://github.com/fiona-grimm)
 * **Meetali Kakad**  
+* **Will Parry** - [@DrWillParry](https://twitter.com/DrWillParry) - [Dr Will Parry](https://willparry.net/)
+* **Kathryn Dreyer** - [@kathrynadreyer](https://twitter.com/kathrynadreyer) - [kathdreyer](https://github.com/kathdreyer)
 
 ## License
 This project is licensed under the [MIT License](https://github.com/HFAnalyticsLab/Diabetes_outpatients/blob/master/LICENSE).
