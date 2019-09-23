@@ -44,24 +44,25 @@ prescriptions_bypat <- therapy_diabetes %>%
   group_by(patid, drug_type) %>% 
   summarise(count = n()) %>% 
   mutate(insulin = ifelse(drug_type =='Insulin', 1, 0),
-         insulin_OHA = ifelse(drug_type == 'Insulin/glp-1', 1, 0),
-         OHA = ifelse(drug_type != 'Insulin' & drug_type != 'Insulin/glp-1', 1, 0),
-         OHA_combo = ifelse(drug_type %in% c('Metformin/SGLT2-i', 'Metformin/DPP-4i', 'Metformin/Glitazone'), 1, 0))
+         insulin_NIGLD = ifelse(drug_type == 'Insulin/glp-1', 1, 0),
+         NIGLD = ifelse(drug_type != 'Insulin' & drug_type != 'Insulin/glp-1', 1, 0),
+         NIGLD_combo = ifelse(drug_type %in% c('Metformin/SGLT2-i', 'Metformin/DPP-4i', 'Metformin/Glitazone'), 1, 0))
 
-# categorise into insulin only, OHA only, both insulin and OHA
+# categorise into insulin only, non-insulin glucose lowering drug (NIGLD, includes OHA and GLP-1 injectables) only, both insulin and NIGLD
+
 therapy_bypat <-  prescriptions_bypat %>% 
   group_by(patid) %>% 
-  summarise(insulin_only = ifelse(sum(insulin) >= 1 & sum(OHA) == 0 & sum(insulin_OHA) == 0, 1, 0),
-            OHA_only = ifelse(sum(OHA) >= 1 & sum(insulin) == 0 & sum(insulin_OHA) == 0, 1, 0),
-            insulin_OHA = ifelse(sum(insulin_OHA) >= 1 | (sum(OHA) >= 1 & sum(insulin) >=1), 1, 0)) 
+  summarise(insulin_only = ifelse(sum(insulin) >= 1 & sum(NIGLD) == 0 & sum(insulin_NIGLD) == 0, 1, 0),
+            NIGLD_only = ifelse(sum(NIGLD) >= 1 & sum(insulin) == 0 & sum(insulin_NIGLD) == 0, 1, 0),
+            insulin_NIGLD = ifelse(sum(insulin_NIGLD) >= 1 | (sum(NIGLD) >= 1 & sum(insulin) >=1), 1, 0)) 
 
 # Join with study population to note where patients had not recorded medication
 therapy_bypat <- therapy_bypat %>% 
   right_join(patients[,'patid'], by = 'patid') %>% 
   mutate(medication = case_when(insulin_only == 1 ~ 'Insulin only',
-                                OHA_only == 1 ~ 'OHA only',
-                                insulin_OHA == 1 ~ 'Both',
-                                is.na(insulin_only) & is.na(OHA_only) & is.na(insulin_OHA) ~ 'None recorded'))
+                                NIGLD_only == 1 ~ 'NIGLD only',
+                                insulin_NIGLD == 1 ~ 'Both',
+                                is.na(insulin_only) & is.na(NIGLD_only) & is.na(insulin_NIGLD) ~ 'None recorded'))
 
 # Saving processed files --------------------------------------------------
 
