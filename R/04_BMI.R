@@ -126,9 +126,10 @@ extract_weight_height <- extract_weight_height %>%
 # the pre-calculated BMI from the additional clinical details table 
 extract_weight_height <- extract_weight_height %>% 
   mutate(BMI_filled = ifelse(is.na(height_m), 1, 0),
-         BMI_calc =  ifelse(is.na(BMI_calc), BMI, BMI_calc),
-         BMI_categorical = cut(BMI_calc, breaks = c(0, 18.5, 25, 30, 35, 100), labels = c('<18.5', '18.5-24.9', '25-29.9', '30-34.9', '>35'),
-                               ordered_result = TRUE)) 
+         BMI_calc =  ifelse(is.na(BMI_calc), round(BMI, 1), BMI_calc),
+         BMI_categorical = cut(BMI_calc, breaks = c(0, 18.5, 25, 30, 35, 100), 
+                               labels = c('<18.5', '18.5-24.9', '25-29.9', '30-34.9', '>35'),
+                               ordered_result = TRUE, right = FALSE)) 
 
 BMI_all_records <- extract_weight_height %>% 
   semi_join(patients[, c('patid')], by = 'patid')
@@ -176,7 +177,6 @@ BMI_within_x_years <- function(years_before_cutoff){
     ungroup() %>% 
     select(patid, BMI_calc, BMI_categorical, eventdate) %>% 
     right_join(patients[, c('patid')], by = 'patid')
-  
   
   BMI_bypat <- BMI_bypat_latest %>% 
     mutate(BMI_categorical = fct_explicit_na(BMI_categorical, 'Missing'))
