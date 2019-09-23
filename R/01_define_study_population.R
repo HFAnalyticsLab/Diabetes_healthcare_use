@@ -81,11 +81,6 @@ patients <- patients %>%
   left_join(imd_patient[, c('patid', 'imd2015_10')], by = c('patid')) %>% 
   filter(!is.na(imd2015_10))
 
-# Exclude patients that transfer out for any reason other than death 
-# between study start and follow up end 
-patients <- patients %>% 
-  filter(is.na(tod) | toreason == 1)
-
 # Exclude patient who died before 2015-12-01 according to ONS:
 # It is a known issue that date of death (dod) is sometimes missing
 # Missing dod will be replaced with date of registration (dor)
@@ -103,7 +98,6 @@ patients <- patients %>%
 # check range of death dates
 range(na.omit(patients$ONS_dod))[1] <= study_start
 
-
 # Urban-Rural indicator
 # first construct practice ID to join on, which is equivalent of the last 3 digits of the patient ID
 patients <- patients %>% 
@@ -112,26 +106,31 @@ patients <- patients %>%
   filter(!is.na(e2011_urban_rural)) 
 
 
-# Dropping variables ------------------------------------------------------
+# Rename variables ------------------------------------------------------
 
 # CPRD date of death, as we are using ONS date of death
 patients <- patients %>% 
-  select(-deathdate)
+  rename(CPRD_deathdate = deathdate)
 
 # Deriving variables ------------------------------------------------------
 
 # Mortality flags and follow-up times
 patients <- patients %>% 
-         # died during study period
-  mutate(died_study = ifelse(is.na(ONS_dod) | ONS_dod >= study_end , 0, 1),
-         # died during follow up 
-         died_followup = ifelse(is.na(ONS_dod) |  ONS_dod < followup_start | ONS_dod > followup_end, 0, 1),
-         # number of days alive during study period 
-         days_alive_study = ifelse(died_study == 0, 731, as.numeric(ONS_dod - study_start, units = 'days')),
-         # number of days alive during follow up
-         days_alive_outcome = case_when(died_study == 1 ~ NA_real_, 
-                                        died_study == 0 & died_followup == 0 ~ 365, 
-                                        died_followup == 1 ~ as.numeric(ONS_dod - followup_start, units = 'days')))
+         # died during study period or follow up 
+  mutate(died_study = ifelse(!is.na(ONS_dod) & ONS_dod %within% interval(study_start, study_end), 1, 0),
+         died_followup = ifelse(!is.na(ONS_dod) & ONS_dod %within% interval(followup_start, followup_end) , 1, 0),
+         # transferred during study period or follow up (for reasons other than death)
+         transfer_out_study = ifelse(!is.na(tod) & tod %within% interval(study_start, study_end) & toreason != 1, 1, 0),
+         transfer_out_followup = ifelse(!is.na(tod) & tod %within% interval(followup_start, followup_end) & toreason != 1, 1, 0),
+         # Resolve cases where patients both die and transfer out - which is first?
+         transfer_out_study = ifelse(died_study == 1 & transfer_out_study == 1 & ONS_dod <= tod, 0, transfer_out_study),
+         died_study = ifelse(died_study == 1 & transfer_out_study == 1 & ONS_dod > tod, 0, died_study),
+         transfer_out_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod <= tod, 0, transfer_out_followup),
+         died_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod > tod, 0, died_followup))
+
+# Check that this worked
+patients %>%  tabyl(died_followup, transfer_out_followup) %>%  adorn_title()
+patients %>%  tabyl(died_study, transfer_out_study) %>%  adorn_title()
 
 
 # Categorical age variable: 5-year bins
