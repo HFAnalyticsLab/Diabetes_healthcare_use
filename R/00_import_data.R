@@ -112,6 +112,21 @@ extract_consultation <- map(consultation_files, read_tsv, col_types = cols(event
 
 saveRDS(extract_consultation, 'raw_data/Extract_consultation.Rds')
 
+
+# Staff -------------------------------------------------------------------
+extract_staff <- read_tsv(str_c(raw_data_path, '2019_07_24_diabetes_Extract_Staff_001.txt')) 
+
+saveRDS(extract_staff, 'raw_data/Extract_staff.Rds')
+
+# Practice ----------------------------------------------------------------
+extract_spractice <- read_tsv(str_c(raw_data_path, '2019_07_24_diabetes_Extract_Practice_001.txt'),
+                              col_types = cols(lcd = col_date(format = "%d/%m/%Y"),
+                                               uts = col_date(format = "%d/%m/%Y")))
+
+
+saveRDS(extract_spractice, 'raw_data/Extract_practice.Rds')
+
+
 # HES Outpatients ------------------------------------------------------------
 hesop_appts_raw <- read_tsv(str_c(raw_data_path_linked, 'hesop_appointment_19_138.txt'),
                          col_types = cols(patid = col_integer(),
@@ -131,3 +146,41 @@ hesop_appts <- hesop_appts_raw %>%
   left_join(hesop_clinical_raw[, c('patid', 'attendkey', 'tretspef','mainspef')], by = c('patid', 'attendkey'))
 
 saveRDS(hesop_appts, 'raw_data/HES_outpatients.Rds')
+
+
+# HES Admitted Patient Care ------------------------------------------------------------
+# Episodes 
+
+hesapc_episodes <- read_tsv(str_c(raw_data_path_linked, 'hes_episodes_19_138.txt'),
+                         col_types = cols(admidate = col_date(format = "%d/%m/%Y"),
+                                          epistart = col_date(format = "%d/%m/%Y"),
+                                          epiend = col_date(format = "%d/%m/%Y"),
+                                          discharged = col_date(format = "%d/%m/%Y")))
+
+saveRDS(hesapc_episodes, 'raw_data/HES_APC_episodes.Rds')
+
+hesapc_episodes_diagnoses <- read_tsv(str_c(raw_data_path_linked, 'hes_diagnosis_epi_19_138.txt'),
+                            col_types = cols(epistart = col_date(format = "%d/%m/%Y"),
+                                             epiend = col_date(format = "%d/%m/%Y")))
+
+hesapc_episodes_diagnoses <- hesapc_episodes_diagnoses %>% 
+  select(-ICDx) %>% 
+  mutate(d_order = ifelse(d_order %in% c(1:9), str_c('Diag_0', d_order), str_c('Diag_', d_order))) %>% 
+  spread(key = 'd_order', value = 'ICD')
+
+saveRDS(hesapc_episodes_diagnoses, 'raw_data/HES_APC_episodes_diagnoses.Rds')
+
+# Spells
+hesapc_spells <- read_tsv(str_c(raw_data_path_linked, 'hes_hospital_19_138.txt'),
+                            col_types = cols(admidate = col_date(format = "%d/%m/%Y"),
+                                             epistart = col_date(format = "%d/%m/%Y"),
+                                             epiend = col_date(format = "%d/%m/%Y"),
+                                             discharged = col_date(format = "%d/%m/%Y")))
+
+saveRDS(hesapc_spells, 'raw_data/HES_APC_spells.Rds')
+
+
+hesapc_spells_diagnoses <- read_tsv(str_c(raw_data_path_linked, 'hes_diagnosis_hosp_19_138.txt'),
+                                      col_types = cols(epistart = col_date(format = "%d/%m/%Y"),
+                                                       epiend = col_date(format = "%d/%m/%Y")))
+
