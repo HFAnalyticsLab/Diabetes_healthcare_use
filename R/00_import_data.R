@@ -126,6 +126,12 @@ extract_spractice <- read_tsv(str_c(raw_data_path, '2019_07_24_diabetes_Extract_
 
 saveRDS(extract_spractice, 'raw_data/Extract_practice.Rds')
 
+# HES Patient ------------------------------------------------------------
+
+hes_patient <- read_tsv(str_c(raw_data_path_linked, 'hes_patient_19_138.txt')) 
+
+saveRDS(hes_patient, 'raw_data/HES_patient.Rds')
+
 
 # HES Outpatients ------------------------------------------------------------
 hesop_appts_raw <- read_tsv(str_c(raw_data_path_linked, 'hesop_appointment_19_138.txt'),
