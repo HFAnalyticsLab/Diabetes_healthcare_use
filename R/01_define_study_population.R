@@ -124,6 +124,11 @@ patients <- patients %>%
 
 # Deriving variables ------------------------------------------------------
 
+# Research quality data flag
+patients <- patients %>% 
+  left_join(extract_practice, by = 'pracid') %>% 
+  mutate(resquality = ifelse(uts <= study_start & lcd > study_end, 1, 0)) 
+
 # Mortality flags and follow-up times
 patients <- patients %>% 
          # died during study period or follow up 
