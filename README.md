@@ -15,7 +15,7 @@ We used data from the Clinical Practice Research Datalink (CPRD) linked to Hospi
 
 Data used for this analysis were anonymised in line with the ICO's Anonymisation Code of Practice. The data were accessed in The Health Foundation's Secure Data Environment, which is a secure data analysis facility (accredited for the ISO27001 information security standard, and recognised for the NHS Digital Data Security and Protection Toolkit). No information that could directly identify a patient or other individual was used. Variables labelled 'patid' do not refer to NHS IDs or other identifiable patient data.
 
-Read code lists used in this analyis can be found in the 'code_lists' folder.
+Read code lists used in this analyis can be found in the 'code_lists' folder. The code list used for ethnicity was from Wright *et al.*, 2017, and can be [downloaded from the Clinical Codes repository] (https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/).
 
 ## How does it work?
 As the data used for this analysis is not publically available, the code cannot be used to replicate the analysis on this dataset. However, with modifications the code will be able to be used on other patient-level CPRD extracts. 
@@ -33,8 +33,14 @@ The following R packages (available on CRAN) are needed:
 
 ### Getting started
 
-The 'R' folder contains the following scripts:
-* '00_import_data.R' - imports and combines data, needs to be run first
+The 'R' folder contains:
+
+1. sourced files: 'study_params.R' contains study parameters used by all scripts
+
+2. file import scripts:
+* '00_import_data.R' - imports and combines CPRD and linked data, needs to be run first
+
+3. analysis scripts (to be used in this order):
 * '01_define_study_population.R' - defines study cohort based on inclusion and exclusion criteria, all other scripts depend on the outputs of it
 * '02_diabetes_medication.R' - extracts data on diabetes medication and defines drug types
 * '03_diabetes_type.R' - extracts diabetes diagnoses and defines diabetes type, additionally depends on script 02
@@ -43,7 +49,16 @@ The 'R' folder contains the following scripts:
 * '06_smoking_status.R' - extracts data on smoking status and defines smoking status
 * '07_multimorbidity.R' - calculated Cambridge multimorbidity score, based on the output of the SAS scripts
 * '08_recentlydiagnosed.R' - creates binary flag if first diagnosis was within last x years before study start
-* '09_descriptives_clinical.R' - creates table with baseline descriptives (table 1)
+* '09_descriptives_clinical.R' - creates table with baseline study population descriptives (table 1), based on 
+scripts 2-8
+
+* '10_GPappointments.R' - cleans and counts GP appointments per patient
+* '11_Outpatient.R' - cleans and counts outpatient appointments
+* '12_hospital_admissions.R' - cleans and counts hospital admissions
+* '13_prescriptions.R'- cleans and counts prescriptions
+* '14_descriptives_utilisation.R' - creates descriptives analyses of healthcare utilisation, based on scripts 10-13
+
+
 
 The 'SAS' folder contains scripts that generates flags for each of the conditions in the [Cambridge multimorbidity
 score v1.0](https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) (to be converted to R in the future):
