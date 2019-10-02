@@ -46,7 +46,7 @@ The 'R' folder contains the following scripts:
 * '09_descriptives_clinical.R' - creates table with baseline descriptives (table 1)
 
 The 'SAS' folder contains scripts that generates flags for each of the conditions in the [Cambridge multimorbidity
-score v1.0[(https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) (to be converted to R in the future):
+score v1.0](https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) (to be converted to R in the future):
 * '01-libnames.sas'- set libnames, file paths and variables 
 * '02_import.sas' - import raw C{RD data and save as sas files
 * '03_CPRDCAM_prep.sas' - import reference data (to be added to repo)
@@ -65,7 +65,7 @@ score v1.0[(https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) (to be converted
 
 ## Authors
 * **Fiona Grimm** - [@fiona_grimm](https://twitter.com/fiona_grimm) - [fiona-grimm](https://github.com/fiona-grimm)
-* **Meetali Kakad**  
+* **Meetali Kakad**  -[@tali_md](https://twitter.com/tali_md?lang=en)
 * **Will Parry** - [@DrWillParry](https://twitter.com/DrWillParry) - [Dr Will Parry](https://willparry.net/)
 * **Kathryn Dreyer** - [@kathrynadreyer](https://twitter.com/kathrynadreyer) - [kathdreyer](https://github.com/kathdreyer)
 
