@@ -65,18 +65,24 @@ patients_combined <- patients_combined %>%
          medication = fct_relevel(medication, 'NIGLD only', 'Insulin only', 'Both', 'None recorded'),
          smoking_status = fct_relevel(smoking_status, 'nonsmoker', 'exsmoker', 'smoker', 'Missing'),
          BMI_categorical = fct_relevel(BMI_categorical, 'Missing', after = Inf),
-         HbA1C_control = fct_relevel(HbA1C_control, 'good', 'borderline', 'bad', 'Missing'))
+         HbA1C_control = fct_relevel(HbA1C_control, 'good', 'borderline', 'bad', 'Missing'),
+         ethnicity = fct_relevel(ethnicity, 'White', 'Asian/British Asian', 'Black/Black British', 'Other', 'Mixed', 'Unknown'))
 
 # Change/combine some factor level to avoid having small groups
 patients_combined <- patients_combined %>% 
   mutate(female = ifelse(gender == 2, 1, 0),
-         age_bins_SDC = fct_collapse(age_bins, '0-19' = c('0-4', '5-9', '10-14', '15-19'),
+         age_bins_study_SDC = fct_collapse(age_bins_study, '0-19' = c('0-4', '5-9', '10-14', '15-19'),
                                      '80+' = c('80-84', '85+')),
-         mental_mm_cat_SDC = fct_collapse(mental_mm_cat, '2+' = c('1', '2', '3', '4+')))
+         age_bins_followup_SDC = fct_collapse(age_bins_followup, '0-19' = c('0-4', '5-9', '10-14', '15-19'),
+                                           '80+' = c('80-84', '85+')),
+         mental_mm_cat_SDC = fct_collapse(mental_mm_cat, '1+' = c('1', '2', '3', '4+')))
+
+
+saveRDS(patients_combined, 'processed_data/patients_clinical_combined.Rds')
 
 
 # Variables to summarise
-vars_tosummarise <- c('resquality', 'diabetes_type', "female", "startage", "age_bins_SDC", 
+vars_tosummarise <- c('resquality', 'diabetes_type', "female", "ethnicity", "startage_study", "age_bins_study_SDC", 
                       'died_study', 'died_followup', 'transfer_out_study', 'transfer_out_followup',
                       'diag_6m', 'diag_2y', 'diag_5y', 
                       'e2011_urban_rural', 'imd_quintile',
@@ -84,7 +90,7 @@ vars_tosummarise <- c('resquality', 'diabetes_type', "female", "startage", "age_
                       'mental_mm_cat_SDC', 'physical_mm_cat', 'mm_cat',
                       'HYP', 'PNC', 'HEL','CHD', 'DEPANX', 'CKD', 'THY', 'DIV', 'IBS', 'ATR')
 
-cat_vars_tosummarise <- vars_tosummarise[vars_tosummarise != 'startage']
+cat_vars_tosummarise <- vars_tosummarise[vars_tosummarise != 'startage_study']
 
 # 1. All patients ---------------------------------------------------------
 # Acceptable patients with diabetes diagnosis and valid IMD
