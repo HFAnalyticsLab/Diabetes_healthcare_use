@@ -39,10 +39,13 @@ extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
 # Import diabetes code list
 diabetes_codes <- read_csv(str_c(code_list_path,'Appendix1_diabetes_diagnosis.csv'))
 
-# Mecode-readcode lookup table
+# CPRD Mecode-readcode lookup table
 medical_dic <- read_tsv(str_c(code_list_path, "medical.txt"))
 
 # Ethnicity code list
+# Wright et al, 2017, Diabetes Care
+# can be downloaded from: https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/
+
 # need to join in medcodes
 ethnicity_codes <- read_csv(str_c(code_list_path, "res56-ethnicity.csv")) %>% 
   select(readcode, ethnic5) %>% 
