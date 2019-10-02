@@ -154,14 +154,70 @@ age_labels <- c(str_c(seq(0, 80, by = 5), '-', seq(4, 84, by = 5)), '85+')
 age_breaks <- c(seq(0, 85, by = 5), Inf)
 
 patients <- patients %>% 
-  mutate(startage = 2015 - yob,
-         age_bins = cut(startage, breaks = age_breaks, labels = age_labels, include.lowest = TRUE))
+  mutate(startage_study = 2015 - yob,
+         age_bins_study = cut(startage_study, breaks = age_breaks, 
+                              labels = age_labels, include.lowest = TRUE, right = FALSE),
+         startage_followup = 2017 - yob,
+         age_bins_followup = cut(startage_followup, breaks = age_breaks, 
+                                 labels = age_labels, include.lowest = TRUE, right = FALSE))
 
 # IMD quintiles
 imd_labels <- c('1 least deprived', '2', '3', '4', '5 most deprived')
 
 patients <- patients %>% 
   mutate(imd_quintile = cut(imd2015_10, breaks = seq(0, 10, by = 2), labels = imd_labels))
+
+
+# Ethnicity ---------------------------------------------------------------
+
+# 1. Try to determine from clinical codes in CPRD
+ethnicity_clinical <- extract_clinical %>% 
+  filter(eventdate < study_start) %>% 
+  semi_join(ethnicity_codes, by = 'medcode') %>% 
+  left_join(ethnicity_codes, by = 'medcode') %>% 
+  group_by(patid, ethnic5) %>% 
+  tally()
+
+# Keep most frequent ethnicity by patient (and if there is a tie keep all)
+ethnicity_clinical_mostfreq <- ethnicity_clinical %>% 
+  group_by(patid) %>% 
+  filter(ethnic5 == max(ethnic5))
+
+# Check for ties
+ethnicity_clinical_mostfreq %>% 
+  select(patid) %>% 
+  group_by(patid) %>% 
+  tally() %>% 
+  filter(n>1)
+
+# Remove patients with ties
+ethnicity_clinical_mostfreq <- ethnicity_clinical_mostfreq %>% 
+  group_by(patid) %>% 
+  mutate(patient_count = n()) %>% 
+  filter(patient_count == 1 ) %>% 
+  select(-patient_count)
+
+# Fill in the gaps (including patients that had tie in CPRD) using HES patient information
+ethnicity_clinical_mostfreq <- ethnicity_clinical_mostfreq %>%  
+  right_join(patients[, 'patid'], by = 'patid') %>% 
+  left_join(hes_patient[, c('patid', 'gen_ethnicity')])
+
+ethnicity_clinical_mostfreq <- ethnicity_clinical_mostfreq  %>% 
+  mutate(ethnicity = ethnic5,
+         ethnicity = ifelse(is.na(ethnicity) & gen_ethnicity == 'White', 'White', ethnicity),
+         ethnicity = ifelse(is.na(ethnicity) & 
+                             (gen_ethnicity=="Other" | gen_ethnicity=="Chinese" | gen_ethnicity=="Oth_Asian"), 'Other', ethnicity),
+         ethnicity = ifelse(is.na(ethnicity) & 
+                              (gen_ethnicity=="Bl_Afric" | gen_ethnicity=="Bl_Carib" | gen_ethnicity=="Bl_Other"), 'Black/Black British', ethnicity),
+         ethnicity = ifelse(is.na(ethnicity) & 
+                              (gen_ethnicity=="Bangladesi" | gen_ethnicity=="Indian" | gen_ethnicity=="Pakistani"), 'Asian/British Asian', ethnicity),
+         ethnicity = fct_explicit_na(ethnicity, 'Unknown'))
+
+ethnicity_clinical_mostfreq %>%  tabyl(ethnicity)
+
+# Add this back into patients table
+patients <- patients %>% 
+  left_join(ethnicity_clinical_mostfreq[, c('patid', 'ethnicity')], by = 'patid')
 
 # Saving processed files --------------------------------------------------
 
