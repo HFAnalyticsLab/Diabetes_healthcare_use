@@ -178,9 +178,3 @@ hesapc_spells <- read_tsv(str_c(raw_data_path_linked, 'hes_hospital_19_138.txt')
                                              discharged = col_date(format = "%d/%m/%Y")))
 
 saveRDS(hesapc_spells, 'raw_data/HES_APC_spells.Rds')
-
-
-hesapc_spells_diagnoses <- read_tsv(str_c(raw_data_path_linked, 'hes_diagnosis_hosp_19_138.txt'),
-                                      col_types = cols(epistart = col_date(format = "%d/%m/%Y"),
-                                                       epiend = col_date(format = "%d/%m/%Y")))
-
