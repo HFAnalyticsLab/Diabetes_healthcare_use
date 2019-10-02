@@ -13,6 +13,9 @@ library(janitor)
 # Source file paths: code_list_path
 source('R_FG/file_paths.R')
 
+# Source study parameters 
+source('R_FG/study_params.R')
+
 # Import data -------------------------------------------------------------
 
 # Patient extract
@@ -27,21 +30,28 @@ imd_patient <- readRDS('raw_data/Linked_patient_imd.Rds')
 # Practice leves rural urban classifier
 rururb_patient <- readRDS('raw_data/Linked_rururb_practice.Rds')
 
+# Practice
+extract_practice <- readRDS('raw_data/Extract_practice.Rds')
+
 # Clinical files 
 extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
 
 # Import diabetes code list
 diabetes_codes <- read_csv(str_c(code_list_path,'Appendix1_diabetes_diagnosis.csv'))
 
-# Define study parameters -------------------------------------------------
+# Mecode-readcode lookup table
+medical_dic <- read_tsv(str_c(code_list_path, "medical.txt"))
 
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
+# Ethnicity code list
+# need to join in medcodes
+ethnicity_codes <- read_csv(str_c(code_list_path, "res56-ethnicity.csv")) %>% 
+  select(readcode, ethnic5) %>% 
+  left_join(medical_dic, by = 'readcode')
+  
+# HES Patient
+hes_patient <- readRDS('raw_data/HES_patient.Rds')
 
-# Year 3 for health outcomes
-followup_start <- ymd('2017-12-01')
-followup_end <-  ymd('2018-11-30')
+
 
 # Double-check pre-applied inclusion and exclusion criteria ---------------
 
