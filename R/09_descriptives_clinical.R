@@ -45,14 +45,9 @@ mm_bypat <- readRDS('processed_data/patients_multimorbidity.rds')
 # Binary variables on 'first diagnosis within last x years'
 clinical_diabetes_first <- readRDS('processed_data/patients_diabetes_firstdiagnosis.rds')
 
-# Practice
-extract_practice <- readRDS('raw_data/Extract_practice.Rds')
-
 # Join them all together
 patients_combined <- patients %>% 
   select(-vmid, -mob, -marital, -famnum, -CHSreg, -CHSdate, -prescr, -capsup, -regstat, -reggap, -internal, -accept, -ONS_dor) %>% 
-  left_join(extract_practice, by = 'pracid') %>% 
-  mutate(resquality = ifelse(uts <= study_start & lcd > study_end, 1, 0)) %>% 
   left_join(diabetes_bypat[, c('patid', 'diabetes_type')], by = 'patid') %>% 
   left_join(therapy_bypat[, c('patid', 'medication')], by = 'patid') %>% 
   left_join(smoking_bypat[, c('patid', 'smoking_status')], by = 'patid') %>% 
