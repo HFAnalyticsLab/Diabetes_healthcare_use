@@ -141,7 +141,8 @@ patients <- patients %>%
          transfer_out_study = ifelse(died_study == 1 & transfer_out_study == 1 & ONS_dod <= tod, 0, transfer_out_study),
          died_study = ifelse(died_study == 1 & transfer_out_study == 1 & ONS_dod > tod, 0, died_study),
          transfer_out_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod <= tod, 0, transfer_out_followup),
-         died_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod > tod, 0, died_followup))
+         died_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod > tod, 0, died_followup),
+         followup_pop = ifelse(resquality == 1 & died_study == 0 & transfer_out_study == 0, 1, 0))
 
 # Check that this worked
 patients %>%  tabyl(died_followup, transfer_out_followup) %>%  adorn_title()
