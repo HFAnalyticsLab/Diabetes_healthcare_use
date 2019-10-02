@@ -15,7 +15,7 @@ We used data from the Clinical Practice Research Datalink (CPRD) linked to Hospi
 
 Data used for this analysis were anonymised in line with the ICO's Anonymisation Code of Practice. The data were accessed in The Health Foundation's Secure Data Environment, which is a secure data analysis facility (accredited for the ISO27001 information security standard, and recognised for the NHS Digital Data Security and Protection Toolkit). No information that could directly identify a patient or other individual was used. Variables labelled 'patid' do not refer to NHS IDs or other identifiable patient data.
 
-Read code lists used in this analyis can be found in the 'code_lists' folder. The code list used for ethnicity was from Wright *et al.*, 2017, and can be [downloaded from the Clinical Codes repository] (https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/).
+Read code lists used in this analyis can be found in the 'code_lists' folder. The code list used for ethnicity was from Wright *et al.*, 2017, and can be [downloaded from the Clinical Codes repository](https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/).
 
 ## How does it work?
 As the data used for this analysis is not publically available, the code cannot be used to replicate the analysis on this dataset. However, with modifications the code will be able to be used on other patient-level CPRD extracts. 
