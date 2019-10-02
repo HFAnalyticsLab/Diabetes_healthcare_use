@@ -133,11 +133,14 @@ write.csv(table_study_csv, 'summary_stats/table1/190917_Table1_studystart.csv')
 # By diabetes type
 # Only patients that did not die or transfer out during study period
 
-patients_followup <-  patients_study %>% 
-  filter(died_study == 0 & transfer_out_study == 0)
+patients_followup <-  patients_combined %>% 
+  filter(followup_pop == 1)
 
-vars_followup <- vars_study[!is.element(vars_study, c('died_study', 'transfer_out_study'))]
-cat_vars_followup <- cat_vars_study[!is.element(cat_vars_study, c('died_study', 'transfer_out_study'))]
+vars_followup <- vars_study[!is.element(vars_study, c('died_study', 'transfer_out_study', "startage_study", "age_bins_study_SDC"))]
+vars_followup <- c(vars_followup, "startage_followup", "age_bins_followup_SDC")
+cat_vars_followup <- cat_vars_study[!is.element(cat_vars_study, c('died_study', 'transfer_out_study', "startage_study", "age_bins_study_SDC"))]
+cat_vars_followup <-  c(cat_vars_followup, "age_bins_followup_SDC")
+
 
 table_followup <- CreateTableOne(vars = vars_followup, strata = 'diabetes_type', 
                                  data = patients_followup, factorVars = cat_vars_followup,
