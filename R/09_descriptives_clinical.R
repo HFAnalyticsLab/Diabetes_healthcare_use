@@ -11,18 +11,13 @@ library(lubridate)
 library(tidylog)
 library(tableone)
 
+
 # Source file paths: Rds_path
 source('R_FG/file_paths.R')
 
-# Define study parameters -------------------------------------------------
+# Source study parameters 
+source('R_FG/study_params.R')
 
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
-
-# Year 3 for health outcomes
-followup_start <- ymd('2017-12-01')
-followup_end <-  ymd('2018-11-30')
 
 # Import data -----------------------------------------
 
