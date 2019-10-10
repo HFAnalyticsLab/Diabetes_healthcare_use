@@ -105,6 +105,14 @@ hesop_count_byPat <- hesop_appts_study %>%
             OP_attended_subs_diab = sum(attended == 5 & firstatt %in% c(2,4) & diabetic_medicine == 1),
             OP_attended_total_diab = sum(attended == 5 & diabetic_medicine == 1))
 
+
+hesop_count_byPat %>%
+  gather(-patid, key = 'type', value = 'count') %>% 
+  ggplot(aes(x = count, group = type, fill = type)) +
+  geom_histogram(binwidth = 1) +
+  coord_cartesian(xlim = c(0,10)) +
+  facet_grid(. ~ type)
+
 # Create categorical variables (binned appointment counts)
 hesop_count_byPat <-  hesop_count_byPat %>% 
   mutate(OP_attended_cat = cut(OP_attended_total, breaks = c(0, 1, 3, 5, 9, 13, 25, Inf), labels = c('None', '1-2', '3-4', '5-8', '9-12', '13-24', 'Over 25'),
