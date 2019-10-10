@@ -128,10 +128,76 @@ hesop_count_byPat <- hesop_count_byPat %>%
 hesop_count_byPat <- hesop_count_byPat %>% 
   mutate_at(vars(OP_attended_cat, OP_attended_diab_cat), funs(fct_explicit_na(., 'None')))
 
-  # Saving processed files --------------------------------------------------
-
+# Saving processed files 
 saveRDS(hesop_count_byPat, 'processed_data/patients_OPappointments.rds')
 
 
+# Descriptives: number of appointments by specialty -----------------------------------------------
+# here it's important to specify which patient population we are looking at 
 
+# Study population (including those who died or transferred out during study period)
+specialty_count <- hesop_appts_study %>% 
+  semi_join(patients[patients$resquality == 1, ], by ='patid') %>% 
+  left_join(patients[, c('patid', 'diabetes_type')], by ='patid') %>% 
+  filter(diabetes_type %in% c('type1', 'type2')) %>% 
+  left_join(tretspef_lookup,  by = 'tretspef') %>%
+  mutate(tretspef_name = gsub(" \\(.*", "", tretspef_name), 
+         tretspef_name_fct = fct_collapse(factor(tretspef_name), 
+                                          'Adult or Paediatric Diabetic Medicine' = c('Paediatric Diabetic Medicine',
+                                                                               'Diabetic Medicine'))) %>% 
+  group_by(tretspef_name_fct, diabetes_type) %>% 
+  summarise(n_appts = n(),
+            n_attends = sum(attended  %in% c(5, 6)),
+            n_patients = length(unique(patid))) %>% 
+  group_by(diabetes_type) %>% 
+  mutate(pct_attends = round(100*n_attends/sum(n_attends), 1))
+
+# Top 5 tretspefs for type 1 and type 2 patients separately
+
+top5_type1  <- specialty_count %>% 
+  filter(diabetes_type == 'type1') %>%
+  arrange(desc(pct_attends)) %>% 
+  head(5) %>% 
+  mutate(tretspef_name_fct = gsub(" ", "\n", tretspef_name_fct)) %>% 
+  ggplot(aes(x = fct_reorder(tretspef_name_fct, desc(pct_attends)), y = pct_attends)) +
+  geom_bar(stat='identity', fill = THF_red, width = 0.8) +
+  theme_classic() +
+  ylab('Percent') +
+  labs(title = 'Outpatient attendances', subtitle = 'Patients with type 1 diabetes') +
+  theme(axis.title.x = element_blank(),
+        plot.margin =margin(t = 5, l = 5, r = 15, b= 5, unit = "mm")) +
+  THF_theme 
+
+ggsave('graphs/OP_attendances/OP_tretspefTop5_type1.pdf', top5_type1, device = 'pdf', width = 5.5, height = 5.5)
+
+
+specialty_count %>% 
+  filter(diabetes_type == 'type1') %>%
+  arrange(desc(pct_attends)) %>% 
+  head(5) %>% 
+  write_csv('graphs/OP_attendances/OP_tretspefTop5_type1.csv')
+
+
+top5_type2  <- specialty_count %>% 
+  filter(diabetes_type == 'type2') %>%
+  arrange(desc(pct_attends)) %>% 
+  head(5) %>% 
+  mutate(tretspef_name_fct = gsub(" ", "\n", tretspef_name_fct)) %>% 
+  ggplot(aes(x = fct_reorder(tretspef_name_fct, desc(pct_attends)), y = pct_attends)) +
+  geom_bar(stat='identity', fill = THF_red, width = 0.8) +
+  theme_classic() +
+  ylab('Percent') +
+  labs(title = 'Outpatient attendances', subtitle = 'Patients with type 1 diabetes') +
+  theme(axis.title.x = element_blank(),
+        plot.margin =margin(t = 5, l = 5, r = 15, b = 5, unit = "mm")) +
+  THF_theme 
+
+ggsave('graphs/OP_attendances/OP_tretspefTop5_type2.pdf', top5_type2, device = 'pdf', width = 5.5, height = 5.5)
+
+
+specialty_count %>% 
+  filter(diabetes_type == 'type2') %>%
+  arrange(desc(pct_attends)) %>% 
+  head(5) %>% 
+  write_csv('graphs/OP_attendances/OP_tretspefTop5_type2.csv')
 
