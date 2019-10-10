@@ -66,33 +66,34 @@ hesop_appts <- hesop_appts %>%
 hesop_appts<- hesop_appts %>% 
   filter(!is.na(tretspef) & !is.na(firstatt) & !is.na(attended))
 
-# Only keep appointments during study 
-hesop_appts<- hesop_appts %>% 
-  filter(apptdate %within% interval(study_start, study_end))
-
 # Drop columns we don't need
 hesop_appts<- hesop_appts %>% 
   select(-apptage, -atentype)
 
-# Appointments after date of death
+# Remove appointments scheduled after date of death
 hesop_appts<- hesop_appts %>% 
   left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
   filter(is.na(ONS_dod) | apptdate < ONS_dod)
 
-# Deriving variables ------------------------------------------------------
-
-# Flag if appointment was in diabetic medicine
+# Create flag indicating whether appointment was in diabetic medicine
 # tretspef == 307, 263 (diabetic medicine, paediatric diabetic medicine)
 hesop_appts<- hesop_appts %>% 
   mutate(diabetic_medicine = ifelse(tretspef %in% c('307','263'), 1, 0))
   
-# Saving processed files --------------------------------------------------
-saveRDS(hesop_appts, 'processed_data/hesop_appts.Rds')
+# Separate table with appointments during study period only
+hesop_appts_study <- hesop_appts %>% 
+  filter(apptdate %within% interval(study_start, study_end))
+
+# Saving processed files 
+saveRDS(hesop_appts, 'processed_data/hesop_appts_all.Rds')
+
+saveRDS(hesop_appts_study, 'processed_data/hesop_appts_study.Rds')
 
 
-# Descriptives ------------------------------------------------------------
+# Descriptive: number of appointments by patient ---------------------------
+# for OP appointments within study period 
 
-hesop_count_byPat <- hesop_appts %>% 
+hesop_count_byPat <- hesop_appts_study %>% 
   group_by(patid) %>% 
   summarise(OP_attended_first = sum(attended == 5 & firstatt %in% c(1,3)),
             OP_attended_subs = sum(attended == 5 & firstatt %in% c(2,4)),
