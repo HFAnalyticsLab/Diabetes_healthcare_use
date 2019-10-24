@@ -52,10 +52,43 @@ mm_bypat <- mm_bypat %>%
          mm_cat = cut(mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
                              labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE))
 
-
-
 # Saving processed files --------------------------------------------------
 
-saveRDS(mm_bypat, 'processed_data/patients_multimorbidity.rds')
+saveRDS(mm_bypat, str_c(processed_RDS_path, 'patients_multimorbidity.rds'))
+
+
+
+# Summary tables for prevalence -------------------------------------------
+
+mm_bypat_study  <-  mm_bypat %>% 
+  right_join(patients[, c('patid', 'resquality', 'diabetes_type')], by = 'patid') %>% 
+  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-resquality) 
+
+mm_prev <- mm_bypat_study %>% 
+  select(patid, diabetes_type, HYP:DEPANX) %>% 
+  gather(-patid, - diabetes_type, key = 'condition', value = 'present') %>% 
+  group_by(diabetes_type, condition) %>% 
+  summarise(n = n(),
+            n_with_condition = sum(present == 1)) %>% 
+  mutate(prevalence = round(100 * n_with_condition / n, 1))
+
+write_csv(mm_prev, str_c(summary_stats_path, 'table1/MM_prevalence.csv'))
+
+# Summary tables for number of conditions -------------------------------------------
+
+mm_means <- mm_bypat %>%  
+  right_join(patients[, c('patid', 'resquality', 'diabetes_type')], by = 'patid') %>% 
+  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-resquality) %>% 
+  group_by(diabetes_type) %>% 
+  summarise(n = n(),
+            mean_mm_count = round(mean(mm_count), 1),
+            mean_physical_mm_count = round(mean(physical_mm_count), 1),
+            mean_mental_mm_count = round(mean(mental_mm_count), 1))
+            
+
+write_csv(mm_means, str_c(summary_stats_path, 'table1/MM_count_means.csv'))
+
 
 
