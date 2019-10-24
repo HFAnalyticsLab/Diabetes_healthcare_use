@@ -69,11 +69,17 @@ hesapc_episodes <- hesapc_episodes %>%
   arrange(patid, epistart)
 
 hesapc_admissions <- hesapc_episodes %>% 
-  filter(eorder == 1 & (admisorc <51 | admisorc >53) & admimeth != 81) %>% 
-  select(patid, spno, epikey, admidate, eorder, epistart, epiend, discharged, epidur, admimeth, admisorc, disdest, dismeth, tretspef) %>% 
-  mutate(emergency = ifelse(admimeth %in% c(21:25), 1, 0),
-         during_study = ifelse(admidate %within% interval(study_start, study_end), 1, 0),
-         during_followup = ifelse(admidate %within% interval(followup_start, followup_end), 1, 0),
+  filter(eorder == 1 & (admisorc <51 | admisorc >53) & admimeth != 81 & admimeth != 67) 
+
+hesapc_admissions <- hesapc_admissions %>% 
+  select(patid, spno, epikey, admidate, eorder, epistart, epiend, discharged, epidur, admimeth, classpat, admisorc, disdest, dismeth, tretspef) %>% 
+  mutate(admitype = case_when(admimeth %in% c(21:25, 66, 67, 69) ~ 'emergency',
+                              admimeth %in% c(11, 12, 13) & classpat %in% c(1, 4) ~ 'elective',
+                              admimeth %in% c(31, 32, 68, 82, 83) ~ 'maternity',
+                              admimeth %in% c(11, 12, 13) & classpat %in% c(2, 3) ~ 'daycase',
+                              admimeth %in% c(98, 99, 28) ~ 'unknown'),
+         during_study = ifelse(epistart %within% interval(study_start, study_end), 1, 0),
+         during_followup = ifelse(epistart %within% interval(followup_start, followup_end), 1, 0),
          TTE_study = ifelse(during_study == 1, epistart - study_start, NA),
          TTE_outcome = ifelse(during_followup == 1, epistart - followup_start, NA)) %>% 
   filter(during_study == 1 | during_followup == 1)
