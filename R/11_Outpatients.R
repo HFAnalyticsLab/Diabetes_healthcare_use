@@ -48,9 +48,14 @@ hesop_appts <- hesop_appts %>%
          servtype = na_if(servtype, 9),
          stafftyp = ifelse(stafftyp %in% c(9, 99), NA, stafftyp)) 
 
-# Only keep appts for study pop
-hesop_appts <- hesop_appts %>% 
-  semi_join(patients, by = 'patid')
+# Exclude appointment without tretspef, firstatt, attended
+hesop_appts<- hesop_appts %>% 
+  filter(!is.na(tretspef) & !is.na(firstatt) & !is.na(attended))
+
+# Remove appointments scheduled after date of death
+hesop_appts<- hesop_appts %>% 
+  left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
+  filter(is.na(ONS_dod) | apptdate < ONS_dod)
 
 # Remove duplicates
 hesop_appts <- hesop_appts %>% 
@@ -60,18 +65,16 @@ hesop_appts <- hesop_appts %>%
            stafftyp,          wait_ind,          waiting,          HES_yr,            
            tretspef,          mainspef, .keep_all = TRUE)
 
-# Exclude appointment without tretspef, firstatt, attended
-hesop_appts<- hesop_appts %>% 
-  filter(!is.na(tretspef) & !is.na(firstatt) & !is.na(attended))
+
+# Only keep appts for study pop
+hesop_appts <- hesop_appts %>% 
+  semi_join(patients, by = 'patid')
+
 
 # Drop columns we don't need
 hesop_appts<- hesop_appts %>% 
   select(-apptage, -atentype)
 
-# Remove appointments scheduled after date of death
-hesop_appts<- hesop_appts %>% 
-  left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
-  filter(is.na(ONS_dod) | apptdate < ONS_dod)
 
 # Create flag indicating whether appointment was in diabetic medicine
 # tretspef == 307, 263 (diabetic medicine, paediatric diabetic medicine)
@@ -82,10 +85,16 @@ hesop_appts<- hesop_appts %>%
 hesop_appts_study <- hesop_appts %>% 
   filter(apptdate %within% interval(study_start, study_end))
 
-# Saving processed files 
-saveRDS(hesop_appts, 'processed_data/hesop_appts_all.Rds')
+# Check: how many appointments are for patients in the final study population?
+hesop_appts_study %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  nrow()
 
-saveRDS(hesop_appts_study, 'processed_data/hesop_appts_study.Rds')
+# Saving processed files 
+saveRDS(hesop_appts, str_c(processed_RDS_path, 'hesop_appts_all.Rds'))
+
+saveRDS(hesop_appts_study, str_c(processed_RDS_path, 'hesop_appts_study.Rds'))
 
 
 # Descriptive: number of appointments by patient ---------------------------
