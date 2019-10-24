@@ -46,6 +46,22 @@ consultations <-  extract_consultation %>%
 consultations <-  consultations %>% 
   filter(eventdate %within% interval(study_start, study_end)) 
 
+# Remove appointments scheduled after patient died
+consultations<- consultations %>% 
+  left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
+  filter(is.na(ONS_dod) | eventdate < ONS_dod)
+
+# Check: how many consultations are for patients in the final study population?
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  nrow()
+
+
+# Defining primary care consultations -------------------------------------
+
+#   1st definition was from previous multimorbidity work 
+# 
 #   Face to face consultation codes:	Home consultation codes:		Telephone consultation codes:
 #   --------------------------------	------------------------		-----------------------------
 #   Clinic,1,							            Home Visit,27,					    Telephone call from a patient,10,
@@ -57,10 +73,10 @@ consultations <-  consultations %>%
 #   Emergency Consultation,18,
 #   Initial Post Discharge Review,48,
 # 
-#   GP codes from rol:				Nurse codes from rol:				Other clinician codes from rol:
-#   ------------------				---------------------				-------------------------------
-#   Senior Partner,1,				Practice Nurse,11,					  Physiotherapist,26,
-#   Partner,2,						 Other Nursing & Midwifery,54		Other Health Care Professional,33
+#   GP codes from rol:				Nurse codes from rol:				    Other clinician codes from rol:
+#   ------------------				---------------------				    -------------------------------
+#   Senior Partner,1,				  Practice Nurse, 11,					    Physiotherapist,26,
+#   Partner,2,						    Other Nursing & Midwifery, 54		Other Health Care Professional, 33
 #   Assistant,3,
 #   Associate,4, 
 #   Locum,7,
@@ -71,78 +87,399 @@ consultations <-  consultations %>%
 #   Other Students,53
 
 # Coding up consultation type, duration and staff type
-# only keep valid consultations
+# according to THF definitions
 consultations <- consultations %>%   
   mutate(pracid = patid %% 1000,
          unique_id = str_c(pracid, consid, sep = '-'),
-         # Consultation type
-         f2f = ifelse(constype %in% c(1, 3, 6, 7, 9, 11, 18, 48), 1, 0),
-         homevis = ifelse(constype %in% c(27, 28, 30, 31, 32, 50), 1, 0),
-         telecons = ifelse(constype %in% c(10, 21, 33, 55), 1, 0),
-         consult = ifelse(f2f == 1 | homevis == 1 | telecons == 1 , 1, 0),
-         # Duration
-         dur0 = ifelse(duration == 0, 1, 0),
-         duration = ifelse(duration == 0 , 0.5, duration),
-         duration = ifelse(duration >= 60 , 60, duration),
-         duratcons = ifelse(consult == 1 & homevis == 0, duration, NA),
-         duratf2f = ifelse(f2f == 1 & homevis == 0, duration, NA),
-         # Staff type
-         gp = ifelse(consult == 1 & role %in% c(1, 2, 3, 4, 7, 8, 10, 47, 50, 53), 1, 0),
-         nurse = ifelse(consult == 1 & role %in% c(11, 54), 1, 0),
-         otherstaff = ifelse(consult == 1 & role %in% c(26, 33), 1, 0),
-         staff_valid = ifelse( gp == 1 | nurse == 1 | otherstaff == 1, 1, 0)) %>% 
-  filter(consult == 1)
+         mode_old = case_when(constype %in% c(1, 3, 6, 7, 9, 11, 18, 48) ~ 'face-to-face',
+                              constype %in% c(27, 28, 30, 31, 32, 50) ~ 'homevisit',
+                              constype %in% c(10, 21, 33, 55) ~ 'teleconsultation'),
+         staff_old = case_when(role %in% c(1, 2, 3, 4, 7, 8, 10, 47, 50, 53) ~ 'GP',
+                               role %in% c(11, 54) ~ 'Nurse',
+                               role %in% c(26, 33) ~ 'Other staff'),
+         consult_old = ifelse(!is.na(mode_old) & !is.na(staff_old), 1, 0)) 
 
-# Remove appointments scheduled after patient died??
-consultations<- consultations %>% 
-  left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
-  filter(is.na(ONS_dod) | eventdate < ONS_dod)
+# Second definition is from the report 'General Practice WOrkload in England 2007 to 2014'
+# by Chris Salisbury et al 
+consultations <- consultations %>%   
+  mutate(mode = case_when(constype %in% c(1, 9, 18) ~ 'face-to-face',
+                          constype %in% c(3, 6, 11, 24, 27, 28, 30, 31, 32) ~ 'visit',
+                          constype %in% c(10, 21, 33, 55) ~ 'teleconsultation'),
+         staff = case_when(role %in% c(1, 2, 3, 4, 5, 6, 7, 8, 10, 47, 50) ~ 'GP',
+                           role %in% c(11, 13) ~ 'Nurse'),
+         consult = ifelse(!is.na(mode) & !is.na(staff), 1, 0))
+
+consultations <- consultations %>%   
+  mutate(short_appt = ifelse(duration < 1, 1, 0))
+
+# Check: how many consultations are for patients in the final study population, depending on
+# the definition of what a consultation is?
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult_old == 1) %>% 
+  nrow()
+
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult == 1) %>% 
+  nrow()
+
+# How many when short appointments are excluded?
+
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult_old == 1 & short_appt == 0) %>% 
+  nrow()
+
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult == 1 & short_appt == 0) %>% 
+  nrow()
+
+# Check: how many of each type, depending on definition?
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult_old == 1) %>% 
+  tabyl(mode_old, staff_old) %>% 
+  adorn_title() %>% 
+  write_csv(str_c(summary_stats_path, 'table2/PrimaryCare_old_definition.csv'))
+
+consultations %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  filter(consult == 1) %>% 
+  tabyl(mode, staff) %>% 
+  adorn_title() %>% 
+  write_csv(str_c(summary_stats_path, 'table2/PrimaryCare_new_definition.csv'))
+
 
 # Counting appointments per patient ---------------------------------------
+# will only do this for Salisbury definition
 
 consultations_bypat <-  consultations %>% 
   group_by(patid) %>% 
-  summarise(n_consult = n(),
-            n_consult_GP = sum(gp == 1),
-            n_consult_nurse = sum(nurse == 1),
-            n_consult_otherstaff = sum(otherstaff == 1),
-            n_consult_f2f = sum(f2f == 1),
-            n_consult_telecons = sum(telecons == 1))
+  summarise(n_consult_all = sum(consult == 1),
+            n_GP_all = sum(consult == 1 & staff == 'GP'),
+            n_nurse_all = sum(consult == 1 & staff == 'Nurse'),
+            # appts 1min or over
+            n_consult_long = sum(consult == 1 & short_appt == 0),
+            n_GP_long = sum(consult == 1 & staff == 'GP' & short_appt == 0),
+            n_nurse_long = sum(consult == 1 & staff == 'Nurse'& short_appt == 0))
 
 
 consultations_bypat %>%
   gather(-patid, key = 'type', value = 'count') %>% 
   ggplot(aes(x = count, group = type, fill = type)) +
   geom_histogram(binwidth = 1) +
-  coord_cartesian(xlim = c(0,10)) +
-  facet_grid(. ~ type)
+  coord_cartesian(xlim = c(0,40)) +
+  facet_wrap('type', ncol = 3)
+
+
+# Normalising appt count for time spent in study ---------------------------
+# the above currently does not take into account whether a patients dies or transfers out during the study period
+# in this step we normalise the number of appointments by patient years in the study
+# only do this for patients in the study population
+
+consultations_bypat_study <- consultations_bypat %>% 
+  right_join(patients[, c('patid', 'tod', 'ONS_dod', 'resquality', 'diabetes_type')], by = 'patid') %>% 
+  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-resquality) %>% 
+  mutate_if(is.numeric, ~replace_na(.x, 0))
+
+consultations_bypat_study <-  consultations_bypat_study %>% 
+  group_by(patid) %>% 
+  mutate(censoring_date = min(tod, ONS_dod, study_end, na.rm = TRUE),
+         years_in_study = round(as.numeric(censoring_date - study_start) / 365, 2),
+         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study))
+
+consultations_bypat_study_norm <- consultations_bypat_study %>% 
+  ungroup() %>% 
+  select(-tod, -ONS_dod, -censoring_date) %>% 
+  gather(-years_in_study, -patid, -diabetes_type, key = 'type', value = 'count') %>% 
+  mutate(count_per_year = round(count / years_in_study, 1))
+
+
+plot_appts_peryear <- consultations_bypat_study_norm %>%
+  ggplot(aes(x = count_per_year, fill = diabetes_type)) +
+  geom_histogram(binwidth = 1) +
+  coord_cartesian(xlim = c(0,40)) +
+  facet_grid(diabetes_type ~ type)
+
+
+# Create categorical variable for script 14 (descriptives) ----------------
 
 
 # Create categorical variables (binned appointment counts)
-consultations_bypat <-  consultations_bypat %>% 
-  mutate(consult_cat = cut(n_consult, breaks = c(0, 1, 3, 5, 9, 13, 25, 49, Inf), labels = c('None', '1-2', '3-4', '5-8', '9-12', '13-24', '25-48', 'Over 48'),
-                           ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
-         GP_cat = cut(n_consult_GP, breaks = c(0, 1, 3, 5, 9, 13, 25, 49, Inf), labels = c('None', '1-2', '3-4', '5-8', '9-12', '13-24', '25-48', 'Over 48'),
-                      ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
-         nurse_cat = cut(n_consult_nurse, breaks = c(0, 1, 3, 5, 9, 13, 25, 49, Inf), labels = c('None', '1-2', '3-4', '5-8', '9-12', '13-24', '25-48', 'Over 48'),
+consultations_bypat_study_norm <-  consultations_bypat_study_norm %>% 
+  mutate(count_cat = cut(count, breaks = c(0, 2, 4, 8, 12, 24, Inf), labels = c(' 0-1', ' 2-3', ' 4-7', ' 8-11', ' 12-23', ' 24+'),
+                         ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
+         count_norm_cat = cut(count_per_year, breaks = c(0, 2, 4, 6, 12, 9999), labels = c(' 0-1', ' 2-3', ' 4-5', ' 6-11', ' 12+'),
                          ordered_result = TRUE, include.lowest = TRUE, right = FALSE))
          
-# Join in patients 
-consultations_bypat <-  consultations_bypat %>% 
-  right_join(patients[, c('patid')], by = 'patid') 
+consultations_bypat_study_norm <- consultations_bypat_study_norm %>% 
+  separate(type, into = c('temp', 'consult_type', 'appt_length')) %>% 
+  select(-temp)
 
-# Convert missing to none
-consultations_bypat <- consultations_bypat %>% 
-  mutate_at(vars(consult_cat, GP_cat, nurse_cat), funs(fct_explicit_na(., 'None')))
+
 
 # Saving processed files --------------------------------------------------
 
-saveRDS(consultations_bypat, 'processed_data/patients_consultations.rds')
+saveRDS(consultations_bypat_study_norm, str_c(processed_RDS_path, 'patients_consultations.rds'))
+
+
+# Create summary tables -------------------------------------------------
+
+# Means
+
+all_consult_means <- consultations_bypat_study_norm %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  summarise(n = n(),
+            mean_count = round(mean(count), 1),
+            mean_count_per_year = round(mean(count_per_patient_year), 1)) %>% 
+  mutate(subgroup = 'all patients')
+
+not_censored_consult_means <-consultations_bypat_study_norm %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  filter(years_in_study == 2) %>% 
+  summarise(n = n(),
+            mean_count = round(mean(count), 1),
+            mean_count_per_year = round(mean(count_per_patient_year), 1)) %>% 
+  mutate(subgroup = 'did not transfer out')
+
+consult_means <- all_consult_means %>% 
+  bind_rows(not_censored_consult_means)
+
+write_csv(consult_means, str_c(summary_stats_path, 'table2/PrimaryCare_means.csv'))
+
+
+# Binned count over two years (not normalised)
+all_count_cat  <-  consultations_bypat_study_norm %>% 
+  group_by(diabetes_type, consult_type, appt_length, count_cat) %>% 
+  count() %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  mutate(denominator = sum(n),
+         percent = round(100* n / sum(n), 1)) %>% 
+  mutate(subgroup = 'all patients')
+
+not_censored_count_cat  <-  consultations_bypat_study_norm %>% 
+  filter(years_in_study == 2) %>% 
+  group_by(diabetes_type, consult_type, appt_length, count_cat) %>% 
+  count() %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  mutate(denominator = sum(n),
+         percent = round(100* n / sum(n), 1)) %>% 
+  mutate(subgroup = 'did not transfer out')
+
+count_cat <- all_count_cat %>% 
+  bind_rows(not_censored_count_cat)
+
+write_csv(count_cat, str_c(summary_stats_path, 'table2/PrimaryCare_appt_count.csv'))
+
+# Binned count per person year
+all_count_norm_cat  <-  consultations_bypat_study_norm %>% 
+  group_by(diabetes_type, consult_type, appt_length, count_norm_cat) %>% 
+  count() %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  mutate(denominator = sum(n),
+         percent = round(100* n / sum(n), 1)) %>% 
+  mutate(subgroup = 'all patients')
+
+not_censored_count_norm_cat  <-  consultations_bypat_study_norm %>% 
+  filter(years_in_study == 2) %>% 
+  group_by(diabetes_type, consult_type, appt_length, count_norm_cat) %>% 
+  count() %>% 
+  group_by(diabetes_type, consult_type, appt_length) %>% 
+  mutate(denominator = sum(n),
+         percent = round(100* n / sum(n), 1)) %>% 
+  mutate(subgroup = 'did not transfer out')
+
+count_norm_cat <- all_count_norm_cat %>% 
+  bind_rows(not_censored_count_norm_cat)
+
+write_csv(count_norm_cat, str_c(summary_stats_path, 'table2/PrimaryCare_appt_per_year.csv'))
+
+
+# Visualising binned counts -----------------------------------------------
+
+# 1. All appointments, all patients 
+count_plot <-  count_cat %>% 
+  filter(appt_length == 'all' & subgroup == 'all patients') %>% 
+  ggplot(aes(x = count_cat, y = percent, fill = diabetes_type)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('Type 1 Diabetes','Type 2 Diabetes')) +
+  ylab('Patients [%]') +
+  facet_grid(. ~ consult_type, labeller = as_labeller(c('consult' = 'Consultations overall',
+                                                      'GP' = 'GP consultations',
+                                                      'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations') +
+  labs(title = 'Primary care consulations (over  2 years)') +
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count.pdf'), count_plot,  device = 'pdf', width = 8, height =5)
+
+norm_count_plot <-  count_norm_cat %>% 
+  filter(appt_length == 'all' & subgroup == 'all patients') %>% 
+  ggplot(aes(x = count_norm_cat, y = percent, fill = diabetes_type)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('Type 1 Diabetes','Type 2 Diabetes')) +
+  ylab('Patients [%]') +
+  facet_grid(. ~ consult_type, labeller = as_labeller(c('consult' = 'Consultations overall',
+                                                        'GP' = 'GP consultations',
+                                                        'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations per year') +
+  labs(title = 'Primary care consulations (per year)') +
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_per_year.pdf'), norm_count_plot,  device = 'pdf', width = 8, height =5)
+
+
+# 2. Sensitivity analysis: all appointments vs. short appointments excluded 
+count_plot_apptlength <-  count_cat %>% 
+  filter(subgroup == 'all patients') %>% 
+  ggplot(aes(x = count_cat, y = percent, fill = appt_length)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('All','>= 1 min')) +
+  ylab('Patients [%]') +
+  facet_grid(diabetes_type ~ consult_type, labeller = labeller(diabetes_type = c('type1' = 'Type 1 Diabetes',
+                                                                                 'type2' = 'Type 2 Diabetes'),
+                                                               consult_type = c('consult' = 'Consultations overall',
+                                                                                'GP' = 'GP consultations',
+                                                                                'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations') +
+  labs(title = 'Primary care consulations (over  2 years)',
+       fill = 'Consultations included') +
+  theme_classic() +
+  theme(legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_sensitivity_apptlength.pdf'), count_plot_apptlength,  device = 'pdf', width = 8, height =8)
+
+norm_count_plot_apptlength <-  count_norm_cat %>% 
+  filter(subgroup == 'all patients') %>% 
+  ggplot(aes(x = count_norm_cat, y = percent, fill = appt_length)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('All','>= 1 min')) +
+  ylab('Patients [%]') +
+  facet_grid(diabetes_type ~ consult_type, labeller = labeller(diabetes_type = c('type1' = 'Type 1 Diabetes',
+                                                                     'type2' = 'Type 2 Diabetes'),
+                                                   consult_type = c('consult' = 'Consultations overall',
+                                                                    'GP' = 'GP consultations',
+                                                                    'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations per year') +
+  labs(title = 'Primary care consulations (per year)',
+       fill = 'Consultations included') +
+  theme_classic() +
+  theme(legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_per_year_sensitivity_apptlength.pdf'), 
+       norm_count_plot_apptlength,  device = 'pdf', width = 8, height = 6)
+
+
+# 3. Sensitivity analysis: all patients vs. patients who transfer out or die excluded 
+count_plot_censoring <-  count_cat %>% 
+  filter(appt_length == 'all') %>% 
+  ggplot(aes(x = count_cat, y = percent, fill = subgroup)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('All','In the study for 2 years')) +
+  ylab('Patients [%]') +
+  facet_grid(diabetes_type ~ consult_type, labeller = labeller(diabetes_type = c('type1' = 'Type 1 Diabetes',
+                                                                                 'type2' = 'Type 2 Diabetes'),
+                                                               consult_type = c('consult' = 'Consultations overall',
+                                                                                'GP' = 'GP consultations',
+                                                                                'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations') +
+  labs(title = 'Primary care consulations (over  2 years)',
+       fill = 'Patients included') +
+  theme_classic() +
+  theme(legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_sensitivity_censoring.pdf'), 
+       count_plot_censoring,  device = 'pdf', width = 8, height =8)
+
+norm_count_plot_censoring <-  count_norm_cat %>% 
+  filter(appt_length == 'all') %>% 
+  ggplot(aes(x = count_norm_cat, y = percent, fill = subgroup)) +
+  geom_bar(stat = 'identity', width = 0.8, position = position_dodge()) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue),
+                    labels = c('All','In the study for 2 years')) +
+  ylab('Patients [%]') +
+  facet_grid(diabetes_type ~ consult_type, labeller = labeller(diabetes_type = c('type1' = 'Type 1 Diabetes',
+                                                                                 'type2' = 'Type 2 Diabetes'),
+                                                               consult_type = c('consult' = 'Consultations overall',
+                                                                                'GP' = 'GP consultations',
+                                                                                'nurse' = 'Nurse consultations'))) +
+  xlab('Number of consultations per year') +
+  labs(title = 'Primary care consulations (per year)',
+       fill = 'Patients included') +
+  theme_classic() +
+  theme(legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_per_year_sensitivity_censoring.pdf'), 
+       norm_count_plot_censoring,  device = 'pdf', width = 8, height = 7)
+
+
+
+
 
 # Diabetes annual check ---------------------------------------------------
 
 # Additional clinical details 
-extract_additional_clinical <- readRDS('raw_data/Extract_additional_clinical.Rds')
+extract_additional_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_additional_clinical.Rds'))
 
 diab_annual_check <- extract_additional_clinical %>% 
   filter(enttype == 22) %>% 
