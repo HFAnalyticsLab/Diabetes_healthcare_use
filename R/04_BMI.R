@@ -1,8 +1,7 @@
 # =======================================================
 # Project: Diabetes outpatient care
-# Purpose: Clean weight and height data and create categorical BMI variable
+# Purpose: Clean weight and height data to calculate BMI and create categorical BMI variable
 # Author: Fiona Grimm
-# Date: 03/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,27 +10,24 @@ library(janitor)
 library(tidylog)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
-# Define study parameters -------------------------------------------------
-
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
+# Source study parameters 
+source('R/study_params.R')
 
 # Import data -----------------------------------------
 
 # Study population
-patients <- readRDS('processed_data/patients.rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
 
 # Import diabetes code list
 obesity_codes <- read_csv(str_c(code_list_path, 'Appendix3_obesity.csv'))
 
 # Additional clinical details 
-extract_additional_clinical <- readRDS('raw_data/Extract_additional_clinical.Rds')
+extract_additional_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_additional_clinical.Rds'))
 
 # Clinical data
-extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
+extract_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_clinical.Rds'))
 
 # Calculating BMI ---------------------------------------------------------
 
@@ -145,22 +141,76 @@ BMI_bypat_latest <-  BMI_all_records %>%
   group_by(patid) %>% 
   filter(row_number() == 1) %>% 
   ungroup() %>% 
-  select(patid, BMI_calc, BMI_categorical, eventdate) %>% 
+  select(patid, BMI_calc, BMI_categorical, BMI_filled, eventdate) %>% 
   right_join(patients[, c('patid')], by = 'patid')
 
 
-BMI_bypat <- BMI_bypat_latest %>% 
+BMI_bypat_latest <- BMI_bypat_latest %>% 
   mutate(BMI_categorical = fct_explicit_na(BMI_categorical, 'Missing'))
 
-BMI_bypat %>% tabyl(BMI_categorical)
+BMI_bypat_latest %>% tabyl(BMI_categorical)
+
+# earliest after study start
+# not not later than study end
+
+BMI_bypat_earliest <-  BMI_all_records %>% 
+  filter(eventdate %within% interval(study_start, study_end)) %>% 
+  arrange(patid, eventdate) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  select(patid, BMI_calc, BMI_filled, BMI_categorical, eventdate) %>% 
+  right_join(patients[, c('patid')], by = 'patid')
+
+
+BMI_bypat_earliest <- BMI_bypat_earliest %>% 
+  mutate(BMI_categorical = fct_explicit_na(BMI_categorical, 'Missing')) %>% 
+  rename(BMI_calc_study = BMI_calc)
+
+BMI_bypat_earliest %>% tabyl(BMI_categorical)
+
+# BMI at baseline ---------------------------------------------------------
+# Define as: latest measurement before study start, if that was within 6 months of study start
+# if none available, earliest after study start
+
+BMI_before_study <- BMI_all_records %>% 
+  filter(eventdate %within% interval(study_start - months(6), study_start)) %>% 
+  arrange(patid, desc(eventdate)) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>%  
+  select(patid, BMI_calc, BMI_categorical, BMI_filled, eventdate) %>% 
+  right_join(patients[, c('patid')], by = 'patid')
+
+BMI_at_baseline <-  BMI_before_study %>% 
+  left_join(BMI_bypat_earliest[, c('patid', 'BMI_calc_study')], by = 'patid')
+
+BMI_at_baseline <- BMI_at_baseline %>% 
+  mutate(BMI_calc = ifelse(is.na(BMI_calc), BMI_calc_study, BMI_calc),
+         BMI_categorical = cut(BMI_calc, breaks = c(0, 18.5, 25, 30, 35, 100), 
+                               labels = c('<18.5', '18.5-24.9', '25-29.9', '30-34.9', '>35'),
+                               ordered_result = TRUE, right = FALSE))
+
+
+BMI_at_baseline <- BMI_at_baseline %>% 
+  mutate(BMI_categorical = fct_explicit_na(BMI_categorical, 'Missing')) 
+
+BMI_at_baseline %>% tabyl(BMI_categorical)
+
 
 # Saving processed files --------------------------------------------------
 
 # 1. all BMI records
-saveRDS(BMI_all_records, 'processed_data/patients_BMI_all.rds')
+saveRDS(BMI_all_records, str_c(processed_RDS_path, 'patients_BMI_all.rds'))
 
 # 2. latest before study end 
-saveRDS(BMI_bypat, 'processed_data/patients_BMI_latest.rds')
+saveRDS(BMI_bypat_latest, str_c(processed_RDS_path, 'patients_BMI_latest.rds'))
+
+# 3. earliest after study start
+saveRDS(BMI_bypat_earliest, str_c(processed_RDS_path, 'patients_BMI_earliest.rds'))
+
+# 4. at baseline (definition above)
+saveRDS(BMI_at_baseline, str_c(processed_RDS_path, 'patients_BMI_at_baseline.rds'))
 
 
 # Experimenting with cutoff dates -----------------------------------------
