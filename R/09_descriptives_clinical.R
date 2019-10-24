@@ -3,7 +3,6 @@
 # Purpose: Descriptive analysis of clinical characteristics from scripts 01-08
 # To generate 'Table 1'
 # Author: Fiona Grimm
-# Date: 10/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,39 +10,40 @@ library(lubridate)
 library(tidylog)
 library(tableone)
 
-
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
 # Source study parameters 
-source('R_FG/study_params.R')
+source('R/study_params.R')
 
+# Source graph parameters 
+source('R/plotting_params.R')
 
 # Import data -----------------------------------------
 
 # Study population
-patients <- readRDS('processed_data/patients.rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
 
 # Diabetes type
-diabetes_bypat <- readRDS('processed_data/patients_diabetes.rds')
+diabetes_bypat <- readRDS(str_c(processed_RDS_path, 'patients_diabetes.rds'))
 
 # Diabetes medication
-therapy_bypat <- readRDS('processed_data/patients_medication.rds')
+therapy_bypat <- readRDS(str_c(processed_RDS_path, 'patients_medication.rds'))
 
 # Smoking (latest within study period)
-smoking_bypat <- readRDS('processed_data/patients_smoking_latest.rds')
+smoking_bypat <- readRDS(str_c(processed_RDS_path, 'patients_smoking_at_baseline.rds'))
 
 # BMI (to check % of patients without record)
-BMI_bypat <- readRDS('processed_data/patients_BMI_latest.rds')
+BMI_bypat <- readRDS(str_c(processed_RDS_path, 'patients_BMI_at_baseline.rds'))
 
 # HbA1C (to check % of patients without record)
-HbA1C_bypat <- readRDS('processed_data/patients_HbA1C_latest.rds')
+HbA1C_bypat <- readRDS(str_c(processed_RDS_path, 'patients_HbA1C_at_baseline.rds'))
 
 # Long-term conditions
-mm_bypat <- readRDS('processed_data/patients_multimorbidity.rds')
+mm_bypat <- readRDS(str_c(processed_RDS_path, 'patients_multimorbidity.rds'))
 
 # Binary variables on 'first diagnosis within last x years'
-clinical_diabetes_first <- readRDS('processed_data/patients_diabetes_firstdiagnosis.rds')
+clinical_diabetes_first <- readRDS(str_c(processed_RDS_path, 'patients_diabetes_firstdiagnosis.rds'))
 
 # Join them all together
 patients_combined <- patients %>% 
@@ -53,7 +53,7 @@ patients_combined <- patients %>%
   left_join(smoking_bypat[, c('patid', 'smoking_status')], by = 'patid') %>% 
   left_join(BMI_bypat[, c('patid', 'BMI_categorical')], by = 'patid') %>% 
   left_join(HbA1C_bypat[, c('patid', 'HbA1C_control')], by = 'patid') %>% 
-  left_join(clinical_diabetes_first[, c('patid', 'diag_6m', 'diag_2y', 'diag_5y')], by = 'patid') %>% 
+  left_join(clinical_diabetes_first[, c('patid', 'time_since_diagnosis')], by = 'patid') %>% 
    mutate(all_clinical_missing = ifelse(medication == 'None recorded' & smoking_status == 'Missing'
                              & BMI_categorical == 'Missing' & HbA1C_control == 'Missing', 1, 0)) %>% 
   left_join(mm_bypat, by = 'patid') 
@@ -101,7 +101,7 @@ table_all <- CreateTableOne(vars = vars_tosummarise,
                             test = FALSE)
 
 table_all_csv <- print(table_all, noSpaces = TRUE) 
-write.csv(table_all_csv, 'summary_stats/table1/190917_Table1_allpatients.csv')
+write.csv(table_all_csv, str_c(summary_stats_path, 'table1/191023_Table1_allpatients.csv'))
 
 # 2. Comparing patients that are research quality with the rest -----------
 # Research quality being defined at being in an UTS practice at study start
@@ -117,7 +117,7 @@ table_resqual <- CreateTableOne(vars = vars_resqual, strata = 'resquality',
                                 test = FALSE)
 
 table_resqual_csv <- print(table_resqual, noSpaces = TRUE) 
-write.csv(table_resqual_csv, 'summary_stats/table1/190917_Table1_researchquality.csv')
+write.csv(table_resqual_csv, str_c(summary_stats_path, 'table1/191023_Table1_researchquality.csv'))
 
 # 3. Population at study start  -------------------------------------------
 # By diabetes type, only research quality patients
@@ -133,9 +133,9 @@ table_study <- CreateTableOne(vars = vars_study, strata = 'diabetes_type',
                               test = FALSE)
 
 table_study_csv <- print(table_study, noSpaces = TRUE)
-write.csv(table_study_csv, 'summary_stats/table1/190917_Table1_studystart.csv')
+write.csv(table_study_csv, str_c(summary_stats_path, 'table1/191023_Table1_studystart.csv'))
 
-# 4. Population at follow-up stsart ---------------------------------------
+# 4. Population at follow-up start ---------------------------------------
 # By diabetes type
 # Only patients that did not die or transfer out during study period
 
