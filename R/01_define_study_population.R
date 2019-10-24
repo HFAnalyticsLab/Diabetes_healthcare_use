@@ -148,7 +148,15 @@ patients <- patients %>%
 patients %>%  tabyl(died_followup, transfer_out_followup) %>%  adorn_title()
 patients %>%  tabyl(died_study, transfer_out_study) %>%  adorn_title()
 
+# Time in study
+patients <- patients %>% 
+  group_by(patid) %>% 
+  mutate(censoring_date_study = min(tod, ONS_dod, study_end, na.rm = TRUE),
+         years_in_study = round(as.numeric(censoring_date_study - study_start) / 365, 2),
+         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study)) %>% 
+  ungroup() 
 
+  
 # Categorical age variable: 5-year bins
 age_labels <- c(str_c(seq(0, 80, by = 5), '-', seq(4, 84, by = 5)), '85+')
 age_breaks <- c(seq(0, 85, by = 5), Inf)
