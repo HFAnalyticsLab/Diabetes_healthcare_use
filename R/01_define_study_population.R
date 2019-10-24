@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Apply inclusion and exclusion criteria to the data extract to define the study cohort
 # Author: Fiona Grimm
-# Date: 29/08/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,48 +10,45 @@ library(tidylog)
 library(janitor)
 
 # Source file paths: code_list_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
 # Source study parameters 
-source('R_FG/study_params.R')
+source('R/study_params.R')
 
 # Import data -------------------------------------------------------------
 
 # Patient extract
-extract_patient <- readRDS('raw_data/Extract_patient.Rds')
+extract_patient <- readRDS(str_c(raw_RDS_path, 'Extract_patient.Rds'))
 
 # ONS death record
-death_patient <- readRDS('raw_data/Linked_death_patient.Rds')
+death_patient <- readRDS(str_c(raw_RDS_path, 'Linked_death_patient.Rds'))
 
 # Patient level IMD
-imd_patient <- readRDS('raw_data/Linked_patient_imd.Rds')
+imd_patient <- readRDS(str_c(raw_RDS_path, 'Linked_patient_imd.Rds'))
 
 # Practice leves rural urban classifier
-rururb_patient <- readRDS('raw_data/Linked_rururb_practice.Rds')
+rururb_patient <- readRDS(str_c(raw_RDS_path, 'Linked_rururb_practice.Rds'))
 
 # Practice
-extract_practice <- readRDS('raw_data/Extract_practice.Rds')
+extract_practice <- readRDS(str_c(raw_RDS_path, 'Extract_practice.Rds'))
 
 # Clinical files 
-extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
+extract_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_clinical.Rds'))
 
 # Import diabetes code list
 diabetes_codes <- read_csv(str_c(code_list_path,'Appendix1_diabetes_diagnosis.csv'))
 
-# CPRD Mecode-readcode lookup table
+# Mecode-readcode lookup table
 medical_dic <- read_tsv(str_c(code_list_path, "medical.txt"))
 
 # Ethnicity code list
-# Wright et al, 2017, Diabetes Care
-# can be downloaded from: https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/
-
 # need to join in medcodes
 ethnicity_codes <- read_csv(str_c(code_list_path, "res56-ethnicity.csv")) %>% 
   select(readcode, ethnic5) %>% 
   left_join(medical_dic, by = 'readcode')
   
 # HES Patient
-hes_patient <- readRDS('raw_data/HES_patient.Rds')
+hes_patient <- readRDS(str_c(raw_RDS_path, 'HES_patient.Rds'))
 
 
 
@@ -93,6 +89,7 @@ patients <- extract_patient %>%
 patients <- patients %>% 
   left_join(imd_patient[, c('patid', 'imd2015_10')], by = c('patid')) %>% 
   filter(!is.na(imd2015_10))
+
 
 # Exclude patient who died before 2015-12-01 according to ONS:
 # It is a known issue that date of death (dod) is sometimes missing
@@ -224,5 +221,5 @@ patients <- patients %>%
 
 # Saving processed files --------------------------------------------------
 
-saveRDS(patients, 'processed_data/patients.rds')
+saveRDS(patients, str_c(processed_RDS_path, 'patients.rds'))
 
