@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Determine diabetes medication type during study period 
 # Author: Fiona Grimm
-# Date: 30/08/2019
 # =======================================================
 
 library(tidyverse)
@@ -10,24 +9,21 @@ library(lubridate)
 library(tidylog)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
-# Define study parameters -------------------------------------------------
-
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
+# Source study parameters 
+source('R/study_params.R')
 
 # Import data -----------------------------------------
 
 # Patiend IDs
-patients <- readRDS('processed_data/patients.Rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients.Rds'))
 
 # Diabetes medication code list
 medication_codes <- read_csv(str_c(code_list_path, 'Appendix5_antidiabetics.csv'))
 
 # Therapy 
-extract_therapy <- readRDS('raw_data/Extract_therapy.Rds')
+extract_therapy <- readRDS(str_c(raw_RDS_path, 'Extract_therapy.Rds'))
 
 
 # Extract prescriptions for diabetes medication ---------------------------
@@ -35,8 +31,15 @@ extract_therapy <- readRDS('raw_data/Extract_therapy.Rds')
 
 therapy_diabetes <- extract_therapy %>% 
   select(patid, eventdate, prodcode) %>%
-  filter(eventdate %within% interval(study_start, study_end) & prodcode %in% medication_codes$product_code) %>% 
+  filter(eventdate %within% interval(study_start, study_end)) %>% 
+  filter(prodcode %in% medication_codes$product_code) %>% 
   left_join(medication_codes[,c('product_code', 'drug_type')], by = c("prodcode" = "product_code")) 
+
+# Check: how many prescriptions are for patients in the final study population?
+therapy_diabetes %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  nrow()
 
 # NB will exclude acarbose as it is technically not an oral hypoglycaemic (OHA)
 prescriptions_bypat <- therapy_diabetes %>% 
@@ -66,4 +69,4 @@ therapy_bypat <- therapy_bypat %>%
 
 # Saving processed files --------------------------------------------------
 
-saveRDS(therapy_bypat, 'processed_data/patients_medication.rds')
+saveRDS(therapy_bypat, str_c(processed_RDS_path, 'patients_medication.rds'))
