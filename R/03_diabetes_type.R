@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Determine diabetes type using Read codes prior to study period 
 # Author: Fiona Grimm
-# Date: 03/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,29 +10,27 @@ library(janitor)
 library(tidylog)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
-# Define study parameters -------------------------------------------------
-
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
+# Source study parameters 
+source('R/study_params.R')
 
 # Import data -----------------------------------------
 
 # Study population
-patients <- readRDS('processed_data/patients.rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
 
 # Diabetes code list
 diabetes_codes <- read_csv(str_c(code_list_path, 'Appendix1_diabetes_diagnosis.csv'))
 
 # Clinical data
-extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
+extract_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_clinical.Rds'))
 
 # Diabetes medication code list
 medication_codes <- read_csv(str_c(code_list_path, 'Appendix5_antidiabetics.csv'))
 
 # Therapy 
-extract_therapy <- readRDS('raw_data/Extract_therapy.Rds')
+extract_therapy <- readRDS(str_c(raw_RDS_path, 'Extract_therapy.Rds'))
 
 
 # Extract diabetes Read codes ---------------------------------------------
@@ -112,7 +109,7 @@ therapy_bypat <- therapy_bypat %>%
          NIGLD_multiple = ifelse(NIGLD_count>= 2, 1, 0))
 
 
-# Step 2. Assign type 2 based on prescriptions: if type unknown and ever been on more than one NIGLD 
+# Step 2. Assign type 2 based on prescriptions: if ever been on more than one NIGLD 
 diabetes_bypat <- diabetes_bypat %>% 
   left_join(therapy_bypat[, c('patid', 'NIGLD_multiple', 'Insulin')], by = 'patid') 
 
@@ -125,7 +122,6 @@ diabetes_bypat <- diabetes_bypat %>%
 
 # Step 3. Convert type 1 to type 2 if 
 # never been prescribed insulin
-# ever been prescribed more than one NIGLD
 diabetes_bypat %>% 
   tabyl(diabetes_type, Insulin) %>% 
   adorn_title()
@@ -143,5 +139,5 @@ diabetes_bypat %>%
 
 # Save processed data -----------------------------------------------------
 
-saveRDS(diabetes_bypat, 'processed_data/patients_diabetes.rds')
+saveRDS(diabetes_bypat, str_c(processed_RDS_path, 'patients_diabetes.rds'))
 
