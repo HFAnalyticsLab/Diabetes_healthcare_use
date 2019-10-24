@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Primary care prescriptions - cleaning, processing and counting
 # Author: Fiona Grimm
-# Date: 05/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -10,23 +9,22 @@ library(lubridate)
 library(janitor)
 library(tidylog)
 
-
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
 # Source study parameters 
-source('R_FG/study_params.R')
+source('R/study_params.R')
 
 # Import data -------------------------------------------------------------
 
-patients <- readRDS('processed_data/patients_clinical_combined.Rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 
 
 # Diabetes medication code list
 medication_codes <- read_csv(str_c(code_list_path, 'Appendix5_antidiabetics.csv'))
 
 # Therapy 
-extract_therapy <- readRDS('raw_data/Extract_therapy.Rds')
+extract_therapy <- readRDS(str_c(raw_RDS_path, 'Extract_therapy.Rds'))
 
 
 # Clean and process -------------------------------------------------------
