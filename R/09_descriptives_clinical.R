@@ -155,5 +155,88 @@ table_followup <- CreateTableOne(vars = vars_followup, strata = 'diabetes_type',
 
 
 table_followup_csv <- print(table_followup, noSpaces = TRUE)
-write.csv(table_followup_csv, 'summary_stats/table1/190917_Table1_followupstart.csv')
+write.csv(table_followup_csv, str_c(summary_stats_path, 'table1/191023_Table1_followupstart.csv'))
+
+
+# 5. Study population split by mental health comorbidity ------------------
+
+patients_study_red <- patients_study %>% 
+  filter(diabetes_type %in% c('type1', 'type2')) %>% 
+  mutate(diabetes_type = fct_drop(diabetes_type))
+
+table_study_mental_mm <- CreateTableOne(vars = vars_study, strata = c('mental_mm_cat_SDC','diabetes_type'), 
+                              data = patients_study_red, factorVars = cat_vars_study,
+                              test = FALSE)
+
+table_study_mental_mm_csv <- print(table_study_mental_mm, noSpaces = TRUE)
+write.csv(table_study_mental_mm_csv, str_c(summary_stats_path, 'table1/191023_Table1_studystart_mental_mm.csv'))
+
+# 6. Study population spliy by time since diagnosis --------------------------
+
+table_study_time_since_diagnosis <- CreateTableOne(vars = vars_study, strata = c('time_since_diagnosis','diabetes_type'), 
+                                        data = patients_study_red, factorVars = cat_vars_study,
+                                        test = FALSE)
+
+table_study_time_since_diagnosis_csv <- print(table_study_time_since_diagnosis, noSpaces = TRUE)
+write.csv(table_study_time_since_diagnosis_csv, str_c(summary_stats_path, 'table1/191023_Table1_studystart_time_since_diagnosis.csv'))
+
+
+
+
+# Exploring glycaemic control ---------------------------------------------
+
+patients_study_red2 <- patients_study_red %>%
+  filter(gender %in% c(1,2)) %>% 
+  mutate(gender = factor(gender),
+         gender = fct_recode(gender, male = '1', female = '2'),
+         HbA1C_control_good = ifelse(HbA1C_control == 'good', 1, 0),
+         female = ifelse(gender == 'female', 1, 0),
+         imd_quintile_numeric = as.numeric(gsub(' .*', '', imd_quintile)))
+
+patients_study_red2  %>% 
+  group_by(gender, diabetes_type, imd_quintile, HbA1C_control) %>% 
+  summarise(n = n()) %>% 
+  group_by(gender, diabetes_type, imd_quintile) %>% 
+  mutate(percent = round(100 * n / sum(n), 1)) %>% 
+  write_csv(str_c(summary_stats_path, 'table1/HbA1C_control_variation.csv'))
+
+hba1c_plot <- patients_study_red2  %>% 
+  group_by(gender, diabetes_type, imd_quintile_numeric, HbA1C_control) %>% 
+  summarise(n = n()) %>% 
+  group_by(gender, diabetes_type, imd_quintile_numeric) %>% 
+  mutate(percent = round(100 * n / sum(n), 1)) %>% 
+           ggplot(aes(x = imd_quintile_numeric, y = percent, fill = gender)) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  facet_grid(diabetes_type ~ HbA1C_control) +
+  scale_fill_manual(values = c(THF_red, THF_50pct_light_blue)) +
+  ylab('Patients [%]') +
+  xlab('IMD quintile') +
+  labs(title = 'HbA1C control by gender and IMD') +
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+ggsave(str_c(summary_stats_path, 'table1/HbA1C_control_variation.pdf'), hba1c_plot,  device = 'pdf', width = 8, height = 5)
+
+
+type1_model_good_control <-  glm(HbA1C_control_good ~ startage_study + female + imd_quintile_numeric + female*imd_quintile_numeric,
+                                 data = patients_study_red2[patients_study_red2$diabetes_type == 'type1',],
+                                 family = 'binomial')
+
+summary(type1_model_good_control)
+exp(cbind(OR = coef(type1_model_good_control), confint(type1_model_good_control)))
+
+type2_model_good_control <-  glm(HbA1C_control_good ~ startage_study + female + imd_quintile_numeric + female*imd_quintile_numeric,
+                                 data = patients_study_red2[patients_study_red2$diabetes_type == 'type2',],
+                                 family = 'binomial')
+
+summary(type1_model_good_control)
+exp(cbind(OR = coef(type1_model_good_control), confint(type1_model_good_control)))
 
