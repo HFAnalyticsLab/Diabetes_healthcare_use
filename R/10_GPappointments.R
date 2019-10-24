@@ -1,37 +1,39 @@
 # =======================================================
 # Project: Diabetes outpatient care
-# Purpose: Primary care/GP appointments - cleaning, processing and counting
+# Purpose: Primary care/GP appointments - cleaning, processing, defining and counting
 # Author: Fiona Grimm
-# Date: 05/09/2019
 # =======================================================
 
 library(tidyverse)
 library(lubridate)
 library(janitor)
 library(tidylog)
-
+library(tableone)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
 # Source study parameters 
-source('R_FG/study_params.R')
+source('R/study_params.R')
+
+# Source graph parameters 
+source('R/plotting_params.R')
 
 # Import data -------------------------------------------------------------
 
-patients <- readRDS('processed_data/patients_clinical_combined.Rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 
 # Diabetes type
-diabetes_bypat <- readRDS('processed_data/patients_diabetes.rds')
+diabetes_bypat <- readRDS(str_c(processed_RDS_path, 'patients_diabetes.rds'))
 
 # Consultations
-extract_consultation <- readRDS('raw_data/Extract_consultation.Rds')
+extract_consultation <- readRDS(str_c(raw_RDS_path, 'Extract_consultation.Rds'))
 
 # Clinical
-extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
+extract_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_clinical.Rds'))
 
 # Staff
-extract_staff <- readRDS('raw_data/Extract_staff.Rds')
+extract_staff <- readRDS(str_c(raw_RDS_path, 'Extract_staff.Rds'))
 
 # Join consulations and staff role
 consultations <-  extract_consultation %>% 
