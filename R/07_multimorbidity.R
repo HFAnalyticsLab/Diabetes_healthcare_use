@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Multimorbidity, current cutoff is study start (covariate)
 # Author: Fiona Grimm
-# Date: 05/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -12,33 +11,31 @@ library(tidylog)
 
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
-# Define study parameters -------------------------------------------------
-
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
+# Source study parameters 
+source('R/study_params.R')
 
 
 # Import data -------------------------------------------------------------
 # Multiple conditions were counted using SAS code in folder SAS_multimorbidity
-# Based on the way it was done in project 36
+
 
 patient_mm <- read_csv(str_c(SAS_path, 'results/cprdcamlts.csv'))
 
-patients <- readRDS('processed_data/patients.rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 
 # Derive counts --------------------------------------------------------------
 
 # Note: for diabetes we are using a slightly more comprehensive list of medcodes (29 more than CPRD)
 # Will exclude diabetes from co-morbidities anyway, as it is part of the inclusion criteria
+# study population
 
 mm_bypat <- patient_mm %>% 
   select(patid, HYP:MIG) %>% 
   right_join(patients[, c('patid')], by = 'patid')
 
-# Will combine depression and axiety
+# Will combine depression and axiety into DEPANX
 mm_bypat <- mm_bypat %>% 
   mutate(DEPANX = ifelse(DEP == 1 | ANX == 1, 1, 0),
          mental_mm_count = ALC + ANO + DEPANX + DEM + LEA + OPS + SCZ,
