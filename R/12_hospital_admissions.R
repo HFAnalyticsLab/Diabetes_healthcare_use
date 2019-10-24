@@ -1,8 +1,7 @@
 # =======================================================
 # Project: Diabetes outpatient care
-# Purpose: Hospital admissions - cleaning, processing and counting
+# Purpose: Hospital Admissions  cleaning, processing and counting
 # Author: Fiona Grimm
-# Date: 17/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,18 +10,18 @@ library(janitor)
 library(tidylog)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
 # Source study parameters 
-source('R_FG/study_params.R')
+source('R/study_params.R')
 
 # Import data -------------------------------------------------------------
 
 # Patiend IDs
-patients <- readRDS('processed_data/patients_clinical_combined.Rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 
 # Inpatient episodes
-hesapc_episodes <- readRDS('raw_data/HES_APC_episodes.Rds')
+hesapc_episodes <- readRDS(str_c(raw_RDS_path, 'HES_APC_episodes.Rds'))
 
 # Cleaning ----------------------------------------------------------------
 
