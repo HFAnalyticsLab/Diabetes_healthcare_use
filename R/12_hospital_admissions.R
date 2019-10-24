@@ -93,35 +93,91 @@ hesapc_admissions %>%
 
 # Duplicates?
 duplicates <- hesapc_admissions %>% 
-  group_by(patid, emergency) %>% 
-  get_dupes(epistart)
+  get_dupes(patid, admitype, epistart)
 
-# if there are several admissions on the same day with the same emergency flag 
+# if there are several admissions on the same day with the admittions type 
 # then keep the longer one (as the other one will be a 0-day admission)
 
 hesapc_admissions <- hesapc_admissions %>% 
   arrange(patid, epistart, desc(epidur)) %>% 
-  distinct(patid, epistart, emergency, .keep_all = TRUE)
+  distinct(patid, epistart, admitype, .keep_all = TRUE)
+
+# Check: how many admissions are for patients in the final study population?
+hesapc_admissions %>% 
+  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
+  filter(resquality == 1) %>% 
+  nrow()
 
 # Saving processed files --------------------------------------------------
 
-saveRDS(hesapc_admissions, 'processed_data/patients_admissions_all.rds')
+saveRDS(hesapc_admissions, str_c(processed_RDS_path, 'patients_admissions.rds'))
 
 
 # Summary per patient -----------------------------------------------------
 
-
 admissions_bypat <-  hesapc_admissions %>% 
   group_by(patid) %>% 
-  summarise(n_adm_study = sum(during_study == 1),
-            n_emadm_study = sum(during_study == 1 & emergency == 1),
-            n_adm_followup = sum(during_followup == 1),
-            n_emadm_followup = sum(during_followup == 1 & emergency == 1)) %>% 
-  right_join(patients[, c('patid')], by = 'patid') 
+  summarise(elective_admissions = sum(admitype == 'elective'),
+            emergency_admissions= sum(admitype == 'emergency')) 
 
+# Normalising by time spent in study
+admissions_bypat <- admissions_bypat %>% 
+  right_join(patients[, c('patid', 'resquality', 'diabetes_type', 'years_in_study')], by = 'patid') %>% 
+  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-resquality) %>% 
+  mutate_if(is.numeric, ~replace_na(.x, 0))
 
+admissions_bypat <- admissions_bypat %>% 
+  ungroup() %>% 
+  mutate(elective_admissions_per_year = round(elective_admissions / years_in_study, 1),
+         emergency_admissions_per_year = round(emergency_admissions / years_in_study, 1))
 
-# Saving processed files --------------------------------------------------
+# Create categorical variables (binned appointment counts)
+admissions_bypat <-  admissions_bypat %>% 
+  mutate(elective_admissions_cat = cut(elective_admissions, 
+                                       breaks = c(0, 1, 2, 3, 4, 5, Inf), 
+                                       labels = c('None', '1', '2', '3', '4', '5+'),
+                                       ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
+         emergency_admissions_cat = cut(emergency_admissions, 
+                                        breaks = c(0, 1, 2, 3, 4, 5, Inf), 
+                                        labels = c('None', '1', '2', '3', '4', '5+'),
+                                        ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
+         elective_admissions_per_year_cat = cut(elective_admissions_per_year, 
+                                                breaks = c(0, 1, 2, 3, 4, 5, Inf), 
+                                                labels = c('None', '1', '2', '3', '4', '5+'),
+                                       ordered_result = TRUE, include.lowest = TRUE, right = FALSE),
+         emergency_admission_per_years_cat = cut(emergency_admissions_per_year, 
+                                                 breaks = c(0, 1, 2, 3, 4, 5, Inf), 
+                                                 labels = c('None', '1', '2', '3', '4', '5+'),
+                                        ordered_result = TRUE, include.lowest = TRUE, right = FALSE))
 
-saveRDS(admissions_bypat, 'processed_data/patients_admissions_count.rds')
+# Saving processed files 
+saveRDS(admissions_bypat, str_c(processed_RDS_path, 'patients_admissions.rds'))
+
+# Create summary tables -------------------------------------------------
+# Means
+
+all_admissions_means <- admissions_bypat %>% 
+  group_by(diabetes_type) %>% 
+  summarise(n = n(),
+            mean_elective_admissions = round(mean(elective_admissions), 1),
+            mean_elective_admissions_per_year = round(mean(elective_admissions_per_year), 1),
+            mean_emergency_admissions = round(mean(emergency_admissions), 1),
+            mean_emergency_admissions_per_year = round(mean(emergency_admissions_per_year), 1)) %>% 
+  mutate(subgroup = 'all patients')
+
+not_censored_admissions_means <- admissions_bypat %>% 
+  group_by(diabetes_type) %>% 
+  filter(years_in_study == 2) %>% 
+  summarise(n = n(),
+            mean_elective_admissions = round(mean(elective_admissions), 1),
+            mean_elective_admissions_per_year = round(mean(elective_admissions_per_year), 1),
+            mean_emergency_admissions = round(mean(emergency_admissions), 1),
+            mean_emergency_admissions_per_year = round(mean(emergency_admissions_per_year), 1)) %>% 
+  mutate(subgroup = 'did not transfer out')
+
+admissions_means <- all_admissions_means %>% 
+  bind_rows(not_censored_admissions_means)
+
+write_csv(admissions_means, str_c(summary_stats_path, 'table2/Admissions_means.csv'))
 
