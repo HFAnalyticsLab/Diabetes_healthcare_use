@@ -129,7 +129,17 @@ patients <- patients %>%
   left_join(extract_practice, by = 'pracid') %>% 
   mutate(resquality = ifelse(uts <= study_start & lcd > study_end, 1, 0)) 
 
-# Mortality flags and follow-up times
+# Check: how many patients with UTS after study start?
+nrow(patients[patients$uts > study_start,])
+
+# Check: how many patients with lcd before study end?
+nrow(patients[patients$lcd <= study_end,])
+
+# Check: how many patients satisfy both conditions?
+nrow(patients[patients$resquality == 1,])
+
+
+# Flags for mortality and transfer out
 patients <- patients %>% 
          # died during study period or follow up 
   mutate(died_study = ifelse(!is.na(ONS_dod) & ONS_dod %within% interval(study_start, study_end), 1, 0),
