@@ -2,7 +2,6 @@
 # Project: Diabetes outpatient care
 # Purpose: Clean HbA1C data and create categorical HbA1C variable
 # Author: Fiona Grimm
-# Date: 03/09/2019
 # =======================================================
 
 library(tidyverse)
@@ -11,30 +10,27 @@ library(janitor)
 library(tidylog)
 
 # Source file paths: Rds_path
-source('R_FG/file_paths.R')
+source('R/file_paths.R')
 
-# Define study parameters -------------------------------------------------
-
-# Year 1 and 2 to quantify utilisation and other covariates
-study_start <- ymd('2015-12-01')
-study_end <- ymd('2017-11-30')
+# Source study parameters 
+source('R/study_params.R')
 
 # Import data -----------------------------------------
 
 # Study population
-patients <- readRDS('processed_data/patients.rds')
+patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
 
 # Additional clinical details 
-extract_additional_clinical <- readRDS('raw_data/Extract_additional_clinical.Rds')
+extract_additional_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_additional_clinical.Rds'))
 
 # HbA1C Read code list
 HbA1C_codelist <- read_csv(str_c(code_list_path, 'Appendix2_HbA1c_diabetic_control.csv'))
 
 # Clinical data
-extract_clinical <- readRDS('raw_data/Extract_clinical.Rds')
+extract_clinical <- readRDS(str_c(raw_RDS_path, 'Extract_clinical.Rds'))
 
 # Test files
-extract_tests <- readRDS('raw_data/Extract_test.Rds')
+extract_tests <- readRDS(str_c(raw_RDS_path, 'Extract_test.Rds'))
 
 # CPRD Variable lookup tables 
 OPR_lookup <- read_csv('../data_dictionary_CPRD/csv_lookup_tables/OPR.csv') %>% 
@@ -74,13 +70,6 @@ clinical_HbA1C <- clinical_HbA1C %>%
 clinical_HbA1C %>% 
   tabyl(control)
 
-# Count number of records by patient (ever recorded before study end)
-clinical_HbA1C_bypat <- clinical_HbA1C %>% 
-  group_by(patid) %>% 
-  summarise(good_Read_count = sum(control == 'good'),
-            borderline_Read_count = sum(control == 'borderline'),
-            bad_Read_count = sum(control == 'bad'))
-
 
 # Latest entry before follow-up period starts
 # not older than study start (this is to make sure the record is not too old & missingness might be informative)
@@ -93,6 +82,30 @@ clinical_HbA1C_latest <- clinical_HbA1C %>%
   ungroup() %>% 
   select(patid, control, eventdate) %>% 
   rename(latest_clinical_HbA1C = control, latest_clin_eventdate = eventdate)
+
+# Earliest entry after study period starts
+# not older than study end 
+
+clinical_HbA1C_earliest <- clinical_HbA1C %>% 
+  filter(eventdate %within% interval(study_start, study_end)) %>% 
+  arrange(patid, eventdate) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  select(patid, control, eventdate) %>% 
+  rename(earliest_clinical_HbA1C = control, earliest_clin_eventdate = eventdate)
+
+# Latest entry before study period starts
+# within 6 months 
+
+clinical_HbA1C_beforestudy <- clinical_HbA1C %>% 
+  filter(eventdate %within% interval(study_start - months(6), study_start)) %>% 
+  arrange(patid, eventdate) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  select(patid, control, eventdate) %>% 
+  rename(beforestudy_clinical_HbA1C = control, beforestudy_clin_eventdate = eventdate)
 
 # 3. As a  test result in the test files ----------------------------------
 
@@ -158,14 +171,6 @@ HbA1C_tests <-  HbA1C_tests %>%
 HbA1C_tests %>% 
   tabyl(control)
 
-# Count tests by patient, ever recorded before study end
-HbA1C_tests_bypat <- HbA1C_tests %>% 
-  group_by(patid) %>% 
-  summarise(good_test_count = sum(control == 'good'),
-            borderline_test_count = sum(control == 'borderline'),
-            bad_test_count = sum(control == 'bad'))
-
-
 # Latest entry before follow-up period starts
 # not older than study start (this is to make sure the record is not too old & missingness might be informative)
 
@@ -178,18 +183,42 @@ HbA1C_tests_latest <- HbA1C_tests %>%
   select(patid, control, eventdate) %>% 
   rename(latest_test = control, latest_test_eventdate = eventdate)
 
+# Earliest entry after study period starts
+# not older than study end 
+
+HbA1C_tests_earliest <- HbA1C_tests %>% 
+  filter(eventdate %within% interval(study_start, study_end)) %>% 
+  arrange(patid, eventdate) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  select(patid, control, eventdate) %>% 
+  rename(earliest_test = control, earliest_test_eventdate = eventdate)
+
+# Latest entry before study period starts
+# within 6 months 
+
+HbA1C_tests_beforestudy <- HbA1C_tests %>% 
+  filter(eventdate %within% interval(study_start - months(6), study_start)) %>% 
+  arrange(patid, eventdate) %>% 
+  group_by(patid) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  select(patid, control, eventdate) %>% 
+  rename(beforestudy_test = control, beforestudy_test_eventdate = eventdate)
+
+
 # 4. Combine and decide on status ---------------------------
 # latest before study end 
 # not older than study start (this is to make sure the record is not too old & missingness might be informative)
 
-hba1c_bypat <- clinical_HbA1C_bypat %>% 
+hba1c_bypat <- patients[, c('patid')] %>% 
   left_join(clinical_HbA1C_latest, by = 'patid') %>% 
-  full_join(HbA1C_tests_bypat, by = 'patid') %>% 
-  left_join(HbA1C_tests_latest, by = 'patid') %>% 
-  right_join(patients[, c('patid')], by = 'patid') 
+  left_join(HbA1C_tests_latest, by = 'patid') 
 
 # latest of clinical or test results decides
 # if both recorded on the same day, will believe clinical result, as there is less room for error
+
 hba1c_bypat <- hba1c_bypat %>% 
   mutate(HbA1C_control = case_when(is.na(latest_clin_eventdate) & !is.na(latest_test_eventdate) ~ latest_test,
                                    !is.na(latest_clin_eventdate) & is.na(latest_test_eventdate) ~ latest_clinical_HbA1C,
@@ -207,16 +236,60 @@ hba1c_bypat <- hba1c_bypat %>%
 
 hba1c_bypat %>%  tabyl(HbA1C_control)
 
+# at baseline 
+# Define as: latest measurement before study start, if that was within 6 months of study start
+# if none available, earliest after study start
+
+hba1c_baseline_bypat <- patients[, c('patid')] %>% 
+  left_join(clinical_HbA1C_beforestudy, by = 'patid') %>% 
+  left_join(HbA1C_tests_beforestudy, by = 'patid')  %>% 
+  left_join(clinical_HbA1C_earliest, by = 'patid') %>% 
+  left_join(HbA1C_tests_earliest, by = 'patid')  
+
+# latest of clinical or test results decides
+# if both recorded on the same day, will believe clinical result, as there is less room for error
+hba1c_baseline_bypat <- hba1c_baseline_bypat %>% 
+  mutate(HbA1C_control = case_when(is.na(beforestudy_clin_eventdate) & !is.na(beforestudy_test_eventdate) ~ beforestudy_test,
+                                 !is.na(beforestudy_clin_eventdate) & is.na(beforestudy_test_eventdate) ~ beforestudy_clinical_HbA1C,
+                                 !is.na(beforestudy_clin_eventdate) & !is.na(beforestudy_test_eventdate) & 
+                                   beforestudy_clin_eventdate > beforestudy_test_eventdate  ~ beforestudy_clinical_HbA1C,
+                                 !is.na(beforestudy_clin_eventdate) & !is.na(beforestudy_test_eventdate) & 
+                                   beforestudy_clin_eventdate < beforestudy_test_eventdate  ~ beforestudy_test,
+                                 !is.na(beforestudy_clin_eventdate) & !is.na(beforestudy_test_eventdate) & 
+                                   beforestudy_clin_eventdate == beforestudy_test_eventdate  ~ beforestudy_clinical_HbA1C))
+
+# Fill NAs with data from after study start
+hba1c_baseline_bypat <- hba1c_baseline_bypat %>% 
+  mutate(HbA1C_control = ifelse(is.na(HbA1C_control) & is.na(earliest_clin_eventdate) & !is.na(earliest_test_eventdate), earliest_test, HbA1C_control),
+         HbA1C_control = ifelse(is.na(HbA1C_control) & !is.na(earliest_clin_eventdate) & is.na(earliest_test_eventdate), earliest_clinical_HbA1C, HbA1C_control),
+         HbA1C_control = ifelse(is.na(HbA1C_control) & !is.na(earliest_clin_eventdate) & !is.na(earliest_test_eventdate)
+                                & earliest_clin_eventdate > earliest_test_eventdate, earliest_test, HbA1C_control),
+         HbA1C_control = ifelse(is.na(HbA1C_control) & !is.na(earliest_clin_eventdate) & !is.na(earliest_test_eventdate)
+                                & earliest_clin_eventdate < earliest_test_eventdate, earliest_clinical_HbA1C, HbA1C_control),
+         HbA1C_control = ifelse(is.na(HbA1C_control) & !is.na(earliest_clin_eventdate) & !is.na(earliest_test_eventdate)
+                                & earliest_clin_eventdate == earliest_test_eventdate, earliest_clinical_HbA1C, HbA1C_control))
+
+
+hba1c_baseline_bypat <- hba1c_baseline_bypat %>% 
+  mutate(HbA1C_control = fct_explicit_na(HbA1C_control, 'Missing'))
+
+
+hba1c_baseline_bypat %>%  tabyl(HbA1C_control)
+
+
 # Saving processed files --------------------------------------------------
 
 # 1. All clinical entries 
-saveRDS(clinical_HbA1C, 'processed_data/patients_HbA1C_clinical_all.rds')
+saveRDS(clinical_HbA1C, str_c(processed_RDS_path, 'patients_HbA1C_clinical_all.rds'))
 
 # 2. All test entries
-saveRDS(HbA1C_tests, 'processed_data/patients_HbA1C_test_all.rds')
+saveRDS(HbA1C_tests, str_c(processed_RDS_path, 'patients_HbA1C_test_all.rds'))
 
-# 3. Combined table with the counts and the latest restults
-saveRDS(hba1c_bypat, 'processed_data/patients_HbA1C_latest.rds')
+# 3. latest before study end 
+saveRDS(hba1c_bypat, str_c(processed_RDS_path, 'patients_HbA1C_latest.rds'))
+
+# 4. at baseline (definition above)
+saveRDS(hba1c_baseline_bypat, str_c(processed_RDS_path, 'patients_HbA1C_at_baseline.rds'))
 
 
 # Experimenting with cutoff dates -----------------------------------------
