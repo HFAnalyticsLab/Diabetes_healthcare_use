@@ -66,7 +66,8 @@ patients_combined <- patients_combined %>%
          smoking_status = fct_relevel(smoking_status, 'nonsmoker', 'exsmoker', 'smoker', 'Missing'),
          BMI_categorical = fct_relevel(BMI_categorical, 'Missing', after = Inf),
          HbA1C_control = fct_relevel(HbA1C_control, 'good', 'borderline', 'bad', 'Missing'),
-         ethnicity = fct_relevel(ethnicity, 'White', 'Asian/British Asian', 'Black/Black British', 'Other', 'Mixed', 'Unknown'))
+         ethnicity = fct_relevel(ethnicity, 'White', 'Asian/British Asian', 'Black/Black British', 'Other', 'Mixed', 'Unknown'),
+         time_since_diagnosis = fct_relevel(time_since_diagnosis, 'less than 1 year'))
 
 # Change/combine some factor level to avoid having small groups
 patients_combined <- patients_combined %>% 
@@ -78,13 +79,13 @@ patients_combined <- patients_combined %>%
          mental_mm_cat_SDC = fct_collapse(mental_mm_cat, '1+' = c('1', '2', '3', '4+')))
 
 
-saveRDS(patients_combined, 'processed_data/patients_clinical_combined.Rds')
+saveRDS(patients_combined, str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 
 
 # Variables to summarise
 vars_tosummarise <- c('resquality', 'diabetes_type', "female", "ethnicity", "startage_study", "age_bins_study_SDC", 
                       'died_study', 'died_followup', 'transfer_out_study', 'transfer_out_followup',
-                      'diag_6m', 'diag_2y', 'diag_5y', 
+                      'time_since_diagnosis', 
                       'e2011_urban_rural', 'imd_quintile',
                       "medication", "smoking_status", "BMI_categorical", "HbA1C_control", 'all_clinical_missing',
                       'mental_mm_cat_SDC', 'physical_mm_cat', 'mm_cat',
