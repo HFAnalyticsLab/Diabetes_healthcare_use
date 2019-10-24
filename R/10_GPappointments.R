@@ -496,22 +496,59 @@ diab_annual_check_bypat  <- diab_annual_check %>%
   group_by(patid) %>% 
   summarise(n_checks = n()) 
 
+# Join in patients 
+diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
+  right_join(patients[, c('patid', 'tod', 'ONS_dod', 'resquality', 'diabetes_type')], by = 'patid') %>% 
+  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-resquality) %>%  
+  mutate(n_checks = replace_na(n_checks, 0))
+
+# correct for years in study
+diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
+  group_by(patid) %>% 
+  mutate(censoring_date = min(tod, ONS_dod, study_end, na.rm = TRUE),
+         years_in_study = round(as.numeric(censoring_date - study_start) / 365, 2),
+         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study))
+
+diab_annual_check_bypat <- diab_annual_check_bypat %>% 
+  ungroup() %>% 
+  select(-tod, -ONS_dod, -censoring_date) %>% 
+  mutate(n_checks_per_year = round(n_checks / years_in_study, 1))
+
+
 # Create categorical variables (binned appointment counts)
 diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
   mutate(diab_annual_check_cat = cut(n_checks, breaks = c(0, 1, 2, Inf), labels = c('None', '1', '2 or more'),
                                      ordered_result = TRUE, include.lowest = TRUE, right = FALSE))
 
-# Join in patients 
-diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
-  right_join(patients[, c('patid')], by = 'patid')
+# Create summary tables -------------------------------------------------
 
-# Convert missing to none
-diab_annual_check_bypat <- diab_annual_check_bypat %>% 
-  mutate(diab_annual_check_cat = fct_explicit_na(diab_annual_check_cat, 'None'))
+# Means
+
+all_checkup_means <- diab_annual_check_bypat %>% 
+  group_by(diabetes_type) %>% 
+  summarise(n = n(),
+            mean_checkup_count = round(mean(n_checks), 1),
+            mean_checkup_count_per_year = round(mean(n_checks_per_year), 1)) %>% 
+  mutate(subgroup = 'all patients')
+
+not_censored_checkup_means <-diab_annual_check_bypat %>% 
+  group_by(diabetes_type) %>% 
+  filter(years_in_study == 2) %>% 
+  summarise(n = n(),
+            mean_checkup_count = round(mean(n_checks), 1),
+            mean_checkup_count_per_year = round(mean(n_checks_per_year), 1)) %>% 
+  mutate(subgroup = 'did not transfer out')
+
+checkup_means <- all_checkup_means %>% 
+  bind_rows(not_censored_checkup_means)
+
+write_csv(checkup__means, str_c(summary_stats_path, 'table2/DiabetesCheckup_means.csv'))
+
 
 # Saving processed files --------------------------------------------------
 
-saveRDS(diab_annual_check_bypat, 'processed_data/patients_annual_diabetes_checks.rds')
+saveRDS(diab_annual_check_bypat, str_c(processed_RDS_path, 'patients_annual_diabetes_checks.rds'))
 
 
 
