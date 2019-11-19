@@ -11,7 +11,7 @@ There is little evidence on the variation of health care utilisation by patients
 The code in this repository is used for data cleaning, to define and describe the study cohort (eg demographic details, clinical characteristics) and to quantify health care utilisation and health outcomes.   
 
 ## Data source
-We used data from the Clinical Practice Research Datalink (CPRD) linked to Hospital Episode Statistics (HES). ISAC protocol number 19_138(link to study description to be added once available). 
+We used data from the Clinical Practice Research Datalink (CPRD) linked to Hospital Episode Statistics (HES), [ISAC protocol number 19_138](https://www.cprd.com/protocol/variation-healthcare-utilisation-across-primary-and-secondary-care-patients-type-1-and-type). 
 
 Data used for this analysis were anonymised in line with the ICO's Anonymisation Code of Practice. The data were accessed in The Health Foundation's Secure Data Environment, which is a secure data analysis facility (accredited for the ISO27001 information security standard, and recognised for the NHS Digital Data Security and Protection Toolkit). No information that could directly identify a patient or other individual was used. Variables labelled 'patid' do not refer to NHS IDs or other identifiable patient data.
 
