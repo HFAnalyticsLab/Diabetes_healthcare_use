@@ -20,10 +20,12 @@ source('R/study_params.R')
 # Import data -------------------------------------------------------------
 # Multiple conditions were counted using SAS code in folder SAS_multimorbidity
 
-
 patient_mm <- read_csv(str_c(SAS_path, 'results/cprdcamlts.csv'))
 
-patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
+patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
+
+# Diabetes type
+diabetes_bypat <- readRDS(str_c(processed_RDS_path, 'patients_diabetes.rds'))
 
 # Derive counts --------------------------------------------------------------
 
@@ -31,19 +33,28 @@ patients <- readRDS(str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
 # Will exclude diabetes from co-morbidities anyway, as it is part of the inclusion criteria
 # study population
 
+# Note 2: ANXr represents a new definition of anxiety, developed by KH based on advice from GPs
+# The difference to ANX is that Z drugs have been excluded from the product code list (45 product codes in total)
+# This includes Zopiclone, Zolpidem, Stilnoct, Zimovane, Zileze, Sonata, Zaleplon
+# as these are mainly prescribed for insomnia
+
 mm_bypat <- patient_mm %>% 
-  select(patid, HYP:MIG) %>% 
-  right_join(patients[, c('patid')], by = 'patid')
+  select(patid, HYP:MIG) 
+
+# What difference is there between the two definitions of anxiety?
 
 # Will combine depression and axiety into DEPANX
 mm_bypat <- mm_bypat %>% 
   mutate(DEPANX = ifelse(DEP == 1 | ANX == 1, 1, 0),
+         DEPANXr = ifelse(DEP == 1 | ANXr == 1, 1, 0),
+         # this is still using the older definition of ANX,
          mental_mm_count = ALC + ANO + DEPANX + DEM + LEA + OPS + SCZ,
          physical_mm_count = AST + ATR + BLI + BRO + CAN + CHD + CKD + CLD + CON + COP + DIV + EPI + HEF + HEL + 
                              HYP + IBD + IBS + MIG + MSC + PNC + PRK + PRO + PSO + PVD + RHE + SIN + STR + THY,
          mm_count = mental_mm_count + physical_mm_count)
          
 
+# this is still using the older definition of ANX
 mm_bypat <- mm_bypat %>% 
   mutate(mental_mm_cat = cut(mental_mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
                              labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE),
