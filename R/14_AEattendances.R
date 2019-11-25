@@ -55,12 +55,16 @@ hesae_attendances <- hesae_attendances %>%
 hesae_attendances_study <- hesae_attendances %>% 
   filter(arrivaldate %within% interval(study_start, study_end))
 
-# Check: how many appointments are for patients in the final study population?
+# Check: how many appointments are for patients in step 2 and 3 cohorts?
 hesae_attendances_study %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   nrow()
 
+hesae_attendances_study %>% 
+  left_join(patients[, c('patid', 'cohort_step3')], by = 'patid') %>% 
+  filter(cohort_step3 == 1) %>% 
+  nrow()
 
 # Derive variables --------------------------------------------------------
 
@@ -95,15 +99,15 @@ hesae_attendances_byPat %>%
 
 # Filter for study population
 hesae_attendances_byPat <- hesae_attendances_byPat %>% 
-  right_join(patients[, c('patid', 'resquality', 'diabetes_type', 'years_in_study')], by = 'patid') %>% 
-  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-resquality) %>% 
+  right_join(patients[, c('patid', 'cohort_step2', 'diabetes_type', 'years_in_study_hes')], by = 'patid') %>% 
+  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-cohort_step2) %>% 
   mutate_if(is.numeric, ~replace_na(.x, 0))   
   
 # Normalise for time spent in study
 hesae_attendances_byPat <- hesae_attendances_byPat %>% 
   ungroup() %>% 
-  mutate(AE_unplanned_per_year = round(AE_unplanned / years_in_study, 1))
+  mutate(AE_unplanned_per_year = round(AE_unplanned / years_in_study_hes, 1))
 
 # Create categorical variables (binned unplanned attendance counts)
 hesae_attendances_byPat <-  hesae_attendances_byPat %>% 
@@ -135,7 +139,7 @@ all_AE_unplanned_means <- hesae_attendances_byPat %>%
 
 not_censored_AE_unplanned_means <-hesae_attendances_byPat %>% 
   group_by(diabetes_type) %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_hes == 2) %>% 
   summarise(n = n(),
             mean_count = round(mean(AE_unplanned), 1),
             mean_count_per_year = round(mean(AE_unplanned_per_year), 1)) %>% 
