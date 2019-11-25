@@ -468,6 +468,69 @@ ggsave(str_c(summary_stats_path, 'table2/PrimaryCare_appt_count_per_year_sensiti
 
 
 
+# Comparing descriptives of different 'primary care user' groups ----------
+
+user_comparison <- consultations_bypat_study_norm %>% 
+  filter(appt_length == 'all' & consult_type == 'consult') %>% 
+  select(patid, count, count_per_year, count_cat, count_norm_cat) %>% 
+  left_join(patients, by = 'patid') %>% 
+  mutate(diabetes_type = fct_drop(diabetes_type))
+
+# Variables to summarise
+vars_tosummarise <- c("female", "ethnicity", "startage_study",
+                      'died_study', 'died_followup', 'transfer_out_study', 'transfer_out_followup',
+                      'time_since_diagnosis', 
+                      'e2011_urban_rural', 'imd_quintile',
+                      "medication", "smoking_status", "BMI_categorical", "HbA1C_control", 'all_clinical_missing',
+                      'mental_mm_cat_SDC', 'physical_mm_cat', 'mm_cat')
+
+cat_vars_tosummarise <- vars_tosummarise[vars_tosummarise != 'startage_study']
+
+user_comparison_summary <- CreateTableOne(vars = vars_tosummarise, 
+                            data = user_comparison, 
+                            strata = c('count_norm_cat', 'diabetes_type'),
+                            factorVars = cat_vars_tosummarise,
+                            test = FALSE)
+
+user_comparison_summary_csv <- print(user_comparison_summary, noSpaces = TRUE) 
+write.csv(user_comparison_summary_csv, str_c(summary_stats_path, 'table2/PrimaryCare_count_norm_cat_group_comparison.csv'))
+
+# Visualisations
+
+user_comparison %>% 
+  group_by(diabetes_type, count_norm_cat, HbA1C_control) %>% 
+  summarise(n = n()) %>% 
+  filter(HbA1C_control != 'Missing') %>% 
+  group_by(diabetes_type, count_norm_cat) %>% 
+  mutate(percent = round(100* n / sum(n), 1)) %>% 
+  ggplot(aes(x = HbA1C_control, y = percent, fill = count_norm_cat)) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  facet_grid(. ~ diabetes_type)
+
+
+user_comparison %>% 
+  group_by(diabetes_type, count_norm_cat, mm_cat) %>% 
+  summarise(n = n()) %>% 
+  group_by(diabetes_type, count_norm_cat) %>% 
+  mutate(percent = round(100* n / sum(n), 1)) %>% 
+  ggplot(aes(x = mm_cat, y = percent, fill = count_norm_cat)) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  facet_grid(. ~ diabetes_type)
+
+
+user_comparison %>% 
+  group_by(diabetes_type, count_norm_cat, mm_cat) %>% 
+  summarise(n = n()) %>% 
+  group_by(diabetes_type, mm_cat) %>% 
+  mutate(percent = round(100* n / sum(n), 1)) %>% 
+  ggplot(aes(x = count_norm_cat, y = percent, fill =mm_cat )) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  facet_grid(. ~ diabetes_type)
+
+
+
+
+
 
 # Diabetes annual check ---------------------------------------------------
 
