@@ -218,14 +218,14 @@ top5_type1  <- specialty_count %>%
         plot.margin =margin(t = 5, l = 5, r = 15, b= 5, unit = "mm")) +
   THF_theme 
 
-ggsave('graphs/OP_attendances/OP_tretspefTop5_type1.pdf', top5_type1, device = 'pdf', width = 5.5, height = 5.5)
+ggsave(str_c(graphs_path, 'OP_attendances/OP_tretspefTop5_type1.pdf'), top5_type1, device = 'pdf', width = 5.5, height = 5.5)
 
 
 specialty_count %>% 
   filter(diabetes_type == 'type1') %>%
   arrange(desc(pct_attends)) %>% 
   head(5) %>% 
-  write_csv('graphs/OP_attendances/OP_tretspefTop5_type1.csv')
+  write_csv(str_c(graphs_path, 'OP_attendances/OP_tretspefTop5_type1.csv'))
 
 
 top5_type2  <- specialty_count %>% 
@@ -242,12 +242,12 @@ top5_type2  <- specialty_count %>%
         plot.margin =margin(t = 5, l = 5, r = 15, b = 5, unit = "mm")) +
   THF_theme 
 
-ggsave('graphs/OP_attendances/OP_tretspefTop5_type2.pdf', top5_type2, device = 'pdf', width = 5.5, height = 5.5)
+ggsave(str_c(graphs_path, 'OP_attendances/OP_tretspefTop5_type2.pdf'), top5_type2, device = 'pdf', width = 5.5, height = 5.5)
 
 
 specialty_count %>% 
   filter(diabetes_type == 'type2') %>%
   arrange(desc(pct_attends)) %>% 
   head(5) %>% 
-  write_csv('graphs/OP_attendances/OP_tretspefTop5_type2.csv')
+  write_csv(str_c(graphs_path, 'OP_attendances/OP_tretspefTop5_type2.csv'))
 
