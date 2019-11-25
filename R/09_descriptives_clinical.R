@@ -104,68 +104,69 @@ patients_combined <- patients_combined %>%
 
 
 saveRDS(patients_combined, str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
+        
 
+# Baseline descriptives ---------------------------------------------------
+
+# For study population (step 2 cohort)
+patients_study <-  patients_combined %>% 
+  filter(cohort_step2 == 1)
 
 # Variables to summarise
-vars_tosummarise <- c('resquality', 'diabetes_type', "female", "ethnicity", "startage_study", "age_bins_study_SDC", 
-                      'died_study', 'died_followup', 'transfer_out_study', 'transfer_out_followup',
+vars_tosummarise <- c("female", "ethnicity", "startage_study", "age_bins_study_SDC", 
+                      'censoring_type_cprd', 'censoring_type_hes',
+                      'years_in_study_cprd', 'years_in_study_hes',
                       'time_since_diagnosis', 
                       'e2011_urban_rural', 'imd_quintile',
-                      "medication", "smoking_status", "BMI_categorical", "HbA1C_control", 'all_clinical_missing',
+                      "medication", "smoking_status", "BMI_categorical", "HbA1C_control",
                       'mental_mm_cat_SDC', 'physical_mm_cat', 'mm_cat',
                       'HYP', 'PNC', 'HEL','CHD', 'DEPANX', 'CKD', 'THY', 'DIV', 'IBS', 'ATR')
 
-cat_vars_tosummarise <- vars_tosummarise[vars_tosummarise != 'startage_study']
+cat_vars_tosummarise <- c('censoring_type_hes', 'e2011_urban_rural',
+                          'HYP', 'PNC', 'HEL','CHD', 'DEPANX', 'CKD', 'THY', 'DIV', 'IBS', 'ATR')
 
-# 1. All patients ---------------------------------------------------------
-# Acceptable patients with diabetes diagnosis and valid IMD
-
-table_all <- CreateTableOne(vars = vars_tosummarise, 
-                            data = patients_combined, 
+table_patients_study <- CreateTableOne(vars = vars_tosummarise, 
+                            data = patients_study, 
+                            strata = 'diabetes_type', 
                             factorVars = cat_vars_tosummarise,
                             test = FALSE)
 
-table_all_csv <- print(table_all, noSpaces = TRUE) 
-write.csv(table_all_csv, str_c(summary_stats_path, 'table1/191023_Table1_allpatients.csv'))
+table_patients_study_csv <- print(table_patients_study, 
+                                  noSpaces = TRUE,
+                                  showAllLevels = TRUE) 
 
-# 2. Comparing patients that are research quality with the rest -----------
-# Research quality being defined at being in an UTS practice at study start
-# and for the last data collection date of the practice to be after follow up end
-
-vars_resqual <- vars_tosummarise[vars_tosummarise != 'resquality']
-cat_vars_resqual <- cat_vars_tosummarise[cat_vars_tosummarise != 'resquality']
+write.csv(table_patients_study_csv, str_c(summary_stats_path, 'table1/Table1_cohort2.csv'))
 
 
 
-table_resqual <- CreateTableOne(vars = vars_resqual, strata = 'resquality', 
-                                data = patients_combined, factorVars = cat_vars_resqual,
-                                test = FALSE)
+# Study population split by mental health comorbidity ------------------
 
-table_resqual_csv <- print(table_resqual, noSpaces = TRUE) 
-write.csv(table_resqual_csv, str_c(summary_stats_path, 'table1/191023_Table1_researchquality.csv'))
+patients_study_red <- patients_study %>% 
+  filter(diabetes_type %in% c('type1', 'type2')) %>% 
+  mutate(diabetes_type = fct_drop(diabetes_type))
 
-# 3. Population at study start  -------------------------------------------
-# By diabetes type, only research quality patients
+vars_tosummarise2 <- vars_tosummarise[vars_tosummarise != 'mental_mm_cat_SDC']
 
-patients_study <-  patients_combined %>% 
-  filter(resquality == 1)
+table_study_mental_mm <- CreateTableOne(vars = vars_tosummarise2, 
+                                        strata = c('mental_mm_cat_SDC','diabetes_type'), 
+                                        data = patients_study_red, 
+                                        factorVars = cat_vars_tosummarise,
+                                        test = FALSE)
 
-vars_study <- vars_resqual[vars_resqual != 'diabetes_type']
-cat_vars_study <- cat_vars_resqual[cat_vars_resqual != 'diabetes_type']
+table_study_mental_mm_csv <- print(table_study_mental_mm, noSpaces = TRUE)
+write.csv(table_study_mental_mm_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_mental_mm.csv'))
 
-table_study <- CreateTableOne(vars = vars_study, strata = 'diabetes_type', 
-                              data = patients_study, factorVars = cat_vars_study,
-                              test = FALSE)
+table_study_DEPANX <- CreateTableOne(vars = vars_tosummarise2, 
+                                        strata = c('DEPANX','diabetes_type'), 
+                                        data = patients_study_red, 
+                                        factorVars = cat_vars_tosummarise,
+                                        test = FALSE)
 
-table_study_csv <- print(table_study, noSpaces = TRUE)
-write.csv(table_study_csv, str_c(summary_stats_path, 'table1/191023_Table1_studystart.csv'))
+table_study_DEPANX_csv <- print(table_study_DEPANX, noSpaces = TRUE)
+write.csv(table_study_DEPANX_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_DEPANX.csv'))
 
-# 4. Population at follow-up start ---------------------------------------
-# By diabetes type
-# Only patients that did not die or transfer out during study period
 
-patients_followup <-  patients_combined %>% 
-  filter(followup_pop == 1)
+
 
 vars_followup <- vars_study[!is.element(vars_study, c('died_study', 'transfer_out_study', "startage_study", "age_bins_study_SDC"))]
 vars_followup <- c(vars_followup, "startage_followup", "age_bins_followup_SDC")
