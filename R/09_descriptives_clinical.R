@@ -19,6 +19,20 @@ source('R/study_params.R')
 # Source graph parameters 
 source('R/plotting_params.R')
 
+# Functions ---------------------------------------------------------------
+
+utilisation_theme <- theme_classic() +
+  theme(legend.position = 'top',
+        legend.text = element_text(color = THF_dark_grey),
+        legend.title = element_text(color = THF_dark_grey),
+        legend.justification = c(1,0),
+        legend.key.size = unit(3, 'mm'),
+        legend.spacing.x = unit(1 ,'mm'),
+        axis.line = element_line(size = 0.25),
+        axis.ticks = element_line(size = 0.25)) +
+  THF_theme
+
+
 # Import data -----------------------------------------
 
 # Study population
