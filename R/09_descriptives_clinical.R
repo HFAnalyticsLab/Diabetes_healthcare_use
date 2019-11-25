@@ -72,7 +72,17 @@ patients_combined <- patients %>%
                              & BMI_categorical == 'Missing' & HbA1C_control == 'Missing', 1, 0)) %>% 
   left_join(mm_bypat, by = 'patid') 
 
-
+# Create factor for censoring type 
+patients_combined <- patients_combined %>% 
+  mutate(censoring_type_cprd = case_when(died_study == 1 ~ 'death',
+                                         transfer_out_study == 1 ~ 'transfer out',
+                                         died_study == 0 & transfer_out_study == 0 & years_in_study_cprd < 2 ~ 'practice last data collection',
+                                         years_in_study_cprd == 2 ~ 'study end'),
+         censoring_type_hes = case_when(died_study == 1 ~ 'death',
+                                        died_study == 0 & years_in_study_hes < 2 ~ 'death', # died_study is based on what happens first in CPRD
+                                        # but some patients transfer out and then die before the end of the study
+                                        years_in_study_hes == 2 ~ 'study end'))
+  
 # Reorder some factor levels 
 patients_combined <- patients_combined %>% 
   mutate(diabetes_type = fct_relevel(diabetes_type, 'type1', 'type2', 'unknown', 'other'),
