@@ -186,26 +186,18 @@ consultations_bypat %>%
 
 # Normalising appt count for time spent in study ---------------------------
 # the above currently does not take into account whether a patients dies or transfers out during the study period
-# in this step we normalise the number of appointments by patient years in the study
-# only do this for patients in the study population
+# in this step we normalise the number of appointments by patient years in the study (CPRD definition)
+# do this for patients step 2 cohort
 
 consultations_bypat_study <- consultations_bypat %>% 
-  right_join(patients[, c('patid', 'tod', 'ONS_dod', 'resquality', 'diabetes_type')], by = 'patid') %>% 
-  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-resquality) %>% 
+  right_join(patients[, c('patid', 'cohort_step2', 'diabetes_type', 'years_in_study_cprd')], by = 'patid') %>% 
+  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-cohort_step2) %>% 
   mutate_if(is.numeric, ~replace_na(.x, 0))
 
-consultations_bypat_study <-  consultations_bypat_study %>% 
-  group_by(patid) %>% 
-  mutate(censoring_date = min(tod, ONS_dod, study_end, na.rm = TRUE),
-         years_in_study = round(as.numeric(censoring_date - study_start) / 365, 2),
-         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study))
-
 consultations_bypat_study_norm <- consultations_bypat_study %>% 
-  ungroup() %>% 
-  select(-tod, -ONS_dod, -censoring_date) %>% 
-  gather(-years_in_study, -patid, -diabetes_type, key = 'type', value = 'count') %>% 
-  mutate(count_per_year = round(count / years_in_study, 1))
+  gather(-years_in_study_cprd, -patid, -diabetes_type, key = 'type', value = 'count') %>% 
+  mutate(count_per_year = round(count / years_in_study_cprd, 1))
 
 
 plot_appts_peryear <- consultations_bypat_study_norm %>%
@@ -215,8 +207,7 @@ plot_appts_peryear <- consultations_bypat_study_norm %>%
   facet_grid(diabetes_type ~ type)
 
 
-# Create categorical variable for script 14 (descriptives) ----------------
-
+# Create categorical variables ----------------
 
 # Create categorical variables (binned appointment counts)
 consultations_bypat_study_norm <-  consultations_bypat_study_norm %>% 
@@ -242,15 +233,15 @@ all_consult_means <- consultations_bypat_study_norm %>%
   group_by(diabetes_type, consult_type, appt_length) %>% 
   summarise(n = n(),
             mean_count = round(mean(count), 1),
-            mean_count_per_year = round(mean(count_per_patient_year), 1)) %>% 
+            mean_count_per_year = round(mean(count_per_year), 1)) %>% 
   mutate(subgroup = 'all patients')
 
 not_censored_consult_means <-consultations_bypat_study_norm %>% 
   group_by(diabetes_type, consult_type, appt_length) %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_cprd == 2) %>% 
   summarise(n = n(),
             mean_count = round(mean(count), 1),
-            mean_count_per_year = round(mean(count_per_patient_year), 1)) %>% 
+            mean_count_per_year = round(mean(count_per_year), 1)) %>% 
   mutate(subgroup = 'did not transfer out')
 
 consult_means <- all_consult_means %>% 
@@ -269,7 +260,7 @@ all_count_cat  <-  consultations_bypat_study_norm %>%
   mutate(subgroup = 'all patients')
 
 not_censored_count_cat  <-  consultations_bypat_study_norm %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_cprd == 2) %>% 
   group_by(diabetes_type, consult_type, appt_length, count_cat) %>% 
   count() %>% 
   group_by(diabetes_type, consult_type, appt_length) %>% 
@@ -292,7 +283,7 @@ all_count_norm_cat  <-  consultations_bypat_study_norm %>%
   mutate(subgroup = 'all patients')
 
 not_censored_count_norm_cat  <-  consultations_bypat_study_norm %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_cprd == 2) %>% 
   group_by(diabetes_type, consult_type, appt_length, count_norm_cat) %>% 
   count() %>% 
   group_by(diabetes_type, consult_type, appt_length) %>% 
