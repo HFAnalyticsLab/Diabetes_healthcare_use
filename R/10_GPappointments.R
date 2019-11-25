@@ -51,12 +51,16 @@ consultations<- consultations %>%
   left_join(patients[, c('patid', 'ONS_dod')], by = 'patid') %>% 
   filter(is.na(ONS_dod) | eventdate < ONS_dod)
 
-# Check: how many consultations are for patients in the final study population?
+# Check: how many consultations are for patients in step 2 and 3 cohorts
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   nrow()
 
+consultations %>% 
+  left_join(patients[, c('patid', 'cohort_step3')], by = 'patid') %>% 
+  filter(cohort_step3 == 1) %>% 
+  nrow()
 
 # Defining primary care consultations -------------------------------------
 
@@ -115,43 +119,43 @@ consultations <- consultations %>%
 # Check: how many consultations are for patients in the final study population, depending on
 # the definition of what a consultation is?
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult_old == 1) %>% 
   nrow()
 
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult == 1) %>% 
   nrow()
 
 # How many when short appointments are excluded?
 
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult_old == 1 & short_appt == 0) %>% 
   nrow()
 
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult == 1 & short_appt == 0) %>% 
   nrow()
 
 # Check: how many of each type, depending on definition?
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult_old == 1) %>% 
   tabyl(mode_old, staff_old) %>% 
   adorn_title() %>% 
   write_csv(str_c(summary_stats_path, 'table2/PrimaryCare_old_definition.csv'))
 
 consultations %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   filter(consult == 1) %>% 
   tabyl(mode, staff) %>% 
   adorn_title() %>% 
@@ -224,8 +228,6 @@ consultations_bypat_study_norm <-  consultations_bypat_study_norm %>%
 consultations_bypat_study_norm <- consultations_bypat_study_norm %>% 
   separate(type, into = c('temp', 'consult_type', 'appt_length')) %>% 
   select(-temp)
-
-
 
 # Saving processed files --------------------------------------------------
 
@@ -498,21 +500,14 @@ diab_annual_check_bypat  <- diab_annual_check %>%
 
 # Join in patients 
 diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
-  right_join(patients[, c('patid', 'tod', 'ONS_dod', 'resquality', 'diabetes_type')], by = 'patid') %>% 
-  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-resquality) %>%  
+  right_join(patients[, c('patid', 'tod', 'ONS_dod', 'cohort_step2', 'diabetes_type', 'years_in_study')], by = 'patid') %>% 
+  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-cohort_step2) %>%  
   mutate(n_checks = replace_na(n_checks, 0))
 
 # correct for years in study
-diab_annual_check_bypat <-  diab_annual_check_bypat %>% 
-  group_by(patid) %>% 
-  mutate(censoring_date = min(tod, ONS_dod, study_end, na.rm = TRUE),
-         years_in_study = round(as.numeric(censoring_date - study_start) / 365, 2),
-         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study))
-
 diab_annual_check_bypat <- diab_annual_check_bypat %>% 
-  ungroup() %>% 
-  select(-tod, -ONS_dod, -censoring_date) %>% 
+
   mutate(n_checks_per_year = round(n_checks / years_in_study, 1))
 
 
