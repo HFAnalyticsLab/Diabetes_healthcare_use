@@ -159,18 +159,27 @@ patients <- patients %>%
          died_study = ifelse(died_study == 1 & transfer_out_study == 1 & ONS_dod > tod, 0, died_study),
          transfer_out_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod <= tod, 0, transfer_out_followup),
          died_followup = ifelse(died_followup == 1 & transfer_out_followup == 1 & ONS_dod > tod, 0, died_followup),
-         followup_pop = ifelse(resquality == 1 & died_study == 0 & transfer_out_study == 0, 1, 0))
+         followup_pop = ifelse(cohort_step3 == 1 & died_study == 0 & transfer_out_study == 0, 1, 0))
 
 # Check that this worked
 patients %>%  tabyl(died_followup, transfer_out_followup) %>%  adorn_title()
 patients %>%  tabyl(died_study, transfer_out_study) %>%  adorn_title()
 
 # Time in study
+# This is separately defined for CPRD and HES data
+# For CPRD, it is the ealiest of study end, patient death, patient transfer out and practice last collection date 
+# For HES, it is the earliest of study end and patient death
+
 patients <- patients %>% 
   group_by(patid) %>% 
-  mutate(censoring_date_study = min(tod, ONS_dod, study_end, na.rm = TRUE),
-         years_in_study = round(as.numeric(censoring_date_study - study_start) / 365, 2),
-         years_in_study = ifelse(years_in_study == 0, 0.01, years_in_study)) %>% 
+  mutate(censoring_date_cprd = min(tod, ONS_dod, study_end, lcd, na.rm = TRUE),
+         years_in_study_cprd = round(as.numeric(censoring_date_cprd - study_start) / 365, 2),
+         years_in_study_cprd = ifelse(years_in_study_cprd == 0, 0.01, years_in_study_cprd),
+         years_in_study_cprd = ifelse(years_in_study_cprd < 0, NA, years_in_study_cprd),
+         censoring_date_hes = min(ONS_dod, study_end, na.rm = TRUE),
+         years_in_study_hes = round(as.numeric(censoring_date_hes - study_start) / 365, 2),
+         years_in_study_hes = ifelse(years_in_study_hes == 0, 0.01, years_in_study_hes),
+         years_in_study_hes = ifelse(years_in_study_hes < 0, NA, years_in_study_hes)) %>% 
   ungroup() 
 
   
