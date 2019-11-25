@@ -114,7 +114,7 @@ patients <- patients %>%
   mutate(pracid = patid %% 1000) %>% 
   left_join(rururb_patient[,c('pracid', 'e2011_urban_rural')], by ='pracid') %>% 
   filter(!is.na(e2011_urban_rural)) 
-
+# None excluded
 
 # Rename variables ------------------------------------------------------
 
@@ -124,21 +124,28 @@ patients <- patients %>%
 
 # Deriving variables ------------------------------------------------------
 
-# Research quality data flag
+# Join in practice information
+# practice UTS before study start --> STEP 2 COHORT DATA
+# practice lcd after study end --> STEP3 COHORT DATA 
 patients <- patients %>% 
   left_join(extract_practice, by = 'pracid') %>% 
-  mutate(resquality = ifelse(uts <= study_start & lcd > study_end, 1, 0)) 
-
+  mutate(cohort_step2 = ifelse(uts <= study_start & lcd > study_start, 1, 0),
+         cohort_step3 = ifelse(uts <= study_start & lcd > study_end, 1, 0)) 
+ 
 # Check: how many patients with UTS after study start?
-nrow(patients[patients$uts > study_start,])
-
-# Check: how many patients with lcd before study end?
-nrow(patients[patients$lcd <= study_end,])
+nrow(patients[patients$uts >= study_start,])
+nrow(patients[patients$lcd < study_start,])
+nrow(patients[patients$lcd < study_start & patients$uts >= study_start,])
 
 # Check: how many patients satisfy both conditions?
-nrow(patients[patients$resquality == 1,])
+nrow(patients[patients$cohort_step2 == 1,])
+
+patients %>%  
+  tabyl(cohort_step2, cohort_step3) %>% 
+  adorn_title()
 
 
+# Research quality data flag
 # Flags for mortality and transfer out
 patients <- patients %>% 
          # died during study period or follow up 
