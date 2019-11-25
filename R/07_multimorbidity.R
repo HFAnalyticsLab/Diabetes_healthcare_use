@@ -1,6 +1,6 @@
 # =======================================================
 # Project: Diabetes outpatient care
-# Purpose: Multimorbidity, current cutoff is study start (covariate)
+# Purpose: Multimorbidity at study start 
 # Author: Fiona Grimm
 # =======================================================
 
