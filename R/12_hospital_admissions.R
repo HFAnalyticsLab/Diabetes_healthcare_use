@@ -102,15 +102,16 @@ hesapc_admissions <- hesapc_admissions %>%
   arrange(patid, epistart, desc(epidur)) %>% 
   distinct(patid, epistart, admitype, .keep_all = TRUE)
 
-# Check: how many admissions are for patients in the final study population?
+# Check: how many admissions are for patients in the step 2 and step 3 populations?
 hesapc_admissions %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   nrow()
 
-# Saving processed files --------------------------------------------------
-
-saveRDS(hesapc_admissions, str_c(processed_RDS_path, 'patients_admissions.rds'))
+hesapc_admissions %>% 
+  left_join(patients[, c('patid', 'cohort_step3')], by = 'patid') %>% 
+  filter(cohort_step3 == 1) %>% 
+  nrow()
 
 
 # Summary per patient -----------------------------------------------------
@@ -180,4 +181,6 @@ admissions_means <- all_admissions_means %>%
   bind_rows(not_censored_admissions_means)
 
 write_csv(admissions_means, str_c(summary_stats_path, 'table2/Admissions_means.csv'))
+
+
 
