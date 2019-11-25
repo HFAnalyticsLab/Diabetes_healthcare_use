@@ -123,15 +123,15 @@ admissions_bypat <-  hesapc_admissions %>%
 
 # Normalising by time spent in study
 admissions_bypat <- admissions_bypat %>% 
-  right_join(patients[, c('patid', 'resquality', 'diabetes_type', 'years_in_study')], by = 'patid') %>% 
-  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-resquality) %>% 
+  right_join(patients[, c('patid', 'cohort_step2', 'diabetes_type', 'years_in_study_hes')], by = 'patid') %>% 
+  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-cohort_step2) %>% 
   mutate_if(is.numeric, ~replace_na(.x, 0))
 
 admissions_bypat <- admissions_bypat %>% 
   ungroup() %>% 
-  mutate(elective_admissions_per_year = round(elective_admissions / years_in_study, 1),
-         emergency_admissions_per_year = round(emergency_admissions / years_in_study, 1))
+  mutate(elective_admissions_per_year = round(elective_admissions / years_in_study_hes, 1),
+         emergency_admissions_per_year = round(emergency_admissions / years_in_study_hes, 1))
 
 # Create categorical variables (binned appointment counts)
 admissions_bypat <-  admissions_bypat %>% 
@@ -169,7 +169,7 @@ all_admissions_means <- admissions_bypat %>%
 
 not_censored_admissions_means <- admissions_bypat %>% 
   group_by(diabetes_type) %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_hes == 2) %>% 
   summarise(n = n(),
             mean_elective_admissions = round(mean(elective_admissions), 1),
             mean_elective_admissions_per_year = round(mean(elective_admissions_per_year), 1),
