@@ -35,11 +35,18 @@ therapy_diabetes <- extract_therapy %>%
   filter(prodcode %in% medication_codes$product_code) %>% 
   left_join(medication_codes[,c('product_code', 'drug_type')], by = c("prodcode" = "product_code")) 
 
-# Check: how many prescriptions are for patients in the final study population?
+# Check: how many prescriptions are for patients step 2 cohort?
 therapy_diabetes %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
   nrow()
+
+# Check: how many prescriptions are for patients step 3 cohort?
+therapy_diabetes %>% 
+  left_join(patients[, c('patid', 'cohort_step3')], by = 'patid') %>% 
+  filter(cohort_step3 == 1) %>% 
+  nrow()
+
 
 # NB will exclude acarbose as it is technically not an oral hypoglycaemic (OHA)
 prescriptions_bypat <- therapy_diabetes %>% 
