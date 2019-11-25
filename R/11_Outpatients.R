@@ -10,7 +10,7 @@ library(janitor)
 library(tidylog)
 
 
-# Source file paths: Rds_path
+# Source file paths
 source('R/file_paths.R')
 
 # Source study parameters 
@@ -85,10 +85,15 @@ hesop_appts<- hesop_appts %>%
 hesop_appts_study <- hesop_appts %>% 
   filter(apptdate %within% interval(study_start, study_end))
 
-# Check: how many appointments are for patients in the final study population?
+# Check: how many appointments are for patients in cohort step 2 and 3?
 hesop_appts_study %>% 
-  left_join(patients[, c('patid', 'resquality')], by = 'patid') %>% 
-  filter(resquality == 1) %>% 
+  left_join(patients[, c('patid', 'cohort_step2')], by = 'patid') %>% 
+  filter(cohort_step2 == 1) %>% 
+  nrow()
+
+hesop_appts_study %>% 
+  left_join(patients[, c('patid', 'cohort_step3')], by = 'patid') %>% 
+  filter(cohort_step3 == 1) %>% 
   nrow()
 
 # Saving processed files 
@@ -135,22 +140,22 @@ hesop_count_byPat <- hesop_count_byPat %>%
 hesop_count_byPat <- hesop_count_byPat %>% 
   mutate_at(vars(OP_attended_cat, OP_attended_diab_cat), funs(fct_explicit_na(., 'None')))
 
-
-# Saving processed files 
-saveRDS(hesop_count_byPat, str_c(processed_RDS_path, 'patients_OPappointments.rds'))
-
 # Normalising by time spent in study
 hesop_count_byPat_norm <- hesop_count_byPat %>% 
-  right_join(patients[, c('patid', 'resquality', 'diabetes_type', 'years_in_study')], by = 'patid') %>% 
-  filter(resquality == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-resquality) %>% 
+  right_join(patients[, c('patid', 'cohort_step2', 'diabetes_type', 'years_in_study_hes')], by = 'patid') %>% 
+  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
+  select(-cohort_step2) %>% 
   mutate_if(is.numeric, ~replace_na(.x, 0))
 
 hesop_count_byPat_norm <- hesop_count_byPat_norm %>% 
   ungroup() %>% 
   select(-OP_attended_cat, -OP_attended_diab_cat) %>% 
-  gather(-years_in_study, -patid, -diabetes_type, key = 'type', value = 'count') %>% 
-  mutate(count_per_year = round(count / years_in_study, 1))
+  gather(-years_in_study_hes, -patid, -diabetes_type, key = 'type', value = 'count') %>% 
+  mutate(count_per_year = round(count / years_in_study_hes, 1))
+
+
+# Saving processed files 
+saveRDS(hesop_count_byPat_norm, str_c(processed_RDS_path, 'patients_OPappointments.rds'))
 
 
 # Create summary tables -------------------------------------------------
@@ -165,7 +170,7 @@ all_OP_means <- hesop_count_byPat_norm %>%
 
 not_censored_OP_means <-hesop_count_byPat_norm %>% 
   group_by(diabetes_type, type) %>% 
-  filter(years_in_study == 2) %>% 
+  filter(years_in_study_hes == 2) %>% 
   summarise(n = n(),
             mean_count = round(mean(count), 1),
             mean_count_per_year = round(mean(count_per_year), 1)) %>% 
@@ -182,7 +187,7 @@ write_csv(OP_means, str_c(summary_stats_path, 'table2/Outpatient_means.csv'))
 
 # Study population (including patients who died or transferred out during study period)
 specialty_count <- hesop_appts_study %>% 
-  semi_join(patients[patients$resquality == 1, ], by ='patid') %>% 
+  semi_join(patients[patients$cohort_step2 == 1, ], by ='patid') %>% 
   left_join(patients[, c('patid', 'diabetes_type')], by ='patid') %>% 
   filter(diabetes_type %in% c('type1', 'type2')) %>% 
   left_join(tretspef_lookup,  by = 'tretspef') %>%
