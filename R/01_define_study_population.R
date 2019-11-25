@@ -81,15 +81,15 @@ sum(!(extract_patient$patid %in% diabetes_clinical$patid))
 
 # Exclusions and linkages -------------------------------------------------
 
-# Exclude patients without diabetes Read codes
+# Exclude patients without diabetes Read codes --> RAW COHORT DATA
 patients <- extract_patient %>% 
   filter(patid %in% diabetes_clinical$patid)
+
 
 # Exclude patients without IMD
 patients <- patients %>% 
   left_join(imd_patient[, c('patid', 'imd2015_10')], by = c('patid')) %>% 
   filter(!is.na(imd2015_10))
-
 
 # Exclude patient who died before 2015-12-01 according to ONS:
 # It is a known issue that date of death (dod) is sometimes missing
@@ -101,7 +101,7 @@ patients <- patients %>%
   left_join(death_patient[,c('patid', 'dod_filled', 'dor')], by = 'patid') %>% 
   rename(ONS_dod = 'dod_filled', ONS_dor = 'dor')
 
-# Exclude patient who died before study_start according to ONS
+# Exclude patient who died before study_start according to ONS --> STEP 1 cohort data
 patients <- patients %>% 
   filter(is.na(ONS_dod) | ONS_dod >= study_start)
 
