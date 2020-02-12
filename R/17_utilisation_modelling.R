@@ -41,7 +41,7 @@ utilisation_theme <- theme_classic() +
 # including confidence intervals
 summariseNbModel <- function(model, type = c('nb', 'cox', 'binomial')){
   
-  if(type == 'nb')
+  if(type == 'nb'){
     table <- broom::tidy(model, exponentiate = TRUE) %>% 
       cbind(exp(confint(model))) 
     
