@@ -113,6 +113,9 @@ hesapc_admissions %>%
   filter(cohort_step3 == 1) %>% 
   nrow()
 
+# Save admissions
+saveRDS(hesapc_admissions, str_c(str_c(processed_RDS_path, 'admissions.rds')))
+
 
 # Summary per patient -----------------------------------------------------
 
