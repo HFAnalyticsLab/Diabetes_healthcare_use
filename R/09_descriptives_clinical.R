@@ -83,6 +83,7 @@ patients_combined <- patients %>%
   select(-vmid, -mob, -marital, -famnum, -CHSreg, -CHSdate, -prescr, -capsup, -regstat, -reggap, -internal, -accept, -ONS_dor) %>% 
   left_join(diabetes_bypat[, c('patid', 'diabetes_type')], by = 'patid') %>% 
   left_join(therapy_bypat[, c('patid', 'medication')], by = 'patid') %>% 
+  left_join(therapy_bypat_prior[, c('patid', 'medication_prior')], by = 'patid') %>% 
   left_join(smoking_bypat[, c('patid', 'smoking_status')], by = 'patid') %>% 
   left_join(BMI_bypat[, c('patid', 'BMI_categorical')], by = 'patid') %>% 
   left_join(HbA1C_bypat[, c('patid', 'HbA1C_control')], by = 'patid') %>% 
@@ -106,6 +107,7 @@ patients_combined <- patients_combined %>%
 patients_combined <- patients_combined %>% 
   mutate(diabetes_type = fct_relevel(diabetes_type, 'type1', 'type2', 'unknown', 'other'),
          medication = fct_relevel(medication, 'NIGLD only', 'Insulin only', 'Both', 'None recorded'),
+         medication_prior = fct_relevel(medication_prior, 'NIGLD only', 'Insulin only', 'Both', 'None recorded'),
          smoking_status = fct_relevel(smoking_status, 'nonsmoker', 'exsmoker', 'smoker', 'Missing'),
          BMI_categorical = fct_relevel(BMI_categorical, 'Missing', after = Inf),
          HbA1C_control = fct_relevel(HbA1C_control, 'good', 'borderline', 'bad', 'Missing'),
@@ -156,8 +158,6 @@ table_patients_study_csv <- print(table_patients_study,
                                   showAllLevels = TRUE) 
 
 write.csv(table_patients_study_csv, str_c(summary_stats_path, 'table1/Table1_cohort2.csv'))
-
-
 
 # Study population split by mental health comorbidity ------------------
 
