@@ -140,12 +140,18 @@ vars_tosummarise <- c("female", "ethnicity", "startage_study", "age_bins_study_S
                       'years_in_study_cprd', 'years_in_study_hes',
                       'time_since_diagnosis', 
                       'e2011_urban_rural', 'imd_quintile',
-                      "medication", "smoking_status", "BMI_categorical", "HbA1C_control",
-                      'mental_mm_cat_SDC', 'physical_mm_cat', 'mm_cat',
-                      'HYP', 'PNC', 'HEL','CHD', 'DEPANX', 'CKD', 'THY', 'DIV', 'IBS', 'ATR')
+                      "medication", "medication_prior", "smoking_status", "BMI_categorical", "HbA1C_control",
+                      'mental_mm_cat_SDC', 'physical_mm_cat', 'physical_mm_count', 'mm_cat', 'mm_count',
+                      "HYP", "PNC", "ATR", "PVD", "CKD", "HEL", "RHE", "COP", "ANX", "BLI", "CON", "DIV", 
+                      "DEP", "THY", "CHD", "HEF", "DEM", "STR", "AST", "PSO", "PRO", "IBD", "IBS", "ANXr", 
+                      "SIN", "PRK", "ALC", "CAN", "OPS", "MSC", "EPI", "SCZ", "CLD", "BRO", "ANO", "LEA", 
+                      "MIG", "DEPANX", "DEPANXr")
 
 cat_vars_tosummarise <- c('censoring_type_hes', 'e2011_urban_rural',
-                          'HYP', 'PNC', 'HEL','CHD', 'DEPANX', 'CKD', 'THY', 'DIV', 'IBS', 'ATR')
+                          "HYP", "PNC", "ATR", "PVD", "CKD", "HEL", "RHE", "COP", "ANX", "BLI", "CON", "DIV", 
+                          "DEP", "THY", "CHD", "HEF", "DEM", "STR", "AST", "PSO", "PRO", "IBD", "IBS", "ANXr", 
+                          "SIN", "PRK", "ALC", "CAN", "OPS", "MSC", "EPI", "SCZ", "CLD", "BRO", "ANO", "LEA", 
+                          "MIG", "DEPANX", "DEPANXr")
 
 table_patients_study <- CreateTableOne(vars = vars_tosummarise, 
                             data = patients_study, 
