@@ -17,6 +17,8 @@ Data used for this analysis were anonymised in line with the ICO's Anonymisation
 
 Read code lists used in this analyis can be found in the 'code_lists' folder. The code list used for ethnicity was from Wright *et al.*, 2017, and can be [downloaded from the Clinical Codes repository](https://clinicalcodes.rss.mhs.man.ac.uk/medcodes/article/56/codelist/res56-ethnicity/).
 
+Definitions and code lists to generate the  [Cambridge multimorbidity score v1.0](https://www.phpc.cam.ac.uk/pcu/cprd_cam/codelists/) can be found in the folder ['SAS/CPRDCAM'](https://github.com/HFAnalyticsLab/Diabetes_healthcare_use/tree/master/SAS/CPRDCAM).
+
 ## How does it work?
 As the data used for this analysis is not publically available, the code cannot be used to replicate the analysis on this dataset. However, with modifications the code will be able to be used on other patient-level CPRD extracts. 
 
@@ -30,6 +32,12 @@ The following R packages (available on CRAN) are needed:
 * [**janitor**](https://cran.r-project.org/web/packages/janitor/index.html)
 * [**lubridate**](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
 * [**tableone**](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html)
+* [**ggrepel**](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)
+* [**MASS**](https://cran.r-project.org/web/packages/MASS/index.html)
+* [**bbmle**](https://cran.r-project.org/web/packages/bbmle/index.html)
+* [**survival**](https://cran.r-project.org/web/packages/survival/index.html)
+* [**survminer**](https://cran.r-project.org/web/packages/survminer/index.html)
+
 
 ### Getting started
 
@@ -40,7 +48,7 @@ The 'R' folder contains:
 2. file import scripts:
 * '00_import_data.R' - imports and combines CPRD and linked data, needs to be run first
 
-3. analysis scripts (to be used in this order):
+3. analysis scripts (study population, **demographic and clinical charateristics**, to be used in this order):
 * '01_define_study_population.R' - defines study cohort based on inclusion and exclusion criteria, all other scripts depend on the outputs of it
 * '02_diabetes_medication.R' - extracts data on diabetes medication and defines drug types
 * '03_diabetes_type.R' - extracts diabetes diagnoses and defines diabetes type, additionally depends on script 02
@@ -52,12 +60,18 @@ The 'R' folder contains:
 * '09_descriptives_clinical.R' - creates table with baseline study population descriptives (table 1), based on 
 scripts 2-8
 
+4. analysis and modelling scripts (**healthcare utilisation**, to be used in this order):
 * '10_GPappointments.R' - cleans and counts GP appointments per patient
 * '11_Outpatient.R' - cleans and counts outpatient appointments
-* '12_hospital_admissions.R' - cleans and counts hospital admissions
+* '12_hospital_admissions.R' - cleans and counts emergency hospital admissions
 * '13_prescriptions.R'- cleans and counts prescriptions
-* '14_descriptives_utilisation.R' - creates descriptives analyses of healthcare utilisation, based on scripts 10-13
+* '14_AEattendances.R' - cleans and counts unplanned A&E attendances
+* '15_descriptives_utilisation.R' -  creates descriptives analyses of healthcare utilisation, based on scripts 10-14
+* '16_utilisation_modelling_prep.R' - tests fit of negative binomial distribution, prepares data for negative binomial models, tests different modelling packages
+* '17_utilisation_modelling.R' - creates models for primary care consultations, outpatient attendances and A&E attendances for people with T2DM and saves the output
 
+4. analysis and modelling scripts (**health outcomes**):
+* '18_outcome_modelling.R' -creates Cox proportional hazard models for the risk of emergency hospital admissions and all-cause mortality for people with T2DM and saves the output 
 
 
 The 'SAS' folder contains scripts that generates flags for each of the conditions in the [Cambridge multimorbidity
