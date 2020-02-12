@@ -158,7 +158,7 @@ table_study_mental_mm_csv <- print(table_study_mental_mm, noSpaces = TRUE)
 write.csv(table_study_mental_mm_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_mental_mm.csv'))
 
 table_study_DEPANX <- CreateTableOne(vars = vars_tosummarise2, 
-                                        strata = c('DEPANX','diabetes_type'), 
+                                        strata = c('DEPANXr','diabetes_type'), 
                                         data = patients_study_red, 
                                         factorVars = cat_vars_tosummarise,
                                         test = FALSE)
@@ -168,265 +168,45 @@ write.csv(table_study_DEPANX_csv, str_c(summary_stats_path, 'table1/Table1_cohor
 
 
 
-# Multimorbidity by age and IMD - crude  ----------------------
+# Prevalence of CMD in T2DM patients --------------------------------------
 
-# T1D
-# Visualisation
-patients_study_summary_T1D <- patients_study_red %>% 
-  filter(gender %in% c(1,2) & diabetes_type == 'type1') %>% 
-  mutate(age_bins_study_T1D = fct_collapse(age_bins_study, '0-9' = c('0-4', '5-9'),
-                                           '80+' = c('80-84', '85+')),
-         gender_fct = factor(gender),
-         gender_fct = fct_recode(gender_fct, 'male' = '1', 'female' = '2')) %>% 
-  group_by(age_bins_study_T1D, gender_fct, imd_quintile) %>% 
-  summarise(n = n(),
-            mean_mm_count = mean(mm_count),
-            sd_mm_count = sd(mm_count))  
+patients_study_T2D <- patients_study %>% 
+  filter(diabetes_type == 'type2') %>% 
+  mutate(age_centered = startage_study - round(mean(startage_study)),
+         age_5ybin_centered = age_centered / 5,
+         imd_quintile_numeric = as.numeric(gsub(' .*', '', imd_quintile)))
 
-patients_study_summary_T1D %>% 
-  ggplot(aes(x = age_bins_study_T1D, y = mean_mm_count, group = imd_quintile, color = imd_quintile)) +
-  geom_line(linetype = 2) +
-  geom_point() +
-  facet_grid(. ~ gender_fct)
+CMD_logmodel <- glm(DEPANXr ~ female + age_5ybin_centered + imd_quintile_numeric + HbA1C_control, 
+                    data = patients_study_T2D, family = 'binomial')
 
-patients_study_summary_T1D2 <- patients_study_red %>% 
-  filter(gender %in% c(1,2) & diabetes_type == 'type1') %>% 
-  mutate(age_bins_study_T1D = fct_collapse(age_bins_study, '0-9' = c('0-4', '5-9'),
-                                           '80+' = c('80-84', '85+')),
-         gender_fct = factor(gender),
-         gender_fct = fct_recode(gender_fct, 'male' = '1', 'female' = '2')) %>% 
-  group_by(age_bins_study_T1D, gender_fct, mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(age_bins_study_T1D, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n),
-         mm_cat = fct_rev(mm_cat))  
-
-write.csv(patients_study_summary_T1D2, 
-          str_c(summary_stats_path, 'multimorbidity/T1D_mm_by_age.csv'))
+CMD_logmodel_summary <- summariseLogModel(CMD_logmodel) 
+write_csv(CMD_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_CMD.csv'))
 
 
-patients_study_summary_T1D2 %>% 
-  ggplot(aes(x = age_bins_study_T1D, y = percent, fill = mm_cat, fill = mm_cat)) +
-  geom_bar(stat = 'identity') +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T1D - Number of co-morbidities', fill = 'Number of conditions') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:5])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0.08))
-  
-patients_study_summary_T1D3 <- patients_study_red %>% 
-  filter(gender %in% c(1,2) & diabetes_type == 'type1') %>% 
-  mutate(age_bins_study_T1D = fct_collapse(age_bins_study, '0-9' = c('0-4', '5-9'),
-                                           '80+' = c('80-84', '85+')),
-         gender_fct = factor(gender),
-         gender_fct = fct_recode(gender_fct, 'male' = '1', 'female' = '2')) %>% 
-  group_by(imd_quintile, gender_fct, mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(imd_quintile, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n),
-         mm_cat = fct_rev(mm_cat))  
 
-patients_study_summary_T1D3 %>% 
-  ggplot(aes(x = imd_quintile, y = percent, fill = mm_cat, fill = mm_cat)) +
-  geom_bar(stat = 'identity') +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T1D - Number of co-morbidities', fill = 'Number of conditions') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:5])) +
-  ylab('Patients [%]') +
-  utilisation_theme 
-
-# T2D
-# Visualisation
-
-patients_T2D_plotdata <-  patients_study_red %>% 
-  filter(gender %in% c(1,2) & diabetes_type == 'type2') %>% 
-  mutate(age_bins_study_T2D = fct_collapse(age_bins_study,  '0-39' = c('0-4', '5-9', '10-14', '15-19',
-                                                                       '20-24', '25-29',  '30-34', '35-39')),
-         gender_fct = factor(gender),
-         gender_fct = fct_recode(gender_fct, 'male' = '1', 'female' = '2')) 
-
-# NUmber of conditions by age group
-T2D_mm_age <- patients_T2D_plotdata %>% 
-  group_by(age_bins_study_T2D, gender_fct, mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(age_bins_study_T2D, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
-
-write.csv(T2D_mm_age, str_c(summary_stats_path, 'multimorbidity/T2D_mm_by_age_crude.csv'))
-
-T2D_mm_age_plot <- T2D_mm_age %>% 
-  ggplot(aes(x = age_bins_study_T2D, y = percent, fill = mm_cat)) +
-  geom_bar(stat = 'identity') +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Number of conditions') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:5])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0.08)) 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_mm_by_age_crude.png'), 
-       T2D_mm_age_plot, width = 7, height = 5)
-
-# NUmber of conditions by IMD
-T2D_mm_IMD <- patients_T2D_plotdata %>% 
-  group_by(imd_quintile, gender_fct, mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(imd_quintile, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
-
-write.csv(T2D_mm_IMD, str_c(summary_stats_path, 'multimorbidity/T2D_mm_by_IMD_crude.csv'))
-
-T2D_mm_IMD_plot <- T2D_mm_IMD %>% 
-  ggplot(aes(x = imd_quintile, y = percent,fill = mm_cat)) +
-  geom_bar(stat = 'identity', width = 0.8) +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Number of conditions') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:5])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_mm_by_IMD_crude.png'), 
-       T2D_mm_IMD_plot, width = 7, height = 5)
-
-# NUmber of physical conditions by age group
-T2D_physmm_age <- patients_T2D_plotdata %>% 
-  group_by(age_bins_study_T2D, gender_fct, physical_mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(age_bins_study_T2D, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
-
-write.csv(T2D_physmm_age, str_c(summary_stats_path, 'multimorbidity/T2D_physicalmm_by_age_crude.csv'))
-
-T2D_physmm_age_plot <- T2D_physmm_age %>% 
-  ggplot(aes(x = age_bins_study_T2D, y = percent, fill = physical_mm_cat)) +
-  geom_bar(stat = 'identity') +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of physical co-morbidities (crude)', fill = 'Number of conditions') +
-  scale_fill_manual(values = THF_discrete_colour_order[1:5]) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0.08)) 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_physicalmm_by_age_crude.png'), 
-       T2D_physmm_age_plot, width = 7, height = 5)
-
-# NUmber of physical conditions by IMD
-T2D_physmm_IMD <- patients_T2D_plotdata %>% 
-  group_by(imd_quintile, gender_fct, physical_mm_cat) %>% 
-  summarise(n = n()) %>% 
-  group_by(imd_quintile, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
-
-write.csv(T2D_physmm_IMD, str_c(summary_stats_path, 'multimorbidity/T2D_physicalmm_by_IMD_crude.csv'))
-
-T2D_physmm_IMD_plot <- T2D_physmm_IMD %>% 
-  ggplot(aes(x = imd_quintile, y = percent,fill = physical_mm_cat)) +
-  geom_bar(stat = 'identity', width = 0.8) +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of physical co-morbidities (crude)', fill = 'Number of conditions') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:5])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_physicalmm_by_IMD_crude.png'), 
-       T2D_physmm_IMD_plot, width = 7, height = 5)
+# Prevalence of conditions in T2DM patients +/- CMD -----------------------
 
 
-# Any mental health condition by age
-T2D_mentalmm_age <- patients_T2D_plotdata %>% 
-  group_by(age_bins_study_T2D, gender_fct, mental_mm_cat_SDC) %>% 
-  summarise(n = n()) %>% 
-  group_by(age_bins_study_T2D, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
+patients_study_T2D %>% 
+    janitor::tabyl(DEPANXr, PNC) %>% 
+    janitor::adorn_percentages()
 
-write.csv(T2D_mentalmm_age, str_c(summary_stats_path, 'multimorbidity/T2D_mentalmm_by_age_crude.csv'))
 
-T2D_mentalmm_age_plot <- T2D_mentalmm_age %>% 
-  ggplot(aes(x = age_bins_study_T2D, y = percent, fill = mental_mm_cat_SDC)) +
-  geom_bar(stat = 'identity') +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Any mental health condition') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:2])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0.08)) 
+# Logistic regression to adjust prevalence of PNC for age, sex and CMD
 
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_mentalmm_by_age_crude.png'), 
-       T2D_mentalmm_age_plot, width = 7, height = 5)
 
-# Any mental health condition by IMD
-T2D_mentalmm_IMD <- patients_T2D_plotdata %>% 
-  group_by(imd_quintile, gender_fct, mental_mm_cat_SDC) %>% 
-  summarise(n = n()) %>% 
-  group_by(imd_quintile, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n)) 
+PNC_logmodel <- glm(PNC ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
+PNC_logmodel_summary <- summariseLogModel(PNC_logmodel) 
+write_csv(PNC_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_PNC.csv'))
 
-write.csv(T2D_mentalmm_IMD, str_c(summary_stats_path, 'multimorbidity/T2D_mentalmm_by_IMD_crude.csv'))
+HEL_logmodel <- glm(HEL ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
+HEL_logmodel_summary <- summariseLogModel(HEL_logmodel) 
+write_csv(HEL_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_HEL.csv'))
 
-T2D_mentalmm_IMD_plot <- T2D_mentalmm_IMD %>% 
-  ggplot(aes(x = imd_quintile, y = percent, fill = mental_mm_cat_SDC)) +
-  geom_bar(stat = 'identity', width = 0.8) +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Any mental health condition') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:2])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme 
+AST_logmodel <- glm(AST ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
+AST_logmodel_summary <- summariseLogModel(AST_logmodel) 
+write_csv(AST_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_AST.csv'))
 
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_mentalmm_by_IMD_crude.png'), 
-       T2D_mentalmm_IMD_plot, width = 7, height = 5)
-
-# DEPANX  by age
-T2D_DEPANX_age <- patients_T2D_plotdata %>% 
-  group_by(age_bins_study_T2D, gender_fct, DEPANX) %>% 
-  summarise(n = n()) %>% 
-  group_by(age_bins_study_T2D, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n),
-         DEPANX = factor(DEPANX)) 
-
-write.csv(T2D_DEPANX_age, str_c(summary_stats_path, 'multimorbidity/T2D_DEPANX_by_age_crude.csv'))
-
-T2D_DEPANX_age_plot <- T2D_DEPANX_age %>% 
-  ggplot(aes(x = age_bins_study_T2D, y = percent, fill = DEPANX)) +
-  geom_bar(stat = 'identity', width = 0.8) +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Depression/Anxiety') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:2])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme +
-  theme(axis.text.x = element_text(angle = -45, hjust = 0.08)) 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_DEPANX_by_age_crude.png'), 
-       T2D_DEPANX_age_plot, width = 7, height = 5)
-
-# DEPANX  by IMD
-T2D_DEPANX_IMD <- patients_T2D_plotdata %>% 
-  group_by(imd_quintile, gender_fct, DEPANX) %>% 
-  summarise(n = n()) %>% 
-  group_by(imd_quintile, gender_fct) %>% 
-  mutate(percent = 100*n / sum(n),
-         DEPANX = factor(DEPANX)) 
-
-write.csv(T2D_DEPANX_IMD, str_c(summary_stats_path, 'multimorbidity/T2D_DEPANX_by_IMD_crude.csv'))
-
-T2D_DEPANX_IMD_plot <- T2D_DEPANX_IMD %>% 
-  ggplot(aes(x = imd_quintile, y = percent, fill = DEPANX)) +
-  geom_bar(stat = 'identity', width = 0.8) +
-  facet_grid(. ~ gender_fct) +
-  labs(title = 'T2D - Number of co-morbidities (crude)', fill = 'Depression/Anxiety') +
-  scale_fill_manual(values = rev(THF_discrete_colour_order[1:2])) +
-  ylab('Patients [%]') +
-  xlab('Age group') +
-  utilisation_theme 
-
-ggsave(str_c(summary_stats_path, 'multimorbidity/T2D_DEPANX_by_IMD_crude.png'), 
-       T2D_DEPANX_IMD_plot, width = 7, height = 5)
-
+IBS_logmodel <- glm(IBS ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
+IBS_logmodel_summary <- summariseLogModel(IBS_logmodel) 
+write_csv(IBS_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_IBS.csv'))
