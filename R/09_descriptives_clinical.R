@@ -33,6 +33,20 @@ utilisation_theme <- theme_classic() +
   THF_theme
 
 
+summariseLogModel <- function(model){
+  summary <- broom::tidy(model, exponentiate = TRUE) %>% 
+    cbind(exp(confint(model))) 
+  
+  rownames(summary) <- NULL
+  colnames(summary) <- c('Coefficient', 'OR', 'Std.Error', 'z.value', 'p.value', 'CI_lower', 'CI_upper')
+  
+  summary <- summary %>% 
+    select(Coefficient, OR, CI_lower, CI_upper, everything()) %>% 
+    mutate_at(vars(OR, z.value, CI_lower, CI_upper), round, 3)
+  
+  return(summary)
+}
+
 # Import data -----------------------------------------
 
 # Study population
@@ -41,8 +55,13 @@ patients <- readRDS(str_c(processed_RDS_path, 'patients.rds'))
 # Diabetes type
 diabetes_bypat <- readRDS(str_c(processed_RDS_path, 'patients_diabetes.rds'))
 
-# Diabetes medication
+# Diabetes medication during study
 therapy_bypat <- readRDS(str_c(processed_RDS_path, 'patients_medication.rds'))
+
+# Diabetes medication prior to study
+therapy_bypat_prior <- readRDS(str_c(processed_RDS_path, 'patients_medication_prior.rds'))
+therapy_bypat_prior <- therapy_bypat_prior %>% 
+  rename(medication_prior = 'medication')
 
 # Smoking (latest within study period)
 smoking_bypat <- readRDS(str_c(processed_RDS_path, 'patients_smoking_at_baseline.rds'))
