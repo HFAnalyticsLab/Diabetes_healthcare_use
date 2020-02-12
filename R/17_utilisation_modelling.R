@@ -6,7 +6,6 @@
 
 library(bbmle) # for AICtab
 library(MASS)  # masks dplyr::select -> load tidyverse last
-library(DHARMa)
 
 library(tidyverse)
 library(lubridate)
