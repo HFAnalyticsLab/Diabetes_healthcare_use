@@ -210,12 +210,12 @@ ethnicity_clinical <- extract_clinical %>%
   semi_join(ethnicity_codes, by = 'medcode') %>% 
   left_join(ethnicity_codes, by = 'medcode') %>% 
   group_by(patid, ethnic5) %>% 
-  tally()
+  tally() 
 
 # Keep most frequent ethnicity by patient (and if there is a tie keep all)
 ethnicity_clinical_mostfreq <- ethnicity_clinical %>% 
   group_by(patid) %>% 
-  filter(ethnic5 == max(ethnic5))
+  filter(n == max(n))
 
 # Check for ties
 ethnicity_clinical_mostfreq %>% 
@@ -240,11 +240,11 @@ ethnicity_clinical_mostfreq <- ethnicity_clinical_mostfreq  %>%
   mutate(ethnicity = ethnic5,
          ethnicity = ifelse(is.na(ethnicity) & gen_ethnicity == 'White', 'White', ethnicity),
          ethnicity = ifelse(is.na(ethnicity) & 
-                             (gen_ethnicity=="Other" | gen_ethnicity=="Chinese" | gen_ethnicity=="Oth_Asian"), 'Other', ethnicity),
+                             (gen_ethnicity=="Other" | gen_ethnicity=="Chinese"), 'Other', ethnicity),
          ethnicity = ifelse(is.na(ethnicity) & 
                               (gen_ethnicity=="Bl_Afric" | gen_ethnicity=="Bl_Carib" | gen_ethnicity=="Bl_Other"), 'Black/Black British', ethnicity),
          ethnicity = ifelse(is.na(ethnicity) & 
-                              (gen_ethnicity=="Bangladesi" | gen_ethnicity=="Indian" | gen_ethnicity=="Pakistani"), 'Asian/British Asian', ethnicity),
+                              (gen_ethnicity=="Bangladesi" | gen_ethnicity=="Indian" | gen_ethnicity=="Pakistani" | gen_ethnicity=="Oth_Asian"), 'Asian/British Asian', ethnicity),
          ethnicity = fct_explicit_na(ethnicity, 'Unknown'))
 
 ethnicity_clinical_mostfreq %>%  tabyl(ethnicity)
