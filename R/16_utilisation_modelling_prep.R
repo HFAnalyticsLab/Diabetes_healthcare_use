@@ -13,8 +13,11 @@ library(lubridate)
 library(janitor)
 library(tidylog)
 
-# Source file paths: Rds_path
+# Source file paths
 source('R/file_paths.R')
+
+# Source study parameters 
+source('R/study_params.R')
 
 # Functions ---------------------------------------------------------------
 
@@ -115,17 +118,9 @@ patients_combined <- patients_combined %>%
 patients_combined <- patients_combined %>% 
   mutate(smoker = ifelse(smoking_status == 'smoker', 1,0),
          newly_diagnosed_1y = ifelse(time_since_diagnosis == 'less than 1 year', 1, 0),
-         HbA1C_control_bad = ifelse(HbA1C_control == 'bad', 1, 0),
-         mm_type = case_when(physical_mm_count == 0 & mental_mm_count == 0 ~ 'no condition',
-                             physical_mm_count >= 1 & mental_mm_count == 0 ~ 'any physical condition',
-                             physical_mm_count == 0 & mental_mm_count >= 1 ~ 'any mental condition',
-                             physical_mm_count >= 1 & mental_mm_count >= 1 ~ 'any physical and mental condition'),
-         mm_type = fct_relevel(mm_type, 'no condition', 'any physical condition', 'any mental condition', 'any physical and mental condition'),
-         mm_type_anyphysical = ifelse(mm_type %in% c('any physical condition', 'any physical and mental condition'), 1, 0),
-         mm_type_anymental = ifelse(mm_type %in% c('any mental condition', 'any physical and mental condition'), 1, 0))
-         
-patients_combined %>% 
-  tabyl(mm_type)
+         mm_count_excl_DEPANXr = rowSums(.[comorbidities[comorbidities != 'DEPANXr']]),
+         mm_count_excl_PNC = rowSums(.[comorbidities[comorbidities != 'PNC']]))
+
 
 # Split diabetes types and centre age on the mean age
 model_data_T1D <- patients_combined %>% 
@@ -141,9 +136,6 @@ model_data_T2D <- patients_combined %>%
 # Save
 saveRDS(model_data_T1D, str_c(processed_RDS_path, 'Utilisation_modelling_data_T1D.Rds'))
 saveRDS(model_data_T2D, str_c(processed_RDS_path, 'Utilisation_modelling_data_T2D.Rds'))
-
-
-
 
 # Testing the fit of negative binomial distributions ----------------------------------------
 
