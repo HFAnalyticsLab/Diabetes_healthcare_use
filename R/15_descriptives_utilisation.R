@@ -102,7 +102,7 @@ patients_combined <- patients %>%
   select(patid, gender, pracid, region, e2011_urban_rural, uts, lcd, cohort_step2, cohort_step3, followup_pop, 
          years_in_study_cprd, years_in_study_hes, startage_study, died_study, transfer_out_study, ONS_dod,
          age_bins_study, age_bins_study_SDC, imd_quintile, ethnicity, diabetes_type, medication, smoking_status, BMI_categorical, HbA1C_control,
-         time_since_diagnosis, mm_cat, mm_count, physical_mm_count, physical_mm_cat, mental_mm_cat_SDC, DEPANX, DEPANXr) %>% 
+         time_since_diagnosis, mm_cat, mm_count, DEPANXr, PNC) %>% 
   left_join(consultations_bypat, by = 'patid') %>% 
   left_join(hesop_count_byPat, by = 'patid') %>% 
   left_join(admissions_bypat, by = 'patid') %>% 
@@ -148,12 +148,10 @@ patients_combined <- patients_combined %>%
                                         years_in_study_hes == 2 ~ 'study end'))
 
 patients_combined <- patients_combined %>% 
-  mutate(DEPANX = factor(DEPANX),
-         DEPANXr = factor(DEPANXr),
+  mutate(DEPANXr = factor(DEPANXr),
+         PNC = factor(PNC),
          female = ifelse(gender == 2, 1, 0),
          female = factor(female))
-
-
 
 # Summarising crude utilisation -------------------------------------------
 
@@ -356,20 +354,6 @@ quantifyUtilisation(data = utilisation_T1D, grouping_var = 'mm_cat',
 quantifyUtilisation(data = utilisation_T2D, grouping_var = 'mm_cat', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 8)
 
-# Number of physical long-term conditions
-quantifyUtilisation(data = utilisation_T1D, grouping_var = 'physical_mm_cat', 
-                    path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T1D'), plot_width = 8)
-
-quantifyUtilisation(data = utilisation_T2D, grouping_var = 'physical_mm_cat', 
-                    path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 8)
-
-# DEPANX
-quantifyUtilisation(data = utilisation_T1D, grouping_var = 'DEPANX', 
-                    path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T1D'), plot_width = 6)
-
-quantifyUtilisation(data = utilisation_T2D, grouping_var = 'DEPANX', 
-                    path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 6)
-
 # DEPANXr
 quantifyUtilisation(data = utilisation_T1D, grouping_var = 'DEPANXr', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T1D'), plot_width = 6)
@@ -377,14 +361,12 @@ quantifyUtilisation(data = utilisation_T1D, grouping_var = 'DEPANXr',
 quantifyUtilisation(data = utilisation_T2D, grouping_var = 'DEPANXr', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 6)
 
-# mental comorbidity
-quantifyUtilisation(data = utilisation_T1D, grouping_var = 'mental_mm_cat_SDC', 
+# PNC
+quantifyUtilisation(data = utilisation_T1D, grouping_var = 'PNC', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T1D'), plot_width = 6)
 
-
-quantifyUtilisation(utilisation_T2D, grouping_var = 'mental_mm_cat_SDC', 
+quantifyUtilisation(data = utilisation_T2D, grouping_var = 'PNC', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 6)
-
 
 # gender
 quantifyUtilisation(data = utilisation_T1D, grouping_var = 'female', 
@@ -401,3 +383,4 @@ quantifyUtilisation(data = utilisation_T1D, grouping_var = 'HbA1C_control',
 
 quantifyUtilisation(utilisation_T2D, grouping_var = 'HbA1C_control', 
                     path = str_c(summary_stats_path, 'utilisation_crude/utilisation_T2D'), plot_width = 8)
+
