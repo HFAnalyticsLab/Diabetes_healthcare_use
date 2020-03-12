@@ -46,20 +46,10 @@ mm_bypat <- patient_mm %>%
 # Will combine depression and axiety into DEPANX
 mm_bypat <- mm_bypat %>% 
   mutate(DEPANX = ifelse(DEP == 1 | ANX == 1, 1, 0),
-         DEPANXr = ifelse(DEP == 1 | ANXr == 1, 1, 0),
-         # this is still using the older definition of ANX,
-         mental_mm_count = ALC + ANO + DEPANX + DEM + LEA + OPS + SCZ,
-         physical_mm_count = AST + ATR + BLI + BRO + CAN + CHD + CKD + CLD + CON + COP + DIV + EPI + HEF + HEL + 
-                             HYP + IBD + IBS + MIG + MSC + PNC + PRK + PRO + PSO + PVD + RHE + SIN + STR + THY,
-         mm_count = mental_mm_count + physical_mm_count)
-         
+         DEPANXr = ifelse(DEP == 1 | ANXr == 1, 1, 0))
 
-# this is still using the older definition of ANX
 mm_bypat <- mm_bypat %>% 
-  mutate(mental_mm_cat = cut(mental_mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
-                             labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE),
-         physical_mm_cat = cut(physical_mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
-                             labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE),
+  mutate(mm_count = rowSums(.[comorbidities]),
          mm_cat = cut(mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
                              labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE))
 

@@ -141,17 +141,9 @@ vars_tosummarise <- c("female", "ethnicity", "startage_study", "age_bins_study_S
                       'time_since_diagnosis', 
                       'e2011_urban_rural', 'imd_quintile',
                       "medication", "medication_prior", "smoking_status", "BMI_categorical", "HbA1C_control",
-                      'mental_mm_cat_SDC', 'physical_mm_cat', 'physical_mm_count', 'mm_cat', 'mm_count',
-                      "HYP", "PNC", "ATR", "PVD", "CKD", "HEL", "RHE", "COP", "ANX", "BLI", "CON", "DIV", 
-                      "DEP", "THY", "CHD", "HEF", "DEM", "STR", "AST", "PSO", "PRO", "IBD", "IBS", "ANXr", 
-                      "SIN", "PRK", "ALC", "CAN", "OPS", "MSC", "EPI", "SCZ", "CLD", "BRO", "ANO", "LEA", 
-                      "MIG", "DEPANX", "DEPANXr")
+                      'mm_cat', 'mm_count', comorbidities)
 
-cat_vars_tosummarise <- c('censoring_type_hes', 'e2011_urban_rural',
-                          "HYP", "PNC", "ATR", "PVD", "CKD", "HEL", "RHE", "COP", "ANX", "BLI", "CON", "DIV", 
-                          "DEP", "THY", "CHD", "HEF", "DEM", "STR", "AST", "PSO", "PRO", "IBD", "IBS", "ANXr", 
-                          "SIN", "PRK", "ALC", "CAN", "OPS", "MSC", "EPI", "SCZ", "CLD", "BRO", "ANO", "LEA", 
-                          "MIG", "DEPANX", "DEPANXr")
+cat_vars_tosummarise <- c('censoring_type_hes', 'e2011_urban_rural', comorbidities)
 
 table_patients_study <- CreateTableOne(vars = vars_tosummarise, 
                             data = patients_study, 
@@ -235,3 +227,4 @@ write_csv(AST_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modell
 IBS_logmodel <- glm(IBS ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
 IBS_logmodel_summary <- summariseLogModel(IBS_logmodel) 
 write_csv(IBS_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_IBS.csv'))
+
