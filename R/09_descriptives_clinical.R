@@ -103,11 +103,10 @@ patients_combined <- patients_combined %>%
 patients_combined <- patients_combined %>% 
   mutate(female = ifelse(gender == 2, 1, 0),
          female = factor(female),
-         age_bins_study_SDC = fct_collapse(age_bins_study, '0-19' = c('0-4', '5-9', '10-14', '15-19'),
+         age_bins_study_SDC = fct_collapse(age_bins_study, '0-24' = c('0-4', '5-9', '10-14', '15-19', '20-24'),
                                      '80+' = c('80-84', '85+')),
          age_bins_followup_SDC = fct_collapse(age_bins_followup, '0-19' = c('0-4', '5-9', '10-14', '15-19'),
-                                           '80+' = c('80-84', '85+')),
-         mental_mm_cat_SDC = fct_collapse(mental_mm_cat, '1+' = c('1', '2', '3', '4+')))
+                                           '80+' = c('80-84', '85+')))
 
 
 saveRDS(patients_combined, str_c(processed_RDS_path, 'patients_clinical_combined.Rds'))
