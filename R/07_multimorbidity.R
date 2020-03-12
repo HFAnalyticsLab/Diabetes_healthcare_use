@@ -105,9 +105,7 @@ mm_means <- mm_bypat2 %>%
   filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
   group_by(diabetes_type) %>% 
   summarise(n = n(),
-            mean_mm_count = round(mean(mm_count), 1),
-            mean_physical_mm_count = round(mean(physical_mm_count), 1),
-            mean_mental_mm_count = round(mean(mental_mm_count), 1))
+            mean_mm_count = round(mean(mm_count), 1))
             
 
 write_csv(mm_means, str_c(summary_stats_path, 'multimorbidity/MM_count_means.csv'))
@@ -117,7 +115,7 @@ write_csv(mm_means, str_c(summary_stats_path, 'multimorbidity/MM_count_means.csv
 
 mm_count <- mm_bypat2 %>%  
   filter(cohort_step2 == 1 & diabetes_type == 'type2') %>% 
-  group_by(physical_mm_cat) %>% 
+  group_by(mm_cat) %>% 
   summarise(n_with_count = n()) %>% 
   ungroup() %>% 
   mutate(n = sum(n_with_count),
@@ -126,11 +124,11 @@ mm_count <- mm_bypat2 %>%
          prevalence_CI_lower =  round(100*proportion_with_count - 1.96*sqrt((proportion_with_count* (1 - proportion_with_count)) / n), 2),
          prevalence_CI_upper =  round(100*proportion_with_count + 1.96*sqrt((proportion_with_count * (1 - proportion_with_count)) / n), 2))
              
-write_csv(mm_count, str_c(summary_stats_path, 'multimorbidity/MM_physical_cat_prevalence.csv'))
+write_csv(mm_count, str_c(summary_stats_path, 'multimorbidity/MM_cat_prevalence.csv'))
 
 mm_count_CMD <- mm_bypat2 %>%  
   filter(cohort_step2 == 1 & diabetes_type == 'type2') %>% 
-  group_by(physical_mm_cat) %>% 
+  group_by(mm_cat) %>% 
   summarise(n_with_count = n()) %>% 
   ungroup() %>% 
   mutate(n = sum(n_with_count),
