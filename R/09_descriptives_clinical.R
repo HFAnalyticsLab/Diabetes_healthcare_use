@@ -148,18 +148,8 @@ patients_study_red <- patients_study %>%
   filter(diabetes_type %in% c('type1', 'type2')) %>% 
   mutate(diabetes_type = fct_drop(diabetes_type))
 
-vars_tosummarise2 <- vars_tosummarise[vars_tosummarise != 'mental_mm_cat_SDC']
-
-table_study_mental_mm <- CreateTableOne(vars = vars_tosummarise2, 
-                                        strata = c('mental_mm_cat_SDC','diabetes_type'), 
-                                        data = patients_study_red, 
-                                        factorVars = cat_vars_tosummarise,
-                                        test = FALSE)
-
-table_study_mental_mm_csv <- print(table_study_mental_mm, noSpaces = TRUE)
-write.csv(table_study_mental_mm_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_mental_mm.csv'))
-
-table_study_DEPANX <- CreateTableOne(vars = vars_tosummarise2, 
+# DEPANXr
+table_study_DEPANX <- CreateTableOne(vars = vars_tosummarise, 
                                         strata = c('DEPANXr','diabetes_type'), 
                                         data = patients_study_red, 
                                         factorVars = cat_vars_tosummarise,
@@ -168,6 +158,15 @@ table_study_DEPANX <- CreateTableOne(vars = vars_tosummarise2,
 table_study_DEPANX_csv <- print(table_study_DEPANX, noSpaces = TRUE)
 write.csv(table_study_DEPANX_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_DEPANX.csv'))
 
+# PNC
+table_study_PNC <- CreateTableOne(vars = vars_tosummarise, 
+                                     strata = c('PNC','diabetes_type'), 
+                                     data = patients_study_red, 
+                                     factorVars = cat_vars_tosummarise,
+                                     test = FALSE)
+
+table_study_PNC_csv <- print(table_study_PNC, noSpaces = TRUE)
+write.csv(table_study_PNC_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_PNC.csv'))
 
 
 # Prevalence of CMD in T2DM patients --------------------------------------
