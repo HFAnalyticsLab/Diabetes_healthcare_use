@@ -50,91 +50,11 @@ mm_bypat <- mm_bypat %>%
 
 mm_bypat <- mm_bypat %>% 
   mutate(mm_count = rowSums(.[comorbidities]),
+         mm_count_excl_DEPANXr = rowSums(.[comorbidities[comorbidities != 'DEPANXr']]),
+         mm_count_excl_PNC = rowSums(.[comorbidities[comorbidities != 'PNC']]),
          mm_cat = cut(mm_count, breaks = c(0, 1, 2, 3, 4, Inf), 
                              labels = c('0', '1', '2', '3', '4+'), include.lowest = TRUE, right = FALSE))
 
 # Saving processed files --------------------------------------------------
 
 saveRDS(mm_bypat, str_c(processed_RDS_path, 'patients_multimorbidity.rds'))
-
-
-
-# Summary tables for prevalence -------------------------------------------
-
-mm_bypat2 <- mm_bypat %>% 
-  right_join(patients[, c('patid', 'cohort_step2', 'cohort_step3')], by = 'patid') %>% 
-  left_join(diabetes_bypat[, c('patid',  'diabetes_type')], by = 'patid')
-
-mm_bypat_study  <-  mm_bypat2 %>% 
-  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  select(-cohort_step2) 
-
-mm_prev <- mm_bypat_study %>% 
-  select(patid, diabetes_type, HYP:DEPANXr) %>% 
-  gather(-patid, - diabetes_type, key = 'condition', value = 'present') %>% 
-  group_by(diabetes_type, condition) %>% 
-  summarise(n = n(),
-            n_with_condition = sum(present == 1)) %>% 
-  mutate(proportion_with_condition = n_with_condition / n ,
-         prevalence = round(100 * n_with_condition / n, 1),prevalence = round(100 * n_with_condition / n, 2),
-         prevalence_CI_lower =  round(100*proportion_with_condition - 1.96*sqrt((proportion_with_condition* (1 - proportion_with_condition)) / n), 2),
-         prevalence_CI_upper =  round(100*proportion_with_condition + 1.96*sqrt((proportion_with_condition * (1 - proportion_with_condition)) / n), 2))
-
-write_csv(mm_prev, str_c(summary_stats_path, 'multimorbidity/MM_prevalence.csv'))
-
-# by CMD
-
-mm_prev_CMD <- mm_bypat_study %>% 
-  filter(diabetes_type == 'type2') %>% 
-  select(patid, HYP:DEPANXr) %>% 
-  gather(-patid, - DEPANXr, key = 'condition', value = 'present') %>% 
-  group_by(DEPANXr, condition) %>% 
-  summarise(n = n(),
-            n_with_condition = sum(present == 1)) %>% 
-  mutate(proportion_with_condition = n_with_condition / n ,
-         prevalence = round(100 * n_with_condition / n, 1),prevalence = round(100 * n_with_condition / n, 2),
-         prevalence_CI_lower =  round(100*proportion_with_condition - 1.96*sqrt((proportion_with_condition* (1 - proportion_with_condition)) / n), 2),
-         prevalence_CI_upper =  round(100*proportion_with_condition + 1.96*sqrt((proportion_with_condition * (1 - proportion_with_condition)) / n), 2))
-
-write_csv(mm_prev_CMD, str_c(summary_stats_path, 'multimorbidity/MM_prevalence_T2DM_byDEPANXr.csv'))
-
-
-# Summary tables for mean number of conditions -------------------------------------------
-
-mm_means <- mm_bypat2 %>%  
-  filter(cohort_step2 == 1 & diabetes_type %in% c('type1', 'type2')) %>% 
-  group_by(diabetes_type) %>% 
-  summarise(n = n(),
-            mean_mm_count = round(mean(mm_count), 1))
-            
-
-write_csv(mm_means, str_c(summary_stats_path, 'multimorbidity/MM_count_means.csv'))
-
-
-# Summary table for condition count ---------------------------------------
-
-mm_count <- mm_bypat2 %>%  
-  filter(cohort_step2 == 1 & diabetes_type == 'type2') %>% 
-  group_by(mm_cat) %>% 
-  summarise(n_with_count = n()) %>% 
-  ungroup() %>% 
-  mutate(n = sum(n_with_count),
-         proportion_with_count = n_with_count / n ,
-         prevalence = round(100 * n_with_count / n, 1),prevalence = round(100 * n_with_count / n, 2),
-         prevalence_CI_lower =  round(100*proportion_with_count - 1.96*sqrt((proportion_with_count* (1 - proportion_with_count)) / n), 2),
-         prevalence_CI_upper =  round(100*proportion_with_count + 1.96*sqrt((proportion_with_count * (1 - proportion_with_count)) / n), 2))
-             
-write_csv(mm_count, str_c(summary_stats_path, 'multimorbidity/MM_cat_prevalence.csv'))
-
-mm_count_CMD <- mm_bypat2 %>%  
-  filter(cohort_step2 == 1 & diabetes_type == 'type2') %>% 
-  group_by(mm_cat) %>% 
-  summarise(n_with_count = n()) %>% 
-  ungroup() %>% 
-  mutate(n = sum(n_with_count),
-         proportion_with_count = n_with_count / n ,
-         prevalence = round(100 * n_with_count / n, 1),prevalence = round(100 * n_with_count / n, 2),
-         prevalence_CI_lower =  round(100*proportion_with_count - 1.96*sqrt((proportion_with_count* (1 - proportion_with_count)) / n), 2),
-         prevalence_CI_upper =  round(100*proportion_with_count + 1.96*sqrt((proportion_with_count * (1 - proportion_with_count)) / n), 2))
-
-write_csv(mm_count_CMD, str_c(summary_stats_path, 'multimorbidity/MM_physical_cat_T2DM_byCMD_prevalence.csv'))

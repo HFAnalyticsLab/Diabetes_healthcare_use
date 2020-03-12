@@ -1,7 +1,6 @@
 # =======================================================
 # Project: Diabetes outpatient care
-# Purpose: Cox model to examine effect of CMD and PNC on outcomes 
-# for people with T2DM (emergency hospital admission, all-cause mortality)
+# Purpose: Cox model to examine effect of long-term conditions on outcomes (emergency hospital admission, all-cause mortality)
 # Author: Fiona Grimm
 # =======================================================
 
@@ -72,9 +71,7 @@ model_data_mortality <-  model_data_mortality %>%
          smoker = ifelse(smoking_status == 'smoker', 1,0),
          newly_diagnosed_1y = ifelse(time_since_diagnosis == 'less than 1 year', 1, 0),
          age_centered = startage_study - round(mean(startage_study)),
-         age_5ybin_centered = age_centered / 5,
-         mm_count_excl_DEPANXr = rowSums(.[comorbidities[comorbidities != 'DEPANXr']]),
-         mm_count_excl_PNC = rowSums(.[comorbidities[comorbidities != 'PNC']]))
+         age_5ybin_centered = age_centered / 5)
 
 # Bin survival time into weeks for kaplan-meier plots
 model_data_mortality <-  model_data_mortality %>% 
@@ -208,9 +205,7 @@ model_data_adm <-  model_data_adm %>%
          smoker = ifelse(smoking_status == 'smoker', 1,0),
          newly_diagnosed_1y = ifelse(time_since_diagnosis == 'less than 1 year', 1, 0),
          age_centered = startage_study - round(mean(startage_study)),
-         age_5ybin_centered = age_centered / 5,
-         mm_count_excl_DEPANXr = rowSums(.[comorbidities[comorbidities != 'DEPANXr']]),
-         mm_count_excl_PNC = rowSums(.[comorbidities[comorbidities != 'PNC']]))
+         age_5ybin_centered = age_centered / 5)
 
 
 # Cox models for T2D

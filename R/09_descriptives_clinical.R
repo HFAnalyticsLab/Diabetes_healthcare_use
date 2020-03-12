@@ -16,22 +16,6 @@ source('R/file_paths.R')
 # Source study parameters 
 source('R/study_params.R')
 
-# Functions ---------------------------------------------------------------
-
-summariseLogModel <- function(model){
-  summary <- broom::tidy(model, exponentiate = TRUE) %>% 
-    cbind(exp(confint(model))) 
-  
-  rownames(summary) <- NULL
-  colnames(summary) <- c('Coefficient', 'OR', 'Std.Error', 'z.value', 'p.value', 'CI_lower', 'CI_upper')
-  
-  summary <- summary %>% 
-    select(Coefficient, OR, CI_lower, CI_upper, everything()) %>% 
-    mutate_at(vars(OR, z.value, CI_lower, CI_upper), round, 3)
-  
-  return(summary)
-}
-
 # Import data -----------------------------------------
 
 # Study population
@@ -125,7 +109,7 @@ vars_tosummarise <- c("female", "ethnicity", "startage_study", "age_bins_study_S
                       'time_since_diagnosis', 
                       'e2011_urban_rural', 'imd_quintile',
                       "medication", "medication_prior", "smoking_status", "BMI_categorical", "HbA1C_control",
-                      'mm_cat', 'mm_count', comorbidities)
+                      'mm_cat', 'mm_count', 'mm_count_excl_DEPANXr', 'mm_count_excl_PNC', comorbidities)
 
 cat_vars_tosummarise <- c('censoring_type_hes', 'e2011_urban_rural', comorbidities)
 
@@ -166,48 +150,3 @@ table_study_PNC <- CreateTableOne(vars = vars_tosummarise,
 
 table_study_PNC_csv <- print(table_study_PNC, noSpaces = TRUE)
 write.csv(table_study_PNC_csv, str_c(summary_stats_path, 'table1/Table1_cohort2_PNC.csv'))
-
-
-# Prevalence of CMD in T2DM patients --------------------------------------
-
-patients_study_T2D <- patients_study %>% 
-  filter(diabetes_type == 'type2') %>% 
-  mutate(age_centered = startage_study - round(mean(startage_study)),
-         age_5ybin_centered = age_centered / 5,
-         imd_quintile_numeric = as.numeric(gsub(' .*', '', imd_quintile)))
-
-CMD_logmodel <- glm(DEPANXr ~ female + age_5ybin_centered + imd_quintile_numeric + HbA1C_control, 
-                    data = patients_study_T2D, family = 'binomial')
-
-CMD_logmodel_summary <- summariseLogModel(CMD_logmodel) 
-write_csv(CMD_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_CMD.csv'))
-
-
-
-# Prevalence of conditions in T2DM patients +/- CMD -----------------------
-
-
-patients_study_T2D %>% 
-    janitor::tabyl(DEPANXr, PNC) %>% 
-    janitor::adorn_percentages()
-
-
-# Logistic regression to adjust prevalence of PNC for age, sex and CMD
-
-
-PNC_logmodel <- glm(PNC ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
-PNC_logmodel_summary <- summariseLogModel(PNC_logmodel) 
-write_csv(PNC_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_PNC.csv'))
-
-HEL_logmodel <- glm(HEL ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
-HEL_logmodel_summary <- summariseLogModel(HEL_logmodel) 
-write_csv(HEL_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_HEL.csv'))
-
-AST_logmodel <- glm(AST ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
-AST_logmodel_summary <- summariseLogModel(AST_logmodel) 
-write_csv(AST_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_AST.csv'))
-
-IBS_logmodel <- glm(IBS ~ female + age_5ybin_centered + DEPANXr, data = patients_study_T2D, family = 'binomial')
-IBS_logmodel_summary <- summariseLogModel(IBS_logmodel) 
-write_csv(IBS_logmodel_summary, str_c(summary_stats_path, 'multimorbidity_modelling/Logistic_coefficients_T2D_IBS.csv'))
-

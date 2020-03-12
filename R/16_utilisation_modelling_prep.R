@@ -117,9 +117,7 @@ patients_combined <- patients_combined %>%
 # Derive and/or simplify variables
 patients_combined <- patients_combined %>% 
   mutate(smoker = ifelse(smoking_status == 'smoker', 1,0),
-         newly_diagnosed_1y = ifelse(time_since_diagnosis == 'less than 1 year', 1, 0),
-         mm_count_excl_DEPANXr = rowSums(.[comorbidities[comorbidities != 'DEPANXr']]),
-         mm_count_excl_PNC = rowSums(.[comorbidities[comorbidities != 'PNC']]))
+         newly_diagnosed_1y = ifelse(time_since_diagnosis == 'less than 1 year', 1, 0))
 
 
 # Split diabetes types and centre age on the mean age
